@@ -189,6 +189,17 @@ implements I18nContextProvider {
     }
 
     /**
+     * Returns {@code true} if the {@code I18nContext} instances will be
+     * inherited by child {@code Thread}s.
+     * 
+     * @return If the {@code I18nContext} instances will be inherited by child
+     * {@code Thread}s
+     */
+    public boolean isInheritable() {
+        return this.contexts instanceof InheritableThreadLocal;
+    }
+
+    /**
      * Returns the internal {@code I18nContext}s per {@code Thread} container.
      * 
      * @return The {@code I18nContext}s per {@code Thread} container

@@ -65,7 +65,7 @@ class DefaultI18nContextProviderTest {
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
         assertFalse(provider.isFullModeByDefault());
-        assertFalse(provider.getContexts() instanceof InheritableThreadLocal);
+        assertFalse(provider.isInheritable());
     }
 
     /**
@@ -78,7 +78,7 @@ class DefaultI18nContextProviderTest {
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
         assertFalse(provider.isFullModeByDefault());
-        assertTrue(provider.getContexts() instanceof InheritableThreadLocal);
+        assertTrue(provider.isInheritable());
     }
 
     /**
