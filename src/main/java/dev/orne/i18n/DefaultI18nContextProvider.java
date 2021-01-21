@@ -79,26 +79,29 @@ implements I18nContextProvider {
     }
 
     /**
-     * Establece si los {@code I18nContext} creados deben devolver todas las
-     * traducciones de los textos internacionalizables por defecto.
+     * Returns if the created {@code I18nContext} instances should be in full
+     * mode by default.
      * 
-     * @return Si los {@code I18nContext} creados deben devolver todas las
-     * traducciones de los textos internacionalizables por defecto
+     * @return {@code true} if all available translations should be retrieved
+     * by default
      */
     public boolean isFullModeByDefault() {
         return fullModeByDefault;
     }
 
     /**
-     * Establece si los {@code I18nContext} creados deben devolver todas las
-     * traducciones de los textos internacionalizables por defecto.
+     * Sets if the created {@code I18nContext} instances should be in full mode
+     * by default.
+     * <p>
+     * If {@code true} all available translations should be retrieved.
+     * Otherwise only the translation in user locale is required.
      * 
-     * @param fullMode Si los {@code I18nContext} creados deben devolver todas
-     * las traducciones de los textos internacionalizables por defecto
+     * @param value If all available translations should be retrieved by
+     * default
      */
     public void setFullModeByDefault(
-            final boolean fullMode) {
-        this.fullModeByDefault = fullMode;
+            final boolean value) {
+        this.fullModeByDefault = value;
     }
 
     /**
