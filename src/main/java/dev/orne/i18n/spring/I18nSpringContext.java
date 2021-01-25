@@ -24,10 +24,12 @@ package dev.orne.i18n.spring;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -52,8 +54,42 @@ implements I18nContext, Serializable {
     /** The serial verion UID. */
     private static final long serialVersionUID = 1L;
 
+    /** The UUID of the provider owner of this context. */
+    private final @NotNull UUID providerUUID;
     /** If all available translations should be retrieved. */
     private boolean fullMode;
+
+    /**
+     * Creates a new instance.
+     * 
+     * @param providerUUID The UUID of the provider owner of this context
+     */
+    public I18nSpringContext(
+            final @NotNull UUID providerUUID) {
+        super();
+        this.providerUUID = Validate.notNull(providerUUID);
+    }
+
+    /**
+     * Copy constructor.
+     * 
+     * @param copy The instance to copy
+     */
+    public I18nSpringContext(
+            final @NotNull I18nSpringContext copy) {
+        super();
+        Validate.notNull(copy);
+        this.providerUUID = copy.providerUUID;
+        this.fullMode = copy.fullMode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UUID getProviderUUID() {
+        return this.providerUUID;
+    }
 
     /**
      * {@inheritDoc}
@@ -95,6 +131,7 @@ implements I18nContext, Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(this.providerUUID)
                 .append(this.fullMode)
                 .toHashCode();
     }
@@ -109,6 +146,7 @@ implements I18nContext, Serializable {
         if (!getClass().equals(obj.getClass())) { return false; }
         final I18nSpringContext other = (I18nSpringContext) obj;
         return new EqualsBuilder()
+                .append(this.providerUUID, other.providerUUID)
                 .append(this.fullMode, other.fullMode)
                 .isEquals();
     }

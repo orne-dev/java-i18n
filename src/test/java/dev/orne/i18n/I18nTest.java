@@ -77,9 +77,9 @@ class I18nTest {
     void testInitialContextProviderStrategy() {
         final I18nContextProviderStrategy defaultStrategy = I18N.getContextProviderStrategy();
         assertNotNull(defaultStrategy);
-        assertTrue(defaultStrategy instanceof ByClassLoaderI18nContextProviderStrategy);
-        final ByClassLoaderI18nContextProviderStrategy byClStrategy =
-                (ByClassLoaderI18nContextProviderStrategy) defaultStrategy;
+        assertTrue(defaultStrategy instanceof DefaultI18nContextProviderStrategy);
+        final DefaultI18nContextProviderStrategy byClStrategy =
+                (DefaultI18nContextProviderStrategy) defaultStrategy;
         final I18nContextProvider defaultProvider = byClStrategy.getDefaultContextProvider();
         assertNotNull(defaultProvider);
         assertTrue(defaultProvider instanceof DefaultI18nContextProvider);

@@ -26,9 +26,8 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Strategy of selection of {@code I18nContextProvider}.
- * Provides methods for retrieving or setting the provider for the current
- * {@code Thread}, a specified {@code Thread} and a specified
- * {@code ClassLoader}.
+ * Provides a method to retrieve the provider for the current
+ * {@code Thread}.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
@@ -36,6 +35,21 @@ import javax.validation.constraints.NotNull;
  * @since 0.1
  */
 public interface I18nContextProviderStrategy {
+
+    /**
+     * Returns the default {@code I18nContextProvider}.
+     * 
+     * @return The default {@code I18nContextProvider}
+     */
+    I18nContextProvider getDefaultContextProvider();
+
+    /**
+     * Sets the default {@code I18nContextProvider}.
+     * 
+     * @param provider The default {@code I18nContextProvider}
+     */
+    void setDefaultContextProvider(
+            @NotNull I18nContextProvider provider);
 
     /**
      * Returns the {@code I18nContextProvider} to be used for the current
@@ -46,60 +60,11 @@ public interface I18nContextProviderStrategy {
     @NotNull I18nContextProvider getContextProvider();
 
     /**
-     * Returns the {@code I18nContextProvider} to be used for the specified
-     * {@code Thread}.
-     * 
-     * @param thread The {@code Thread}
-     * @return The {@code I18nContextProvider} for the specified
-     * {@code Thread}
+     * Invalidates this strategy and all context providers, thus invalidating
+     * any previously created I18N contexts.
+     * <p>
+     * Effects of calling any other method after this one is left to
+     * implementations choice, and thus is discouraged.
      */
-    @NotNull
-    I18nContextProvider getContextProvider(
-            @NotNull Thread thread);
-
-    /**
-     * Returns the {@code I18nContextProvider} to be used for the specified
-     * {@code ClassLoader}.
-     * 
-     * @param classLoader The {@code ClassLoader}
-     * @return The {@code I18nContextProvider} for the specified
-     * {@code ClassLoader}
-     */
-    @NotNull
-    I18nContextProvider getContextProvider(
-            @NotNull ClassLoader classLoader);
-
-    /**
-     * Sets the {@code I18nContextProvider} to be used for the current
-     * {@code Thread}.
-     * 
-     * @param provider The {@code I18nContextProvider} for the current
-     * {@code Thread}
-     */
-    void setContextProvider(
-            @NotNull I18nContextProvider provider);
-
-    /**
-     * Set the {@code I18nContextProvider} to be used for the specified
-     * {@code Thread}.
-     * 
-     * @param thread The {@code Thread}
-     * @param provider The {@code I18nContextProvider} for the specified
-     * {@code Thread}
-     */
-    void setContextProvider(
-            @NotNull Thread thread,
-            @NotNull I18nContextProvider provider);
-
-    /**
-     * Set the {@code I18nContextProvider} to be used for the specified
-     * {@code ClassLoader}.
-     * 
-     * @param classLoader The {@code ClassLoader}
-     * @param provider The {@code I18nContextProvider} for the specified
-     * {@code ClassLoader}
-     */
-    void setContextProvider(
-            @NotNull ClassLoader classLoader,
-            @NotNull I18nContextProvider provider);
+    void invalidate();
 }

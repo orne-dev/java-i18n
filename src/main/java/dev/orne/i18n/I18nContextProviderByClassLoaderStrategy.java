@@ -38,11 +38,10 @@ import org.apache.commons.lang3.Validate;
  * @see I18nContextProviderStrategy
  * @since 0.1
  */
-public class ByClassLoaderI18nContextProviderStrategy
-implements I18nContextProviderStrategy {
+public class I18nContextProviderByClassLoaderStrategy
+extends DefaultI18nContextProviderStrategy
+implements I18nContextProviderConfigurableStrategy {
 
-    /** The default {@code I18nContextProvider}. */
-    private final @NotNull I18nContextProvider defaultContextProvider;
     /** The {@code I18nContextProvider} mapping per {@code ClassLoader}. */
     private final @NotNull Map<ClassLoader, I18nContextProvider> contextProviders;
 
@@ -52,7 +51,7 @@ implements I18nContextProviderStrategy {
      * 
      * @param defaultContextProvider The default {@code I18nContextProvider}
      */
-    public ByClassLoaderI18nContextProviderStrategy(
+    public I18nContextProviderByClassLoaderStrategy(
             final @NotNull I18nContextProvider defaultContextProvider) {
         this(defaultContextProvider, new WeakHashMap<>());
     }
@@ -68,21 +67,11 @@ implements I18nContextProviderStrategy {
      * @param contextProviders The {@code I18nContextProvider} mapping per
      * {@code ClassLoader}
      */
-    protected ByClassLoaderI18nContextProviderStrategy(
+    protected I18nContextProviderByClassLoaderStrategy(
             final @NotNull I18nContextProvider defaultContextProvider,
             final @NotNull Map<ClassLoader, I18nContextProvider> contextProviders) {
-        super();
-        this.defaultContextProvider = Validate.notNull(defaultContextProvider);
+        super(defaultContextProvider);
         this.contextProviders = Validate.notNull(contextProviders);
-    }
-
-    /**
-     * Returns the default {@code I18nContextProvider}.
-     * 
-     * @return The default {@code I18nContextProvider}
-     */
-    public I18nContextProvider getDefaultContextProvider() {
-        return this.defaultContextProvider;
     }
 
     /**
@@ -102,7 +91,7 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull I18nContextProvider getContextProvider() {
+    public synchronized @NotNull I18nContextProvider getContextProvider() {
         return getContextProvider(Thread.currentThread());
     }
 
@@ -110,7 +99,7 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull I18nContextProvider getContextProvider(
+    public synchronized @NotNull I18nContextProvider getContextProvider(
             final @NotNull Thread thread) {
         return getContextProvider(
                 Validate.notNull(thread).getContextClassLoader());
@@ -120,7 +109,7 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull I18nContextProvider getContextProvider(
+    public synchronized @NotNull I18nContextProvider getContextProvider(
             final @NotNull ClassLoader classLoader) {
         return this.contextProviders.computeIfAbsent(
                 Validate.notNull(classLoader),
@@ -128,7 +117,7 @@ implements I18nContextProviderStrategy {
                     I18nContextProvider inheritedResult;
                     final ClassLoader parentClassLoader = classLoader.getParent();
                     if (parentClassLoader == null) {
-                        inheritedResult = this.defaultContextProvider;
+                        inheritedResult = getDefaultContextProvider();
                     } else {
                         inheritedResult = getContextProvider(parentClassLoader);
                     }
@@ -140,7 +129,7 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void setContextProvider(
+    public synchronized void setContextProvider(
             final @NotNull I18nContextProvider provider) {
         setContextProvider(
                 Thread.currentThread(),
@@ -151,7 +140,7 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void setContextProvider(
+    public synchronized void setContextProvider(
             final @NotNull Thread thread,
             final @NotNull I18nContextProvider provider) {
         setContextProvider(
@@ -163,11 +152,22 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void setContextProvider(
+    public synchronized void setContextProvider(
             final @NotNull ClassLoader classLoader,
             final @NotNull I18nContextProvider provider) {
         this.contextProviders.put(
                 Validate.notNull(classLoader),
                 Validate.notNull(provider));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void invalidate() {
+        for (final I18nContextProvider provider : this.contextProviders.values()) {
+            provider.invalidate();
+        }
+        super.invalidate();
     }
 }

@@ -24,9 +24,11 @@ package dev.orne.i18n;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -46,10 +48,45 @@ implements I18nContext, Serializable {
     /** The serial verion UID. */
     private static final long serialVersionUID = 1L;
 
+    /** The UUID of the provider owner of this context. */
+    private final @NotNull UUID providerUUID;
     /** The user's locale. */
     private @NotNull Locale locale = Locale.getDefault();
     /** If all available translations should be retrieved. */
     private boolean fullMode;
+
+    /**
+     * Creates a new instance.
+     * 
+     * @param providerUUID The UUID of the provider owner of this context
+     */
+    public DefaultI18nContext(
+            final @NotNull UUID providerUUID) {
+        super();
+        this.providerUUID = Validate.notNull(providerUUID);
+    }
+
+    /**
+     * Copy constructor.
+     * 
+     * @param copy The instance to copy
+     */
+    public DefaultI18nContext(
+            final @NotNull DefaultI18nContext copy) {
+        super();
+        Validate.notNull(copy);
+        this.providerUUID = copy.providerUUID;
+        this.locale = copy.locale;
+        this.fullMode = copy.fullMode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UUID getProviderUUID() {
+        return this.providerUUID;
+    }
 
     /**
      * {@inheritDoc}
@@ -93,6 +130,7 @@ implements I18nContext, Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(this.providerUUID)
                 .append(this.locale)
                 .append(this.fullMode)
                 .toHashCode();
@@ -108,6 +146,7 @@ implements I18nContext, Serializable {
         if (!getClass().equals(obj.getClass())) { return false; }
         final DefaultI18nContext other = (DefaultI18nContext) obj;
         return new EqualsBuilder()
+                .append(this.providerUUID, other.providerUUID)
                 .append(this.locale, other.locale)
                 .append(this.fullMode, other.fullMode)
                 .isEquals();

@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -61,6 +62,7 @@ class DefaultI18nContextProviderTest {
     @Test
     void testConstructor() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
+        assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
@@ -74,6 +76,7 @@ class DefaultI18nContextProviderTest {
     @Test
     void testConstructor_Inheritable() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+        assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
@@ -254,6 +257,7 @@ class DefaultI18nContextProviderTest {
     @Test
     void testGetContext() {
         final DefaultI18nContextProvider provider = spy(new DefaultI18nContextProvider(false));
+        willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final I18nContext result = provider.getContext();
         assertSame(mockContext, result);
@@ -281,6 +285,7 @@ class DefaultI18nContextProviderTest {
     void testGetContext_Inheritable()
     throws InterruptedException {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+        willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final InheritableGetContextChild childTest =
                 new InheritableGetContextChild(provider);
@@ -366,8 +371,20 @@ class DefaultI18nContextProviderTest {
     @Test
     void testIsContextAlive_Same() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
+        willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         assertTrue(provider.isContextAlive(mockContext));
+    }
+
+    /**
+     * Test {@link DefaultI18nContextProvider#isContextAlive(I18nContext)}.
+     */
+    @Test
+    void testIsContextAlive_WrongUUID() {
+        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
+        willReturn(UUID.randomUUID()).given(mockContext).getProviderUUID();
+        provider.getContexts().set(mockContext);
+        assertFalse(provider.isContextAlive(mockContext));
     }
 
     /**
@@ -387,6 +404,7 @@ class DefaultI18nContextProviderTest {
     @Test
     void testClearContext() {
         final DefaultI18nContextProvider provider = spy(new DefaultI18nContextProvider(false));
+        willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final I18nContext tmp = provider.getContext();
         assertSame(mockContext, tmp);
@@ -402,6 +420,7 @@ class DefaultI18nContextProviderTest {
     void testClearContext_Inheritable()
     throws InterruptedException {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+        willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final InheritableGetContextChild preTest =
                 new InheritableGetContextChild(provider);
@@ -416,6 +435,60 @@ class DefaultI18nContextProviderTest {
         child.start();
         child.join();
         assertNull(childTest.storedContext);
+    }
+
+    /**
+     * Test {@link DefaultI18nContextProvider#invalidate()}.
+     */
+    @Test
+    void testInvalidate() {
+        final Locale[] locales = new Locale[] {
+                Locale.ENGLISH,
+                Locale.FRENCH
+        };
+        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
+        provider.setAvailableLocales(locales);
+        provider.setFullModeByDefault(true);
+        final String key = "mock key";
+        provider.setDefaultI18nResources(mockDefaultResources);
+        provider.addI18nResources(key, mockResources);
+        final I18nContext context = provider.getContext();
+        provider.invalidate();
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertTrue(provider.getI18nResources().isEmpty());
+        assertFalse(provider.isFullModeByDefault());
+        assertFalse(provider.isInheritable());
+        assertFalse(provider.isContextAlive(context));
+        provider.clearContext();
+    }
+
+    /**
+     * Test {@link DefaultI18nContextProvider#invalidate()}.
+     */
+    @Test
+    void testInvalidate_Inheritable() {
+        final Locale[] locales = new Locale[] {
+                Locale.ENGLISH,
+                Locale.FRENCH
+        };
+        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+        provider.setAvailableLocales(locales);
+        provider.setFullModeByDefault(true);
+        final String key = "mock key";
+        provider.setDefaultI18nResources(mockDefaultResources);
+        provider.addI18nResources(key, mockResources);
+        final I18nContext context = provider.getContext();
+        provider.invalidate();
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertTrue(provider.getI18nResources().isEmpty());
+        assertFalse(provider.isFullModeByDefault());
+        assertTrue(provider.isInheritable());
+        assertFalse(provider.isContextAlive(context));
+        provider.clearContext();
     }
 
     class InheritableGetContextChild

@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -43,6 +44,8 @@ import org.apache.commons.lang3.Validate;
 public class DefaultI18nContextProvider
 implements I18nContextProvider {
 
+    /** The UUID of this provider instance. */
+    private UUID sessionUUID = UUID.randomUUID();
     /**
      * If the created {@code I18nContext} instances should be in full mode by
      * default.
@@ -63,6 +66,14 @@ implements I18nContextProvider {
     private final @NotNull ThreadLocal<I18nContext> contexts;
 
     /**
+     * Creates a new instance with {@code I18nContext} instances inherited by
+     * child {@code Thread}s
+     */
+    public DefaultI18nContextProvider() {
+        this(true);
+    }
+
+    /**
      * Creates a new instance.
      * 
      * @param inheritable If the {@code I18nContext} instances should be
@@ -76,6 +87,17 @@ implements I18nContextProvider {
         } else {
             this.contexts = new ThreadLocal<>();
         }
+    }
+
+    /**
+     * Returns the UUID of this provider instance and session.
+     * Used to check contexts validity. Constant from instance creation to
+     * call to {@code invalidate()}
+     * 
+     * @return The UUID of this provider instance
+     */
+    public UUID getSessionUUID() {
+        return this.sessionUUID;
     }
 
     /**
@@ -235,7 +257,7 @@ implements I18nContextProvider {
      * @return The new I18N context
      */
     public @NotNull I18nContext createContext() {
-        final DefaultI18nContext context = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(this.sessionUUID);
         context.setFullMode(this.fullModeByDefault);
         return context;
     }
@@ -261,7 +283,8 @@ implements I18nContextProvider {
      */
     @Override
     public boolean isContextAlive(final I18nContext context) {
-        return Validate.notNull(context) == this.contexts.get();
+        return Validate.notNull(context) == this.contexts.get() &&
+                this.sessionUUID.equals(context.getProviderUUID());
     }
 
     /**
@@ -270,5 +293,21 @@ implements I18nContextProvider {
     @Override
     public void clearContext() {
         this.contexts.remove();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation resets available languages, and I18N resources to
+     * defaults and generates a new session UUID to invalidate any existing
+     * contexts.
+     */
+    @Override
+    public synchronized void invalidate() {
+        this.sessionUUID = UUID.randomUUID();
+        this.fullModeByDefault = false;
+        this.availableLocales = Locale.getAvailableLocales();
+        this.defaultI18nResources = DummyI18nResources.INSTANCE;
+        this.i18nResources.clear();
     }
 }

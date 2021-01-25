@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -80,7 +81,7 @@ class I18nSpringContextTest {
      */
     @Test
     void testConstructor() {
-        final I18nSpringContext context = new I18nSpringContext();
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         assertEquals(MOCK_DEFAULT_CONTEXT_LOCALE, context.getLocale());
         assertFalse(context.isFullMode());
     }
@@ -90,7 +91,7 @@ class I18nSpringContextTest {
      */
     @Test
     void testSetLocale() {
-        final I18nSpringContext context = new I18nSpringContext();
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         context.setLocale(MOCK_LOCALE);
         assertEquals(MOCK_LOCALE, context.getLocale());
         assertEquals(MOCK_LOCALE, LocaleContextHolder.getLocale());
@@ -101,7 +102,7 @@ class I18nSpringContextTest {
      */
     @Test
     void testSetLocale_Null() {
-        final I18nSpringContext context = new I18nSpringContext();
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         context.setLocale(null);
         assertEquals(MOCK_DEFAULT_LOCALE, LocaleContextHolder.getLocale());
         assertEquals(MOCK_DEFAULT_LOCALE, context.getLocale());
@@ -112,7 +113,7 @@ class I18nSpringContextTest {
      */
     @Test
     void testSetFullMode() {
-        final I18nSpringContext context = new I18nSpringContext();
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         context.setFullMode(true);
         assertTrue(context.isFullMode());
     }
@@ -123,12 +124,13 @@ class I18nSpringContextTest {
      */
     @Test
     void testEqualsHashCodeToString() {
-        final I18nSpringContext context = new I18nSpringContext();
-        final I18nSpringContext other = new I18nSpringContext();
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         assertFalse(context.equals(null));
         assertTrue(context.equals(context));
         assertEquals(context.hashCode(), context.hashCode());
         assertFalse(context.equals(new Object()));
+        assertFalse(context.equals(new I18nSpringContext(UUID.randomUUID())));
+        final I18nSpringContext other = new I18nSpringContext(context);
         assertTrue(context.equals(other));
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
@@ -151,7 +153,7 @@ class I18nSpringContextTest {
      */
     @Test
     void testSerializable() throws IOException, ClassNotFoundException {
-        final I18nSpringContext context = new I18nSpringContext();
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         context.setFullMode(true);
         final byte[] serializationResult;
         try (

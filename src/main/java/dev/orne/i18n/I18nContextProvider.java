@@ -87,4 +87,13 @@ public interface I18nContextProvider {
      * Clears the I18N context for the current thread.
      */
     void clearContext();
+
+    /**
+     * Invalidates this context provider, thus invalidating
+     * any previously created I18N contexts.
+     * <p>
+     * Effects of calling any other method after this one is left to
+     * implementations choice, and thus is discouraged.
+     */
+    void invalidate();
 }

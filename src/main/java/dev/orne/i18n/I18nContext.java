@@ -23,6 +23,7 @@ package dev.orne.i18n;
  */
 
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -35,6 +36,13 @@ import javax.validation.constraints.NotNull;
  * @since 0.1
  */
 public interface I18nContext {
+
+    /**
+     * Returns the UUID of the provider owner of this context.
+     * 
+     * @return The UUID of the provider owner of this context
+     */
+    @NotNull UUID getProviderUUID();
 
     /**
      * Returns the user's language.

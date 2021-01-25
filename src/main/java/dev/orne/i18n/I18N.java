@@ -41,8 +41,7 @@ public final class I18N {
 
     /** The I18N context provider selection strategy. */
     private static @NotNull I18nContextProviderStrategy contextProviderStrategy =
-            new ByClassLoaderI18nContextProviderStrategy(
-                new DefaultI18nContextProvider(true));
+            new DefaultI18nContextProviderStrategy(new DefaultI18nContextProvider(true));
 
     /**
      * Private constructor.

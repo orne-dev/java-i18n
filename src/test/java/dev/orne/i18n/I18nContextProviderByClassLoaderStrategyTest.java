@@ -35,15 +35,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
- * Unit tests for {@code ByClassLoaderI18nContextProviderStrategy}.
+ * Unit tests for {@code I18nContextProviderByClassLoaderStrategy}.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
- * @see ByClassLoaderI18nContextProviderStrategy
+ * @see I18nContextProviderByClassLoaderStrategy
  */
 @Tag("ut")
-class ByClassLoaderI18nContextProviderStrategyTest {
+class I18nContextProviderByClassLoaderStrategyTest {
 
     private @Mock I18nContextProvider mockDefaultProvider;
     private @Mock I18nContextProvider mockProvider;
@@ -58,75 +58,75 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy(I18nContextProvider)}.
      */
     @Test
     void testConstructor() {
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider);
         assertSame(mockDefaultProvider, strategy.getDefaultContextProvider());
         assertNotNull(strategy.getContextProviders());
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy(I18nContextProvider)}.
      */
     @Test
     void testConstructor_Null() {
         assertThrows(NullPointerException.class, () -> {
-            new ByClassLoaderI18nContextProviderStrategy(null);
+            new I18nContextProviderByClassLoaderStrategy(null);
         });
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider, Map)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy(I18nContextProvider, Map)}.
      */
     @Test
     void testConstructor_Map() {
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertSame(mockDefaultProvider, strategy.getDefaultContextProvider());
         assertSame(mockProviderMap, strategy.getContextProviders());
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider, Map)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy(I18nContextProvider, Map)}.
      */
     @Test
     void testConstructor_Map_NullProvider() {
         assertThrows(NullPointerException.class, () -> {
-            new ByClassLoaderI18nContextProviderStrategy(null, mockProviderMap);
+            new I18nContextProviderByClassLoaderStrategy(null, mockProviderMap);
         });
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider, Map)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy(I18nContextProvider, Map)}.
      */
     @Test
     void testConstructor_Map_NullMap() {
         assertThrows(NullPointerException.class, () -> {
-            new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, null);
+            new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, null);
         });
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider, Map)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy(I18nContextProvider, Map)}.
      */
     @Test
     void testConstructor_Map_Nulls() {
         assertThrows(NullPointerException.class, () -> {
-            new ByClassLoaderI18nContextProviderStrategy(null, null);
+            new I18nContextProviderByClassLoaderStrategy(null, null);
         });
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider(ClassLoader)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider(ClassLoader)}.
      */
     @Test
     void testGetContextProvider_ClassLoader_Unset() {
         final Map<ClassLoader, I18nContextProvider> map = new HashMap<>();
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, map);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, map);
         final I18nContextProvider result = strategy.getContextProvider(mockClassLoader);
         assertSame(mockDefaultProvider, result);
         assertEquals(1, map.size());
@@ -134,14 +134,14 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider(ClassLoader)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider(ClassLoader)}.
      */
     @Test
     void testGetContextProvider_ClassLoader_Set() {
         final Map<ClassLoader, I18nContextProvider> map = new HashMap<>();
         map.put(mockClassLoader, mockProvider);
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, map);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, map);
         final I18nContextProvider result = strategy.getContextProvider(mockClassLoader);
         assertSame(mockProvider, result);
         assertEquals(1, map.size());
@@ -149,14 +149,14 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider(ClassLoader)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider(ClassLoader)}.
      */
     @Test
     void testGetContextProvider_ClassLoader_Parent_Unset() {
         final Map<ClassLoader, I18nContextProvider> map = new HashMap<>();
         final MockClassLoader classLoader = new MockClassLoader(mockClassLoader);
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, map);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, map);
         final I18nContextProvider result = strategy.getContextProvider(classLoader);
         assertSame(mockDefaultProvider, result);
         assertEquals(2, map.size());
@@ -165,15 +165,15 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider(ClassLoader)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider(ClassLoader)}.
      */
     @Test
     void testGetContextProvider_ClassLoader_Parent_Set() {
         final Map<ClassLoader, I18nContextProvider> map = new HashMap<>();
         final MockClassLoader classLoader = new MockClassLoader(mockClassLoader);
         map.put(mockClassLoader, mockProvider);
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, map);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, map);
         final I18nContextProvider result = strategy.getContextProvider(classLoader);
         assertSame(mockProvider, result);
         assertEquals(2, map.size());
@@ -182,7 +182,7 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider(ClassLoader)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider(ClassLoader)}.
      */
     @Test
     void testGetContextProvider_ClassLoader_Parent_Set_Alt() {
@@ -190,8 +190,8 @@ class ByClassLoaderI18nContextProviderStrategyTest {
         final MockClassLoader classLoader = new MockClassLoader(mockClassLoader);
         map.put(mockClassLoader, mockProvider);
         map.put(classLoader, mockAltProvider);
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, map);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, map);
         final I18nContextProvider result = strategy.getContextProvider(classLoader);
         assertSame(mockAltProvider, result);
         assertEquals(2, map.size());
@@ -200,12 +200,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider(Thread)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider(Thread)}.
      */
     @Test
     void testGetContextProvider_Thread() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         willReturn(mockClassLoader).given(mockThread).getContextClassLoader();
         willReturn(mockProvider).given(strategy).getContextProvider(mockClassLoader);
         final I18nContextProvider result = strategy.getContextProvider(mockThread);
@@ -218,12 +218,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#getContextProvider()}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#getContextProvider()}.
      */
     @Test
     void testGetContextProvider() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         willReturn(mockProvider).given(strategy).getContextProvider(Thread.currentThread());
         final I18nContextProvider result = strategy.getContextProvider();
         assertSame(mockProvider, result);
@@ -233,25 +233,25 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_ClassLoader() {
         final Map<ClassLoader, I18nContextProvider> map = new HashMap<>();
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, map);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, map);
         strategy.setContextProvider(mockClassLoader, mockProvider);
         assertEquals(1, map.size());
         assertSame(mockProvider, map.get(mockClassLoader));
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_ClassLoader_NullClassLoader() {
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((ClassLoader) null, mockProvider);
         });
@@ -259,12 +259,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_ClassLoader_NullProvider() {
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider(mockClassLoader, null);
         });
@@ -272,12 +272,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(ClassLoader, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_ClassLoader_Nulls() {
-        final ByClassLoaderI18nContextProviderStrategy strategy =
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap);
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((ClassLoader) null, null);
         });
@@ -285,12 +285,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(Thread, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(Thread, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_Thread() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         willReturn(mockClassLoader).given(mockThread).getContextClassLoader();
         willDoNothing().given(strategy).setContextProvider(mockClassLoader, mockProvider);
         strategy.setContextProvider(mockThread, mockProvider);
@@ -303,12 +303,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(Thread, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(Thread, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_Thread_NullThread() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((Thread) null, mockProvider);
         });
@@ -316,12 +316,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(Thread, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(Thread, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_Thread_NullProvider() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         final NullPointerException mockEx = new NullPointerException();
         willReturn(mockClassLoader).given(mockThread).getContextClassLoader();
         willThrow(mockEx).given(strategy).setContextProvider(mockClassLoader, null);
@@ -333,12 +333,12 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         willDoNothing().given(strategy).setContextProvider(Thread.currentThread(), mockProvider);
         strategy.setContextProvider(mockProvider);
         then(strategy).should().setContextProvider(mockProvider);
@@ -348,16 +348,29 @@ class ByClassLoaderI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link ByClassLoaderI18nContextProviderStrategy#setContextProvider(Thread, I18nContextProvider)}.
+     * Test {@link I18nContextProviderByClassLoaderStrategy#setContextProvider(Thread, I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_Thread_Nulls() {
-        final ByClassLoaderI18nContextProviderStrategy strategy = spy(
-                new ByClassLoaderI18nContextProviderStrategy(mockDefaultProvider, mockProviderMap));
+        final I18nContextProviderByClassLoaderStrategy strategy = spy(
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((Thread) null, null);
         });
         then(mockProviderMap).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Test {@link I18nContextProviderByClassLoaderStrategy#invalidate()}.
+     */
+    @Test
+    void testInvalidate() {
+        final I18nContextProviderByClassLoaderStrategy strategy =
+                new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider);
+        strategy.setContextProvider(mockClassLoader, mockProvider);
+        strategy.invalidate();
+        then(mockDefaultProvider).should().invalidate();
+        then(mockProvider).should().invalidate();
     }
 
     static class MockClassLoader

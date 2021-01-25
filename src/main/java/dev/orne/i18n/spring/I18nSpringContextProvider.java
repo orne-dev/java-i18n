@@ -52,7 +52,7 @@ extends DefaultI18nContextProvider {
      * Creates a new instance with contexts inherited by child {@code Thread}s.
      */
     public I18nSpringContextProvider() {
-        super(true);
+        super();
     }
 
     /**
@@ -70,7 +70,7 @@ extends DefaultI18nContextProvider {
     @Autowired(required=false)
     public I18nSpringContextProvider(
             final MessageSource messageSource) {
-        super(true);
+        super();
         if (messageSource != null) {
             setDefaultI18nResources(new I18nSpringResources(messageSource));
         }
@@ -109,7 +109,7 @@ extends DefaultI18nContextProvider {
      */
     @Override
     public @NotNull I18nContext createContext() {
-        final I18nSpringContext result = new I18nSpringContext();
+        final I18nSpringContext result = new I18nSpringContext(getSessionUUID());
         result.setFullMode(isFullModeByDefault());
         return result;
     }
@@ -120,7 +120,7 @@ extends DefaultI18nContextProvider {
     @Override
     public @NotNull I18nContext createContext(
             final @NotNull I18nContext parent) {
-        final I18nSpringContext result = new I18nSpringContext();
+        final I18nSpringContext result = new I18nSpringContext(getSessionUUID());
         result.setFullMode(Validate.notNull(parent).isFullMode());
         return result;
     }

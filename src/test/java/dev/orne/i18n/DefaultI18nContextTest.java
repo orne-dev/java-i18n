@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -67,7 +68,7 @@ class DefaultI18nContextTest {
      */
     @Test
     void testConstructor() {
-        final DefaultI18nContext context = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         assertEquals(MOCK_DEFAULT_LOCALE, context.getLocale());
         assertFalse(context.isFullMode());
     }
@@ -77,7 +78,7 @@ class DefaultI18nContextTest {
      */
     @Test
     void testSetLocale() {
-        final DefaultI18nContext context = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         context.setLocale(MOCK_LOCALE);
         assertEquals(MOCK_LOCALE, context.getLocale());
     }
@@ -87,7 +88,7 @@ class DefaultI18nContextTest {
      */
     @Test
     void testSetLocale_Null() {
-        final DefaultI18nContext context = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         context.setLocale(MOCK_LOCALE);
         context.setLocale(null);
         assertEquals(MOCK_DEFAULT_LOCALE, context.getLocale());
@@ -98,7 +99,7 @@ class DefaultI18nContextTest {
      */
     @Test
     void testSetFullMode() {
-        final DefaultI18nContext context = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         context.setFullMode(true);
         assertTrue(context.isFullMode());
     }
@@ -109,12 +110,13 @@ class DefaultI18nContextTest {
      */
     @Test
     void testEqualsHashCodeToString() {
-        final DefaultI18nContext context = new DefaultI18nContext();
-        final DefaultI18nContext other = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         assertFalse(context.equals(null));
         assertTrue(context.equals(context));
         assertEquals(context.hashCode(), context.hashCode());
         assertFalse(context.equals(new Object()));
+        assertFalse(context.equals(new DefaultI18nContext(UUID.randomUUID())));
+        final DefaultI18nContext other = new DefaultI18nContext(context);
         assertTrue(context.equals(other));
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
@@ -143,7 +145,7 @@ class DefaultI18nContextTest {
      */
     @Test
     void testSerializable() throws IOException, ClassNotFoundException {
-        final DefaultI18nContext context = new DefaultI18nContext();
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         context.setLocale(MOCK_LOCALE);
         context.setFullMode(true);
         final byte[] serializationResult;

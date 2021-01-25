@@ -8,7 +8,9 @@
 01. :gift: Added `dev.orne.i18n.I18nContextProvider`
 01. :gift: Added `dev.orne.i18n.DefaultI18nContextProvider`
 01. :gift: Added `dev.orne.i18n.I18nContextProviderStrategy`
-01. :gift: Added `dev.orne.i18n.ByClassLoaderI18nContextProviderStrategy`
+01. :gift: Added `dev.orne.i18n.DefaultI18nContextProviderStrategy`
+01. :gift: Added `dev.orne.i18n.I18nContextProviderConfigurableStrategy`
+01. :gift: Added `dev.orne.i18n.I18nContextProviderByClassLoaderStrategy`
 01. :gift: Added `dev.orne.i18n.I18N`
 01. :gift: Added Spring framework integration support
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringContext`
