@@ -22,11 +22,17 @@ package dev.orne.i18n;
  * #L%
  */
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main entry point to I18N framework. Provides methods for configuration and
@@ -39,9 +45,18 @@ import org.apache.commons.lang3.Validate;
  */
 public final class I18N {
 
+    /** The configuration file path. */
+    public static final String CONFIG_FILE = "dev.orne.i18n.config.properties";
+    /**
+     * The configuration file property for {@code I18nContextProviderStrategy}
+     * implementation to use.
+     */
+    public static final String STRATEGY_PROP = "strategy";
+
+    /** The class logger. */
+    private static final @NotNull Logger LOG = LoggerFactory.getLogger(I18N.class);
     /** The I18N context provider selection strategy. */
-    private static @NotNull I18nContextProviderStrategy contextProviderStrategy =
-            new DefaultI18nContextProviderStrategy(new DefaultI18nContextProvider(true));
+    private static @NotNull I18nContextProviderStrategy contextProviderStrategy;
 
     /**
      * Private constructor.
@@ -56,7 +71,12 @@ public final class I18N {
      * @return The I18N context provider selection strategy
      */
     public static @NotNull I18nContextProviderStrategy getContextProviderStrategy() {
-        return I18N.contextProviderStrategy;
+        synchronized (I18N.class) {
+            if (I18N.contextProviderStrategy == null) {
+                I18N.contextProviderStrategy = createStrategy();
+            }
+            return I18N.contextProviderStrategy;
+        }
     }
 
     /**
@@ -66,7 +86,103 @@ public final class I18N {
      */
     public static void setContextProviderStrategy(
             final @NotNull I18nContextProviderStrategy strategy) {
-        I18N.contextProviderStrategy = Validate.notNull(strategy);
+        synchronized (I18N.class) {
+            I18N.contextProviderStrategy = Validate.notNull(strategy);
+        }
+    }
+
+    /**
+     * Reconfigures the full I18N system, reseting the I18N context provider
+     * selection strategy.
+     * <p>
+     * The old strategy and context providers will be invalidated, thus
+     * invalidating all previously created I18N contexts.
+     * <p>
+     * If no custom new I18N context provider selection strategy is set after
+     * calling this method any method call will fire the I18N system
+     * configuration based on configuration file (if present).
+     */
+    public static void reconfigure() {
+        if (I18N.contextProviderStrategy != null) {
+            I18N.contextProviderStrategy.invalidate();
+            I18N.contextProviderStrategy = null;
+        }
+    }
+
+    static I18nContextProviderStrategy createStrategy() {
+        return createStrategy(Thread.currentThread().getContextClassLoader());
+    }
+
+    static I18nContextProviderStrategy createStrategy(
+            final @NotNull ClassLoader cl) {
+        final Properties config = loadConfiguration(cl);
+        I18nContextProviderStrategy result = getCustomStrategy(cl, config);
+        if (result == null) {
+            result = new DefaultI18nContextProviderStrategy(new DefaultI18nContextProvider());
+        }
+        return result;
+    }
+
+    static Properties loadConfiguration(
+            final @NotNull ClassLoader cl) {
+        final Properties config = new Properties();
+        try (final InputStream input = cl.getResourceAsStream(CONFIG_FILE)) {
+            if (input != null) {
+                config.load(input);
+            }
+        } catch (final IOException ioe) {
+            LOG.error("Error loading Orne I18N configuration file.", ioe);
+        }
+        return config;
+    }
+
+    static I18nContextProviderStrategy getCustomStrategy(
+            final @NotNull ClassLoader cl,
+            final @NotNull Properties config) {
+        I18nContextProviderStrategy result = null;
+        final Class<? extends I18nContextProviderStrategy> clazz = getCustomStrategyClass(cl, config);
+        if (clazz != null) {
+            try {
+                final Constructor<? extends I18nContextProviderStrategy> configCtr =
+                        clazz.getConstructor(Properties.class);
+                result = configCtr.newInstance(config);
+            } catch (final NoSuchMethodException ignore) {
+                // Ignored
+            } catch (final Exception e) {
+                LOG.warn("Error calling custom I18N context provider strategy class Properties constructor", e);
+            }
+            if (result == null) {
+                try {
+                    result = clazz.newInstance();
+                } catch (final Exception e) {
+                    LOG.error("Error instantiating custom I18N context provider strategy class with default constructor.", e);
+                }
+            }
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    static Class<? extends I18nContextProviderStrategy> getCustomStrategyClass(
+            final @NotNull ClassLoader cl,
+            final @NotNull Properties config) {
+        Class<? extends I18nContextProviderStrategy> result = null;
+        if (config.containsKey(STRATEGY_PROP)) {
+            final String strategyClassName = config.getProperty(STRATEGY_PROP);
+            try {
+                final Class<?> clazz = Class.forName(strategyClassName, true, cl);
+                if (I18nContextProviderStrategy.class.isAssignableFrom(clazz)) {
+                    result = (Class<? extends I18nContextProviderStrategy>) clazz;
+                } else {
+                    LOG.error(
+                            "Configured custom I18N context provider strategy class {} is not valid",
+                            strategyClassName);
+                }
+            } catch (final ClassNotFoundException cnfe) {
+                LOG.error("Cannot found configured custom I18N context provider strategy class", cnfe);
+            }
+        }
+        return result;
     }
 
     /**
@@ -80,7 +196,7 @@ public final class I18N {
      * @see I18nContextProviderStrategy#getContextProvider()
      */
     public static @NotNull I18nContextProvider getContextProvider() {
-        return I18N.contextProviderStrategy.getContextProvider();
+        return getContextProviderStrategy().getContextProvider();
     }
 
     /**
