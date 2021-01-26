@@ -32,6 +32,8 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Default implementation of {@code I18nContextProvider}.
@@ -309,5 +311,35 @@ implements I18nContextProvider {
         this.availableLocales = Locale.getAvailableLocales();
         this.defaultI18nResources = DummyI18nResources.INSTANCE;
         this.i18nResources.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(this.fullModeByDefault)
+                .append(this.availableLocales)
+                .append(this.defaultI18nResources)
+                .append(this.i18nResources)
+                .toHashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (!getClass().equals(obj.getClass())) { return false; }
+        final DefaultI18nContextProvider other = (DefaultI18nContextProvider) obj;
+        return new EqualsBuilder()
+                .append(this.fullModeByDefault, other.fullModeByDefault)
+                .append(this.availableLocales, other.availableLocales)
+                .append(this.defaultI18nResources, other.defaultI18nResources)
+                .append(this.i18nResources, other.i18nResources)
+                .isEquals();
     }
 }
