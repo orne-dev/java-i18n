@@ -51,20 +51,30 @@ class DefaultI18nContextProviderStrategyTest {
     }
 
     /**
-     * Test {@link DefaultI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider)}.
+     * Test {@link DefaultI18nContextProviderStrategy#DefaultI18nContextProviderStrategy()}.
      */
     @Test
     void testConstructor() {
+        final DefaultI18nContextProviderStrategy strategy =
+                new DefaultI18nContextProviderStrategy();
+        assertTrue(strategy.getDefaultContextProvider() instanceof DefaultI18nContextProvider);
+    }
+
+    /**
+     * Test {@link DefaultI18nContextProviderStrategy#DefaultI18nContextProviderStrategy(I18nContextProvider)}.
+     */
+    @Test
+    void testConstructor_Provider() {
         final DefaultI18nContextProviderStrategy strategy =
                 new DefaultI18nContextProviderStrategy(mockDefaultProvider);
         assertSame(mockDefaultProvider, strategy.getDefaultContextProvider());
     }
 
     /**
-     * Test {@link DefaultI18nContextProviderStrategy#ByClassLoaderI18nContextProviderStrategy(I18nContextProvider)}.
+     * Test {@link DefaultI18nContextProviderStrategy#DefaultI18nContextProviderStrategy(I18nContextProvider)}.
      */
     @Test
-    void testConstructor_Null() {
+    void testConstructor_Provider_Null() {
         assertThrows(NullPointerException.class, () -> {
             new DefaultI18nContextProviderStrategy(null);
         });

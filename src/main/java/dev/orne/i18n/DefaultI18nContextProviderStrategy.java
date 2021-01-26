@@ -42,6 +42,15 @@ implements I18nContextProviderStrategy {
     private @NotNull I18nContextProvider defaultContextProvider;
 
     /**
+     * Creates a new instance with an default instance of
+     * {@code DefaultI18nContextProvider} as default
+     * {@code I18nContextProvider}.
+     */
+    public DefaultI18nContextProviderStrategy() {
+        this(new DefaultI18nContextProvider());
+    }
+
+    /**
      * Creates a new instance with the specified default
      * {@code I18nContextProvider}.
      * 

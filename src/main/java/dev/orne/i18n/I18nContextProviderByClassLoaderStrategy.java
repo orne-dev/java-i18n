@@ -46,6 +46,15 @@ implements I18nContextProviderConfigurableStrategy {
     private final @NotNull Map<ClassLoader, I18nContextProvider> contextProviders;
 
     /**
+     * Creates a new instance with an default instance of
+     * {@code DefaultI18nContextProvider} as default
+     * {@code I18nContextProvider}.
+     */
+    public I18nContextProviderByClassLoaderStrategy() {
+        this(new DefaultI18nContextProvider());
+    }
+
+    /**
      * Creates a new instance with the specified default
      * {@code I18nContextProvider}.
      * 

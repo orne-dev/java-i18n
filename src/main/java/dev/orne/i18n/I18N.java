@@ -118,7 +118,7 @@ public final class I18N {
         final Properties config = loadConfiguration(cl);
         I18nContextProviderStrategy result = getCustomStrategy(cl, config);
         if (result == null) {
-            result = new DefaultI18nContextProviderStrategy(new DefaultI18nContextProvider());
+            result = new DefaultI18nContextProviderStrategy();
         }
         return result;
     }
