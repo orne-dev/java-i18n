@@ -33,6 +33,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import dev.orne.i18n.DummyI18nResources;
 import dev.orne.i18n.I18nContext;
@@ -179,5 +181,24 @@ class I18nSpringContextProviderTest {
         assertThrows(NullPointerException.class, () -> {
             provider.createContext(null);
         });
+    }
+
+    /**
+     * Test {@link I18nSpringContextProvider#clearContext()}.
+     */
+    @Test
+    void testClearContext() {
+        final I18nSpringContextProvider provider = new I18nSpringContextProvider();
+        final I18nContext context = provider.getContext();
+        final Locale locale = new Locale("zz");
+        context.setLocale(locale);
+        assertEquals(locale, context.getLocale());
+        assertEquals(locale, LocaleContextHolder.getLocale());
+        final LocaleContext springContext = LocaleContextHolder.getLocaleContext();
+        assertNotNull(springContext);
+        assertEquals(locale, springContext.getLocale());
+        provider.clearContext();
+        assertFalse(provider.isContextAlive(context));
+        assertNull(LocaleContextHolder.getLocaleContext());
     }
 }
