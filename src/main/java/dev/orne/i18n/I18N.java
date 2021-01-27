@@ -87,6 +87,7 @@ public final class I18N {
     public static void setContextProviderStrategy(
             final @NotNull I18nContextProviderStrategy strategy) {
         synchronized (I18N.class) {
+            reconfigure();
             I18N.contextProviderStrategy = Validate.notNull(strategy);
         }
     }
@@ -103,9 +104,11 @@ public final class I18N {
      * configuration based on configuration file (if present).
      */
     public static void reconfigure() {
-        if (I18N.contextProviderStrategy != null) {
-            I18N.contextProviderStrategy.invalidate();
-            I18N.contextProviderStrategy = null;
+        synchronized (I18N.class) {
+            if (I18N.contextProviderStrategy != null) {
+                I18N.contextProviderStrategy.invalidate();
+                I18N.contextProviderStrategy = null;
+            }
         }
     }
 
