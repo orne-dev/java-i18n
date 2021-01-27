@@ -491,6 +491,53 @@ class DefaultI18nContextProviderTest {
         provider.clearContext();
     }
 
+    /**
+     * Test {@link DefaultI18nContextProvider#equals(Object)} and
+     * {@link DefaultI18nContextProvider#hashCode()}.
+     */
+    @Test
+    void testEqualsHashCodeToString() {
+        final Locale[] locales = new Locale[] {
+                Locale.ENGLISH,
+                Locale.FRENCH
+        };
+        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+        assertNotEquals(provider, null);
+        assertEquals(provider, provider);
+        assertEquals(provider.hashCode(), provider.hashCode());
+        assertNotEquals(provider, new Object());
+        assertNotEquals(provider, new DefaultI18nContextProvider(false));
+        final DefaultI18nContextProvider other = new DefaultI18nContextProvider(true);
+        assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
+        assertEquals(provider, other);
+        other.setFullModeByDefault(true);
+        assertNotEquals(provider, other);
+        other.setAvailableLocales(locales);
+        assertNotEquals(provider, other);
+        other.setFullModeByDefault(false);
+        assertNotEquals(provider, other);
+        provider.setAvailableLocales(locales);
+        assertEquals(provider, other);
+        assertEquals(provider.hashCode(), other.hashCode());
+        provider.setFullModeByDefault(true);
+        other.setFullModeByDefault(true);
+        assertEquals(provider, other);
+        assertEquals(provider.hashCode(), other.hashCode());
+        provider.setDefaultI18nResources(mockDefaultResources);
+        assertNotEquals(provider, other);
+        other.setDefaultI18nResources(mockDefaultResources);
+        assertEquals(provider, other);
+        assertEquals(provider.hashCode(), other.hashCode());
+        provider.addI18nResources("mock key", mockResources);
+        assertNotEquals(provider, other);
+        other.addI18nResources("other mock key", mockResources);
+        assertNotEquals(provider, other);
+        other.clearI18nResources();
+        other.addI18nResources("mock key", mockResources);
+        assertEquals(provider, other);
+        assertEquals(provider.hashCode(), other.hashCode());
+    }
+
     class InheritableGetContextChild
     implements Runnable {
 

@@ -319,6 +319,7 @@ implements I18nContextProvider {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(isInheritable())
                 .append(this.fullModeByDefault)
                 .append(this.availableLocales)
                 .append(this.defaultI18nResources)
@@ -336,6 +337,7 @@ implements I18nContextProvider {
         if (!getClass().equals(obj.getClass())) { return false; }
         final DefaultI18nContextProvider other = (DefaultI18nContextProvider) obj;
         return new EqualsBuilder()
+                .append(this.isInheritable(), other.isInheritable())
                 .append(this.fullModeByDefault, other.fullModeByDefault)
                 .append(this.availableLocales, other.availableLocales)
                 .append(this.defaultI18nResources, other.defaultI18nResources)

@@ -64,13 +64,48 @@ class DefaultI18nContextTest {
     }
 
     /**
-     * Test {@link DefaultI18nContext#DefaultI18nContext()}.
+     * Test {@link DefaultI18nContext#DefaultI18nContext(UUID)}.
      */
     @Test
     void testConstructor() {
         final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         assertEquals(MOCK_DEFAULT_LOCALE, context.getLocale());
         assertFalse(context.isFullMode());
+    }
+
+    /**
+     * Test {@link DefaultI18nContext#DefaultI18nContext(UUID)}.
+     */
+    @Test
+    void testConstructor_Null() {
+        assertThrows(NullPointerException.class, () -> {
+            new DefaultI18nContext((UUID) null);
+        });
+    }
+
+    /**
+     * Test {@link DefaultI18nContext#DefaultI18nContext(DefaultI18nContext)}.
+     */
+    @Test
+    void testCopyConstructor() {
+        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
+        context.setLocale(MOCK_LOCALE);
+        context.setFullMode(true);
+        final DefaultI18nContext result = new DefaultI18nContext(context);
+        assertEquals(context.getProviderUUID(), result.getProviderUUID());
+        assertEquals(context.isFullMode(), result.isFullMode());
+        assertEquals(context, result);
+        assertEquals(context.hashCode(), result.hashCode());
+    }
+
+    /**
+     * Test {@link DefaultI18nContext#DefaultI18nContext(DefaultI18nContext)}.
+     */
+    @Test
+    void testCopyConstructor_Null() {
+        assertThrows(NullPointerException.class, () -> {
+            new DefaultI18nContext((DefaultI18nContext) null);
+        });
     }
 
     /**
@@ -111,31 +146,31 @@ class DefaultI18nContextTest {
     @Test
     void testEqualsHashCodeToString() {
         final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
-        assertFalse(context.equals(null));
-        assertTrue(context.equals(context));
+        assertNotEquals(context, null);
+        assertEquals(context, context);
         assertEquals(context.hashCode(), context.hashCode());
-        assertFalse(context.equals(new Object()));
-        assertFalse(context.equals(new DefaultI18nContext(UUID.randomUUID())));
+        assertNotEquals(context, new Object());
+        assertNotEquals(context, new DefaultI18nContext(UUID.randomUUID()));
         final DefaultI18nContext other = new DefaultI18nContext(context);
-        assertTrue(context.equals(other));
+        assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
         other.setFullMode(true);
-        assertFalse(context.equals(other));
+        assertNotEquals(context, other);
         assertNotNull(other.toString());
         other.setLocale(MOCK_LOCALE);
-        assertFalse(context.equals(other));
+        assertNotEquals(context, other);
         assertNotNull(other.toString());
         other.setFullMode(false);
-        assertFalse(context.equals(other));
+        assertNotEquals(context, other);
         assertNotNull(other.toString());
         context.setLocale(MOCK_LOCALE);
-        assertTrue(context.equals(other));
+        assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
         context.setFullMode(true);
         other.setFullMode(true);
-        assertTrue(context.equals(other));
+        assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
     }
