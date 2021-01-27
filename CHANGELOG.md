@@ -16,3 +16,5 @@
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringContext`
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringResources`
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringContextProvider`
+    01. :gift: Added `dev.orne.i18n.spring.I18nSpringConfigurer`
+    01. :gift: Added `dev.orne.i18n.spring.EnableI18N`
