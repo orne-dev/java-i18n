@@ -77,13 +77,48 @@ class I18nSpringContextTest {
     }
 
     /**
-     * Test {@link I18nSpringContext#I18nSpringContext()}.
+     * Test {@link I18nSpringContext#I18nSpringContext(UUID)}.
      */
     @Test
     void testConstructor() {
         final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         assertEquals(MOCK_DEFAULT_CONTEXT_LOCALE, context.getLocale());
         assertFalse(context.isFullMode());
+    }
+
+    /**
+     * Test {@link I18nSpringContext#I18nSpringContext(UUID)}.
+     */
+    @Test
+    void testConstructor_Null() {
+        assertThrows(NullPointerException.class, () -> {
+            new I18nSpringContext((UUID) null);
+        });
+    }
+
+    /**
+     * Test {@link I18nSpringContext#I18nSpringContext(I18nSpringContext)}.
+     */
+    @Test
+    void testCopyConstructor_Null() {
+        assertThrows(NullPointerException.class, () -> {
+            new I18nSpringContext((I18nSpringContext) null);
+        });
+    }
+
+    /**
+     * Test {@link I18nSpringContext#I18nSpringContext(I18nSpringContext)}.
+     */
+    @Test
+    void testCopyConstructor() {
+        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
+        assertEquals(MOCK_DEFAULT_CONTEXT_LOCALE, context.getLocale());
+        assertFalse(context.isFullMode());
+        final I18nSpringContext result = new I18nSpringContext(context);
+        assertEquals(context.getProviderUUID(), result.getProviderUUID());
+        assertEquals(context.isFullMode(), result.isFullMode());
+        assertEquals(context, result);
+        assertEquals(context.hashCode(), result.hashCode());
     }
 
     /**
