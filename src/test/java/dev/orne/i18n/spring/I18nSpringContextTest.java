@@ -159,25 +159,25 @@ class I18nSpringContextTest {
     @Test
     void testEqualsHashCodeToString() {
         final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
-        assertFalse(context.equals(null));
-        assertTrue(context.equals(context));
+        assertNotEquals(context, (Object) null);
+        assertEquals(context, context);
         assertEquals(context.hashCode(), context.hashCode());
-        assertFalse(context.equals(new Object()));
-        assertFalse(context.equals(new I18nSpringContext(UUID.randomUUID())));
+        assertNotEquals(context, new Object());
+        assertNotEquals(context, new I18nSpringContext(UUID.randomUUID()));
         final I18nSpringContext other = new I18nSpringContext(context);
-        assertTrue(context.equals(other));
+        assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
         other.setFullMode(true);
-        assertFalse(context.equals(other));
+        assertNotEquals(context, other);
         assertNotNull(other.toString());
         other.setFullMode(false);
-        assertTrue(context.equals(other));
+        assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
         context.setFullMode(true);
         other.setFullMode(true);
-        assertTrue(context.equals(other));
+        assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
     }

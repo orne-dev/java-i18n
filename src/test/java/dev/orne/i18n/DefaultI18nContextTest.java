@@ -146,7 +146,7 @@ class DefaultI18nContextTest {
     @Test
     void testEqualsHashCodeToString() {
         final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
-        assertNotEquals(context, null);
+        assertNotEquals(context, (Object) null);
         assertEquals(context, context);
         assertEquals(context.hashCode(), context.hashCode());
         assertNotEquals(context, new Object());
