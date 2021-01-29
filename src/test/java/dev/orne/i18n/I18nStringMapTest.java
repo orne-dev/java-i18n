@@ -58,10 +58,12 @@ class I18nStringMapTest {
     private static final String MOCK_ZZ_MSG = "mock xx message";
     private static final String CONTEXT_LANG = "cx";
     private static final String XX_LANG = "xx";
+    private static final String XX_YY_LANG = "xx-YY";
     private static final String YY_LANG = "yy";
     private static final String ZZ_LANG = "zz";
     private static final Locale CONTEXT_LOCALE = new Locale(CONTEXT_LANG);
     private static final Locale XX_LOCALE = new Locale(XX_LANG);
+    private static final Locale XX_YY_LOCALE = new Locale(XX_YY_LANG);
     private static final Locale YY_LOCALE = new Locale(YY_LANG);
     private static final Locale ZZ_LOCALE = new Locale(ZZ_LANG);
 
@@ -181,6 +183,30 @@ class I18nStringMapTest {
     void testCopyConstructor_Null() {
         assertThrows(NullPointerException.class, () -> {
             new I18nStringMap((I18nString) null);
+        });
+    }
+
+    /**
+     * Test {@link I18nStringMap#setDefaultText(String)}.
+     */
+    @Test
+    void testSetDefaultText() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
+        final I18nStringMap result = bean.setDefaultText(MOCK_XX_MSG);
+        assertSame(bean, result);
+        assertEquals(MOCK_XX_MSG, bean.getDefaultText());
+        assertNotNull(result.getAvailableTranslations());
+        assertTrue(result.getAvailableTranslations().isEmpty());
+    }
+
+    /**
+     * Test {@link I18nStringMap#setDefaultText(String)}.
+     */
+    @Test
+    void testSetDefaultText_Null() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
+        assertThrows(NullPointerException.class, () -> {
+            bean.setDefaultText(null);
         });
     }
 
@@ -340,6 +366,19 @@ class I18nStringMapTest {
      * Test {@link I18nResourcesString#get(String)}.
      */
     @Test
+    void testGet_Language_Variant() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG)
+                .set(XX_LOCALE, MOCK_XX_MSG);
+        final String result = bean.get(XX_YY_LANG);
+        assertEquals(MOCK_XX_MSG, result);
+        assertEquals(1, bean.getAvailableTranslations().size());
+        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+    }
+
+    /**
+     * Test {@link I18nResourcesString#get(String)}.
+     */
+    @Test
     void testGet_Language_Missing() {
         final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG)
                 .set(XX_LOCALE, MOCK_XX_MSG);
@@ -367,6 +406,19 @@ class I18nStringMapTest {
         assertThrows(NullPointerException.class, () -> {
             bean.get((String) null);
         });
+    }
+
+    /**
+     * Test {@link I18nResourcesString#get(Locale)}.
+     */
+    @Test
+    void testGet_Locale_Variant() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG)
+                .set(XX_LOCALE, MOCK_XX_MSG);
+        final String result = bean.get(XX_YY_LOCALE);
+        assertEquals(MOCK_XX_MSG, result);
+        assertEquals(1, bean.getAvailableTranslations().size());
+        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
     }
 
     /**

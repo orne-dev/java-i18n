@@ -105,10 +105,12 @@ implements I18nString {
      * Sets the default text.
      * 
      * @param defaultText The default text
+     * @return This instance for method chaining
      */
-    public void setDefaultText(
+    public I18nStringMap setDefaultText(
             final @NotNull String defaultText) {
         this.defaultText = Validate.notNull(defaultText);
+        return this;
     }
 
     /**
