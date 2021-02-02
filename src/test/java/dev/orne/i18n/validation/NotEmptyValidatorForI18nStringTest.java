@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18nString;
-import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.NotEmpty;
 
 /**

@@ -1,4 +1,4 @@
-package dev.orne.i18n.validation;
+package dev.orne.i18n.validation.javax;
 
 /*-
  * #%L
@@ -24,32 +24,34 @@ package dev.orne.i18n.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.validation.constraints.NotEmpty;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18nString;
-import jakarta.validation.constraints.NotBlank;
 
 /**
- * Unit tests for {@code NotBlankValidatorForI18nString}.
+ * Unit tests for {@code NotEmptyValidatorForI18nString}.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @since 0.1
- * @see NotBlankValidatorForI18nString
+ * @see NotEmptyValidatorForI18nString
  */
 @Tag("ut")
-class NotBlankValidatorForI18nStringTest
-extends AbstractI18nValidatorTest<NotBlank> {
+@SuppressWarnings("deprecation")
+class NotEmptyValidatorForI18nStringTest
+extends AbstractI18nValidatorTest<NotEmpty> {
 
-    public NotBlankValidatorForI18nStringTest() {
-        super(NotBlank.class, NotBlankValidatorForI18nString.class);
+    public NotEmptyValidatorForI18nStringTest() {
+        super(NotEmpty.class, NotEmptyValidatorForI18nString.class);
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Null() {
@@ -65,15 +67,15 @@ extends AbstractI18nValidatorTest<NotBlank> {
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Blank() {
-        assertBlankValidation(false);
+        assertBlankValidation(true);
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid() {
@@ -81,7 +83,7 @@ extends AbstractI18nValidatorTest<NotBlank> {
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Map_Default_Empty() {
@@ -89,15 +91,15 @@ extends AbstractI18nValidatorTest<NotBlank> {
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Map_Default_Blank() {
-        assertMapBlankDefaultValidation(false);
+        assertMapBlankDefaultValidation(true);
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Map_Translation_Empty() {
@@ -105,15 +107,15 @@ extends AbstractI18nValidatorTest<NotBlank> {
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Map_Translation_Blank() {
-        assertMapBlankTranslationValidation(false);
+        assertMapBlankTranslationValidation(true);
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
+     * Test {@link NotEmptyValidatorForI18nString#isValid(I18nString, ConstraintValidatorContext)}.
      */
     @Test
     void testIsValid_Map() {
@@ -121,11 +123,11 @@ extends AbstractI18nValidatorTest<NotBlank> {
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isTextValid(String)}.
+     * Test {@link NotEmptyValidatorForI18nString#isTextValid(String)}.
      */
     @Test
     void testIsTextValid_Null() {
-        final NotBlankValidatorForI18nString validator = new NotBlankValidatorForI18nString();
+        final NotEmptyValidatorForI18nString validator = new NotEmptyValidatorForI18nString();
         validator.initialize(mockAnnotation);
         assertThrows(NullPointerException.class, () -> {
             validator.isTextValid(null);
@@ -133,34 +135,34 @@ extends AbstractI18nValidatorTest<NotBlank> {
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isTextValid(String)}.
+     * Test {@link NotEmptyValidatorForI18nString#isTextValid(String)}.
      */
     @Test
     void testIsTextValid_Empty() {
-        final NotBlankValidatorForI18nString validator = new NotBlankValidatorForI18nString();
+        final NotEmptyValidatorForI18nString validator = new NotEmptyValidatorForI18nString();
         validator.initialize(mockAnnotation);
         final boolean result = validator.isTextValid("");
         assertFalse(result);
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isTextValid(String)}.
+     * Test {@link NotEmptyValidatorForI18nString#isTextValid(String)}.
      */
     @Test
     void testIsTextValid_Blank() {
-        final NotBlankValidatorForI18nString validator = new NotBlankValidatorForI18nString();
+        final NotEmptyValidatorForI18nString validator = new NotEmptyValidatorForI18nString();
         validator.initialize(mockAnnotation);
         final boolean result = validator.isTextValid(
                 StringUtils.leftPad("", textSize));
-        assertFalse(result);
+        assertTrue(result);
     }
 
     /**
-     * Test {@link NotBlankValidatorForI18nString#isTextValid(String)}.
+     * Test {@link NotEmptyValidatorForI18nString#isTextValid(String)}.
      */
     @Test
     void testIsTextValid_Random() {
-        final NotBlankValidatorForI18nString validator = new NotBlankValidatorForI18nString();
+        final NotEmptyValidatorForI18nString validator = new NotEmptyValidatorForI18nString();
         validator.initialize(mockAnnotation);
         final boolean result = validator.isTextValid(
                 RandomStringUtils.random(textSize));

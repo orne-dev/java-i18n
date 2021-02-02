@@ -30,3 +30,11 @@
     01. :gift: Added `dev.orne.i18n.validation.NotBlankValidatorForI18nString`
     01. :gift: Added `dev.orne.i18n.validation.SizeValidatorForI18nString`
     01. :gift: Added `dev.orne.i18n.validation.PatternValidatorForI18nString`
+01. :gift: Added Javax Bean Validation 2.0 support
+    01. :warning: Deprecated. Use Jakarta Bean Validation 3.0 if possible
+    01. :gift: Added `dev.orne.i18n.validation.javax.AbstractValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.javax.NotEmptyValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.javax.NotBlankValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.javax.SizeValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.javax.PatternValidatorForI18nString`
+    

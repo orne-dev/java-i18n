@@ -1,4 +1,4 @@
-package dev.orne.i18n.validation;
+package dev.orne.i18n.validation.javax;
 
 /*-
  * #%L
@@ -27,13 +27,14 @@ import static org.mockito.BDDMockito.*;
 
 import java.lang.annotation.Annotation;
 
+import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18nString;
-import jakarta.validation.constraints.Size;
 
 /**
  * Unit tests for {@code SizeValidatorForI18nString}.
@@ -44,6 +45,7 @@ import jakarta.validation.constraints.Size;
  * @see SizeValidatorForI18nString
  */
 @Tag("ut")
+@SuppressWarnings("deprecation")
 class SizeValidatorForI18nStringTest
 extends AbstractI18nValidatorTest<Size> {
 

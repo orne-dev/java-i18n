@@ -1,0 +1,4 @@
+dev.orne.i18n.validation.javax.NotEmptyValidatorForI18nString
+dev.orne.i18n.validation.javax.NotBlankValidatorForI18nString
+dev.orne.i18n.validation.javax.SizeValidatorForI18nString
+dev.orne.i18n.validation.javax.PatternValidatorForI18nString
