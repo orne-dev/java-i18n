@@ -36,11 +36,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
 import java.util.Properties;
 
-import javax.validation.constraints.NotNull;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18N} runtime configuration.

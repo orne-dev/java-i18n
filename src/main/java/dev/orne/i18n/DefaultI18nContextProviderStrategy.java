@@ -22,9 +22,9 @@ package dev.orne.i18n;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Default implementation of {@code I18nContextProviderStrategy} that returns
@@ -65,7 +65,7 @@ implements I18nContextProviderStrategy {
      * {@inheritDoc}
      */
     @Override
-    public I18nContextProvider getDefaultContextProvider() {
+    public @NotNull I18nContextProvider getDefaultContextProvider() {
         return this.defaultContextProvider;
     }
 

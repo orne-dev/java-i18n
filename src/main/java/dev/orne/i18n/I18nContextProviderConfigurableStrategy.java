@@ -22,7 +22,7 @@ package dev.orne.i18n;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Configurable strategy of selection of {@code I18nContextProvider}.

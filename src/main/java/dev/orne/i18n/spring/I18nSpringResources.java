@@ -25,14 +25,13 @@ package dev.orne.i18n.spring;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nResources} based on Spring

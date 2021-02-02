@@ -26,13 +26,11 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 import java.util.WeakHashMap;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nString} that doesn't contain translations.
@@ -52,7 +50,7 @@ implements I18nString {
     private static final long serialVersionUID = 1L;
 
     /** The cache of {@code String} to {@code I18nFixedString} relations. */
-    private static final WeakHashMap<String, WeakReference<I18nFixedString>> CACHE =
+    private static final @NotNull WeakHashMap<@NotNull String, @NotNull WeakReference<I18nFixedString>> CACHE =
             new WeakHashMap<>();
 
     /** The fixed text for all languages. */
@@ -78,7 +76,6 @@ implements I18nString {
      * @return The instance for the specified text, or {@code null} if
      * {@code text} is {@code null}
      */
-    @JsonCreator
     public static I18nFixedString from(
             final String text) {
         if (text == null) { return null; }

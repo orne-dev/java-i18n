@@ -25,7 +25,7 @@ package dev.orne.i18n;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface for I18N messages source. Provides an implementation agnostic way

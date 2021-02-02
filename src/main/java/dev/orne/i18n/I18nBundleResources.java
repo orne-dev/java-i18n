@@ -27,9 +27,9 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nResources} based on {@code ResourceBundle}.
@@ -62,7 +62,7 @@ implements I18nResources {
      * 
      * @return The I18N resources bundle
      */
-    protected ResourceBundle getBundle() {
+    protected @NotNull ResourceBundle getBundle() {
         return this.bundle;
     }
 
@@ -84,8 +84,11 @@ implements I18nResources {
     public @NotNull String getMessage(
             final @NotNull String defaultMessage,
             final @NotNull String[] codes,
-            final @NotNull Locale locale,
+            final Locale locale,
             final Object... params) {
+        Validate.notNull(defaultMessage);
+        Validate.notNull(codes);
+        Validate.noNullElements(codes);
         String format = null;
         for (final String code : codes) {
             try {
@@ -123,8 +126,10 @@ implements I18nResources {
     public String getMessage(
             final @NotNull String defaultMessage,
             final @NotNull String code,
-            final @NotNull Locale locale,
+            final Locale locale,
             final Object... params) {
+        Validate.notNull(defaultMessage);
+        Validate.notNull(code);
         String format;
         try {
             format = this.bundle.getString(code);

@@ -29,11 +29,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nString} based on {@code I18nResources}.
@@ -73,13 +73,13 @@ implements I18nString {
             final @NotNull String[] codes,
             final Serializable... arguments) {
         super();
+        this.i18nResourcesKey = resources;
         this.defaultText = Validate.notNull(defaultMessage);
         Validate.notNull(codes);
         Validate.noNullElements(codes);
         this.codes = Arrays.copyOf(codes, codes.length);
         Validate.notNull(arguments);
         this.arguments = Arrays.copyOf(arguments, arguments.length);
-        this.i18nResourcesKey = resources;
     }
 
     /**

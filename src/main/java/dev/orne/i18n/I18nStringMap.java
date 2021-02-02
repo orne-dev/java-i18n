@@ -26,11 +26,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nString} populated with translations.
@@ -51,7 +51,7 @@ implements I18nString {
     /** The default text. */
     private @NotNull String defaultText;
     /** The text translations. */
-    private final @NotNull Map<String, String> i18n = new HashMap<>();
+    private final @NotNull Map<@NotNull String, @NotNull String> i18n = new HashMap<>();
 
     /**
      * Creates a new instance with empty default text and no translations.
@@ -124,7 +124,7 @@ implements I18nString {
      * 
      * @return The text translations
      */
-    public @NotNull Map<String, String> getI18n() {
+    public @NotNull Map<@NotNull String, @NotNull String> getI18n() {
         return this.i18n;
     }
 
@@ -137,8 +137,10 @@ implements I18nString {
      * @return This instance for method chaining
      */
     public @NotNull I18nStringMap setI18n(
-            final @NotNull Map<String, String> translations) {
+            final @NotNull Map<@NotNull String, @NotNull String> translations) {
         Validate.notNull(translations);
+        Validate.noNullElements(translations.keySet());
+        Validate.noNullElements(translations.values());
         this.i18n.clear();
         this.i18n.putAll(translations);
         return this;

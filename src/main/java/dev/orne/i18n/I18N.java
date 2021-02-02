@@ -28,11 +28,11 @@ import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.Properties;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Main entry point to I18N framework. Provides methods for configuration and
@@ -54,9 +54,9 @@ public final class I18N {
     public static final String STRATEGY_PROP = "strategy";
 
     /** The class logger. */
-    private static final @NotNull Logger LOG = LoggerFactory.getLogger(I18N.class);
+    private static final Logger LOG = LoggerFactory.getLogger(I18N.class);
     /** The I18N context provider selection strategy. */
-    private static @NotNull I18nContextProviderStrategy contextProviderStrategy;
+    private static I18nContextProviderStrategy contextProviderStrategy;
 
     /**
      * Private constructor.
@@ -112,11 +112,27 @@ public final class I18N {
         }
     }
 
-    static I18nContextProviderStrategy createStrategy() {
+    /**
+     * Creates a I18N context provider selection strategy based on
+     * configuration file in current {@code Thread} context class loader.
+     * If no configuration file is found a default I18N context provider
+     * selection strategy is created.
+     * 
+     * @return The I18N context provider selection strategy
+     */
+    static @NotNull I18nContextProviderStrategy createStrategy() {
         return createStrategy(Thread.currentThread().getContextClassLoader());
     }
 
-    static I18nContextProviderStrategy createStrategy(
+    /**
+     * Creates a I18N context provider selection strategy based on
+     * configuration file in specified class loader. If no configuration file
+     * is found a default I18N context provider selection strategy is created.
+     * 
+     * @param cl The class loader to load the configuration from
+     * @return The I18N context provider selection strategy
+     */
+    static @NotNull I18nContextProviderStrategy createStrategy(
             final @NotNull ClassLoader cl) {
         final Properties config = loadConfiguration(cl);
         I18nContextProviderStrategy result = getCustomStrategy(cl, config);
@@ -126,8 +142,18 @@ public final class I18N {
         return result;
     }
 
-    static Properties loadConfiguration(
+    /**
+     * Loads the configuration properties from the configuration file
+     * {@code CONFIG_FILE}. If no such file exists returns an empty
+     * {@code Properties}.
+     * 
+     * @param cl The class loader to load the configuration from
+     * @return The configuration properties
+     * @see #CONFIG_FILE
+     */
+    static @NotNull Properties loadConfiguration(
             final @NotNull ClassLoader cl) {
+        Validate.notNull(cl);
         final Properties config = new Properties();
         try (final InputStream input = cl.getResourceAsStream(CONFIG_FILE)) {
             if (input != null) {
@@ -139,6 +165,22 @@ public final class I18N {
         return config;
     }
 
+    /**
+     * Creates the configured I18N context provider selection strategy.
+     * <p>
+     * <ol>
+     * <li>If no custom strategy class is configured returns {@code null}.</li>
+     * <li>If a custom strategy class is configured tries to call a
+     * constructor with configuration {@code Properties} parameter.</li>
+     * <li>If no such constructor exists or an error occurs tries to call
+     * default empty constructor.</li>
+     * <li>If both constructor fail or are missing returns {@code null}.</li>
+     * 
+     * @param cl The class loader used to find the custom strategy class
+     * @param config The configuration properties
+     * @return The configured I18N context provider selection strategy, or
+     * {@code null} if no custom strategy is configured or cannot be created
+     */
     static I18nContextProviderStrategy getCustomStrategy(
             final @NotNull ClassLoader cl,
             final @NotNull Properties config) {
@@ -165,6 +207,16 @@ public final class I18N {
         return result;
     }
 
+    /**
+     * Finds the configured custom I18N context provider selection strategy
+     * class. If no class is configured, cannot be found or doesn't implement
+     * {@code I18nContextProviderStrategy} returns {@code null}.
+     * 
+     * @param cl The class loader used to find the custom strategy class
+     * @param config The configuration properties
+     * @return The valid configured custom strategy class, or {@code null}
+     * @see #STRATEGY_PROP
+     */
     @SuppressWarnings("unchecked")
     static Class<? extends I18nContextProviderStrategy> getCustomStrategyClass(
             final @NotNull ClassLoader cl,

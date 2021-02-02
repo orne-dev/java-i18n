@@ -30,8 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +43,7 @@ import dev.orne.i18n.I18nContextProvider;
 import dev.orne.i18n.I18nContextProviderConfigurableStrategy;
 import dev.orne.i18n.I18nContextProviderStrategy;
 import dev.orne.i18n.I18nResources;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * I18N context provider configuration for Spring. Configures a
@@ -230,7 +229,7 @@ implements InitializingBean, ImportAware {
      * 
      * @return The additional named I18N resources
      */
-    public Map<String, I18nResources> getNamedI18nResources() {
+    public Map<@NotNull String, @NotNull I18nResources> getNamedI18nResources() {
         if (this.namedI18nResources == null) {
             return null;
         } else {
@@ -244,10 +243,12 @@ implements InitializingBean, ImportAware {
      * @param resources The additional named I18N resources
      */
     public void setNamedI18nResources(
-            final Map<String, I18nResources> resources) {
+            final Map<@NotNull String, @NotNull I18nResources> resources) {
         if (resources == null) {
             this.namedI18nResources = null;
         } else {
+            Validate.noNullElements(resources.keySet());
+            Validate.noNullElements(resources.values());
             this.namedI18nResources = new HashMap<>(resources);
         }
     }
@@ -305,8 +306,8 @@ implements InitializingBean, ImportAware {
      * 
      * @return The new configured {@code I18nContextProvider}
      */
-    protected I18nContextProvider createContextProvider() {
-        final I18nSpringContextProvider bean;
+    protected @NotNull I18nContextProvider createContextProvider() {
+        final @NotNull I18nSpringContextProvider bean;
         if (this.defaultI18nResources != null) {
             bean = new I18nSpringContextProvider(
                     this.inheritableContexts);
@@ -368,7 +369,7 @@ implements InitializingBean, ImportAware {
      */
     @Override
     public void afterPropertiesSet() {
-        final I18nContextProvider provider;
+        final @NotNull I18nContextProvider provider;
         if (this.contextProvider == null) {
             provider = createContextProvider();
         } else {

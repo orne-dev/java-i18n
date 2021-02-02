@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +48,7 @@ import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nContextProvider;
 import dev.orne.i18n.I18nContextProviderByClassLoaderStrategy;
 import dev.orne.i18n.I18nResources;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18nSpringConfigurer}.

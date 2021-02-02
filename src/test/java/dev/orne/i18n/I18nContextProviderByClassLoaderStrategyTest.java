@@ -25,6 +25,7 @@ package dev.orne.i18n;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -261,12 +262,16 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_ClassLoader_NullClassLoader() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy =
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((ClassLoader) null, mockProvider);
         });
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -274,12 +279,16 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_ClassLoader_NullProvider() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy =
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider(mockClassLoader, null);
         });
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -287,12 +296,16 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_ClassLoader_Nulls() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy =
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap);
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((ClassLoader) null, null);
         });
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -300,6 +313,8 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_Thread() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy = spy(
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         willReturn(mockClassLoader).given(mockThread).getContextClassLoader();
@@ -310,7 +325,9 @@ class I18nContextProviderByClassLoaderStrategyTest {
         then(strategy).should().setContextProvider(mockThread, mockProvider);
         then(strategy).should().setContextProvider(mockClassLoader, mockProvider);
         then(strategy).shouldHaveNoMoreInteractions();
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -318,12 +335,16 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_Thread_NullThread() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy = spy(
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((Thread) null, mockProvider);
         });
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -331,6 +352,8 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_Thread_NullProvider() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy = spy(
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         final NullPointerException mockEx = new NullPointerException();
@@ -340,7 +363,9 @@ class I18nContextProviderByClassLoaderStrategyTest {
             strategy.setContextProvider(mockThread, null);
         });
         assertSame(mockEx, result);
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -348,6 +373,8 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy = spy(
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         willDoNothing().given(strategy).setContextProvider(Thread.currentThread(), mockProvider);
@@ -355,7 +382,9 @@ class I18nContextProviderByClassLoaderStrategyTest {
         then(strategy).should().setContextProvider(mockProvider);
         then(strategy).should().setContextProvider(Thread.currentThread(), mockProvider);
         then(strategy).shouldHaveNoMoreInteractions();
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -363,12 +392,16 @@ class I18nContextProviderByClassLoaderStrategyTest {
      */
     @Test
     void testSetContextProvider_Thread_Nulls() {
+        willReturn(Collections.emptySet()).given(mockProviderMap).keySet();
+        willReturn(Collections.emptyList()).given(mockProviderMap).values();
         final I18nContextProviderByClassLoaderStrategy strategy = spy(
                 new I18nContextProviderByClassLoaderStrategy(mockDefaultProvider, mockProviderMap));
         assertThrows(NullPointerException.class, () -> {
             strategy.setContextProvider((Thread) null, null);
         });
-        then(mockProviderMap).shouldHaveNoInteractions();
+        then(mockProviderMap).should().keySet();
+        then(mockProviderMap).should().values();
+        then(mockProviderMap).shouldHaveNoMoreInteractions();
     }
 
     /**

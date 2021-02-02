@@ -22,8 +22,6 @@ package dev.orne.i18n.spring;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,6 +30,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import dev.orne.i18n.DefaultI18nContextProvider;
 import dev.orne.i18n.I18nContext;
 import dev.orne.i18n.I18nContextProvider;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nContextProvider} for Spring contexts.

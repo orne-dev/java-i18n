@@ -32,14 +32,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18nFixedString}.

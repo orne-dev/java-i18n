@@ -25,9 +25,9 @@ package dev.orne.i18n;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Dummy implementation of {@code I18nResources} that always returns the

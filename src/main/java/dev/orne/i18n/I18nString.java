@@ -25,11 +25,9 @@ package dev.orne.i18n;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface for I18N texts.

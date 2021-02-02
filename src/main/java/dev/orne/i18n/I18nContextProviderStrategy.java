@@ -22,7 +22,7 @@ package dev.orne.i18n;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Strategy of selection of {@code I18nContextProvider}.
@@ -41,7 +41,7 @@ public interface I18nContextProviderStrategy {
      * 
      * @return The default {@code I18nContextProvider}
      */
-    I18nContextProvider getDefaultContextProvider();
+    @NotNull I18nContextProvider getDefaultContextProvider();
 
     /**
      * Sets the default {@code I18nContextProvider}.

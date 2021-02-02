@@ -24,3 +24,9 @@
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringContextProvider`
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringConfigurer`
     01. :gift: Added `dev.orne.i18n.spring.EnableI18N`
+01. :gift: Added Jakarta Bean Validation 3.0 support
+    01. :gift: Added `dev.orne.i18n.validation.AbstractValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.NotEmptyValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.NotBlankValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.SizeValidatorForI18nString`
+    01. :gift: Added `dev.orne.i18n.validation.PatternValidatorForI18nString`

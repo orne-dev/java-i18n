@@ -29,11 +29,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Default implementation of {@code I18nContextProvider}.
@@ -47,7 +47,7 @@ public class DefaultI18nContextProvider
 implements I18nContextProvider {
 
     /** The UUID of this provider instance. */
-    private UUID sessionUUID = UUID.randomUUID();
+    private @NotNull UUID sessionUUID = UUID.randomUUID();
     /**
      * If the created {@code I18nContext} instances should be in full mode by
      * default.
@@ -62,7 +62,7 @@ implements I18nContextProvider {
     private @NotNull I18nResources defaultI18nResources =
             DummyI18nResources.INSTANCE;
     /** The alternative I18N resources by key. */
-    private final @NotNull Map<String, I18nResources> i18nResources =
+    private final @NotNull Map<@NotNull String, @NotNull I18nResources> i18nResources =
             new HashMap<>();
     /** The {@code I18nContext}s per {@code Thread} container. */
     private final @NotNull ThreadLocal<I18nContext> contexts;
@@ -98,7 +98,7 @@ implements I18nContextProvider {
      * 
      * @return The UUID of this provider instance
      */
-    public UUID getSessionUUID() {
+    public @NotNull UUID getSessionUUID() {
         return this.sessionUUID;
     }
 
@@ -171,7 +171,7 @@ implements I18nContextProvider {
      * 
      * @return The alternative I18N resources by key
      */
-    public Map<String, I18nResources> getI18nResources() {
+    public @NotNull Map<@NotNull String, @NotNull I18nResources> getI18nResources() {
         return Collections.unmodifiableMap(this.i18nResources);
     }
 
@@ -186,9 +186,9 @@ implements I18nContextProvider {
     public @NotNull I18nResources getI18nResources(
             final String key) {
         if (key == null) {
-            return defaultI18nResources;
+            return this.defaultI18nResources;
         } else {
-            return this.i18nResources.getOrDefault(key, defaultI18nResources);
+            return this.i18nResources.getOrDefault(key, this.defaultI18nResources);
         }
     }
 
@@ -231,7 +231,7 @@ implements I18nContextProvider {
      * 
      * @return The {@code I18nContext}s per {@code Thread} container
      */
-    protected ThreadLocal<I18nContext> getContexts() {
+    protected @NotNull ThreadLocal<I18nContext> getContexts() {
         return this.contexts;
     }
 
@@ -284,7 +284,8 @@ implements I18nContextProvider {
      * The default contexts don't expire.
      */
     @Override
-    public boolean isContextAlive(final I18nContext context) {
+    public boolean isContextAlive(
+            final @NotNull I18nContext context) {
         return Validate.notNull(context) == this.contexts.get() &&
                 this.sessionUUID.equals(context.getProviderUUID());
     }
