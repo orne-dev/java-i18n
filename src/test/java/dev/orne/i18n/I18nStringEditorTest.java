@@ -67,6 +67,17 @@ class I18nStringEditorTest {
     }
 
     /**
+     * Test {@link I18nStringEditor#setAsText(String)}.
+     */
+    @Test
+    void testSetAsText_Null() {
+        final I18nStringEditor editor = new I18nStringEditor();
+        editor.setAsText(null);
+        final Object value = editor.getValue();
+        assertNull(value);
+    }
+
+    /**
      * Test {@link I18nStringEditor#getAsText()}.
      */
     @Test
@@ -79,5 +90,16 @@ class I18nStringEditorTest {
         assertEquals(text, result);
         then(mockI18nString).should().get();
         then(mockI18nString).shouldHaveNoMoreInteractions();
+    }
+
+    /**
+     * Test {@link I18nStringEditor#getAsText()}.
+     */
+    @Test
+    void testGetAsText_Null() {
+        final I18nStringEditor editor = new I18nStringEditor();
+        editor.setValue(null);
+        final String result = editor.getAsText();
+        assertNull(result);
     }
 }

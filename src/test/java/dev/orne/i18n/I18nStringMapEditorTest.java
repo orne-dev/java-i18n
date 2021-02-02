@@ -67,6 +67,17 @@ class I18nStringMapEditorTest {
     }
 
     /**
+     * Test {@link I18nStringMapEditor#setAsText(String)}.
+     */
+    @Test
+    void testSetAsText_Null() {
+        final I18nStringMapEditor editor = new I18nStringMapEditor();
+        editor.setAsText(null);
+        final Object value = editor.getValue();
+        assertNull(value);
+    }
+
+    /**
      * Test {@link I18nStringMapEditor#getAsText()}.
      */
     @Test
@@ -79,5 +90,16 @@ class I18nStringMapEditorTest {
         assertEquals(text, result);
         then(mockI18nString).should().get();
         then(mockI18nString).shouldHaveNoMoreInteractions();
+    }
+
+    /**
+     * Test {@link I18nStringMapEditor#getAsText()}.
+     */
+    @Test
+    void testGetAsText_Null() {
+        final I18nStringMapEditor editor = new I18nStringMapEditor();
+        editor.setValue(null);
+        final String result = editor.getAsText();
+        assertNull(result);
     }
 }

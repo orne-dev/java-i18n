@@ -40,7 +40,11 @@ extends PropertyEditorSupport {
      */
     @Override
     public void setAsText(final String text) {
-        super.setValue(I18nFixedString.from(text));
+        if (text == null) {
+            super.setValue(null);
+        } else {
+            super.setValue(I18nFixedString.from(text));
+        }
     }
 
     /**
@@ -49,6 +53,10 @@ extends PropertyEditorSupport {
     @Override
     public String getAsText() {
         final I18nString value = (I18nString) getValue();
-        return value.get();
+        if (value == null) {
+            return null;
+        } else {
+            return value.get();
+        }
     }
 }
