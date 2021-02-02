@@ -23,9 +23,8 @@ package dev.orne.i18n;
  */
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -52,7 +51,14 @@ implements I18nString {
     /** The default text. */
     private @NotNull String defaultText;
     /** The text translations. */
-    private final @NotNull HashMap<String, String> translations = new HashMap<>();
+    private final @NotNull Map<String, String> i18n = new HashMap<>();
+
+    /**
+     * Creates a new instance with empty default text and no translations.
+     */
+    public I18nStringMap() {
+        this("");
+    }
 
     /**
      * Creates a new instance with no translations.
@@ -82,11 +88,11 @@ implements I18nString {
         if (copy instanceof I18nStringMap) {
             final I18nStringMap mapcopy = (I18nStringMap) copy;
             this.defaultText = mapcopy.getDefaultText();
-            this.translations.putAll(mapcopy.translations);
+            this.i18n.putAll(mapcopy.i18n);
         } else if (copy instanceof I18nResourcesString) {
             final I18nResourcesString rescopy = (I18nResourcesString) copy;
             this.defaultText = rescopy.getFormattedDefaultText();
-            this.translations.put(I18N.getLocale().getLanguage(), copy.get());
+            this.i18n.put(I18N.getLocale().getLanguage(), copy.get());
         } else {
             this.defaultText = copy.get();
         }
@@ -107,19 +113,35 @@ implements I18nString {
      * @param defaultText The default text
      * @return This instance for method chaining
      */
-    public I18nStringMap setDefaultText(
+    public @NotNull I18nStringMap setDefaultText(
             final @NotNull String defaultText) {
         this.defaultText = Validate.notNull(defaultText);
         return this;
     }
 
     /**
-     * Returns the languages this instance has translations for.
+     * Returns the text translations.
      * 
-     * @return The languages this instance has translations for
+     * @return The text translations
      */
-    public @NotNull Set<String> getAvailableTranslations() {
-        return new HashSet<>(this.translations.keySet());
+    public @NotNull Map<String, String> getI18n() {
+        return this.i18n;
+    }
+
+    /**
+     * Sets the text translations. This methods modifies the internal
+     * {@code Map}. Further modifications on argument will have no effect in
+     * internal translations.
+     * 
+     * @param translations The text translations
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap setI18n(
+            final @NotNull Map<String, String> translations) {
+        Validate.notNull(translations);
+        this.i18n.clear();
+        this.i18n.putAll(translations);
+        return this;
     }
 
     /**
@@ -136,13 +158,13 @@ implements I18nString {
     @Override
     public @NotNull String get(final @NotNull String language) {
         String tmp = Validate.notNull(language);
-        while (!this.translations.containsKey(tmp) &&
+        while (!this.i18n.containsKey(tmp) &&
                 tmp.contains("-")) {
             tmp = tmp.substring(0, tmp.lastIndexOf('-'));
         }
         final String result;
-        if (this.translations.containsKey(tmp)) {
-            result = this.translations.get(tmp);
+        if (this.i18n.containsKey(tmp)) {
+            result = this.i18n.get(tmp);
         } else {
             result = this.defaultText;
         }
@@ -166,7 +188,7 @@ implements I18nString {
     public @NotNull I18nStringMap set(
             final @NotNull String language,
             final @NotNull String text) {
-        this.translations.put(
+        this.i18n.put(
                 Validate.notNull(language),
                 Validate.notNull(text));
         return this;
@@ -193,7 +215,7 @@ implements I18nString {
      */
     public @NotNull I18nStringMap remove(
             final @NotNull String language) {
-        this.translations.remove(Validate.notNull(language));
+        this.i18n.remove(Validate.notNull(language));
         return this;
     }
 
@@ -205,7 +227,7 @@ implements I18nString {
      */
     public @NotNull I18nStringMap remove(
             final @NotNull Locale locale) {
-        this.translations.remove(Validate.notNull(locale).getLanguage());
+        this.i18n.remove(Validate.notNull(locale).getLanguage());
         return this;
     }
 
@@ -216,7 +238,7 @@ implements I18nString {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(this.defaultText)
-                .append(this.translations)
+                .append(this.i18n)
                 .toHashCode();
     }
 
@@ -231,7 +253,7 @@ implements I18nString {
         final I18nStringMap other = (I18nStringMap) obj;
         return new EqualsBuilder()
                 .append(this.defaultText, other.defaultText)
-                .append(this.translations, other.translations)
+                .append(this.i18n, other.i18n)
                 .isEquals();
     }
 

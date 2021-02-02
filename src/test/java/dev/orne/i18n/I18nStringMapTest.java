@@ -30,7 +30,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -95,21 +97,32 @@ class I18nStringMapTest {
     }
 
     /**
-     * Test {@link I18nStringMap#I18nStringMap(String)}.
+     * Test {@link I18nStringMap#I18nStringMap()}.
      */
     @Test
     void testConstructor() {
-        final I18nStringMap result = new I18nStringMap(MOCK_DEF_MSG);
-        assertEquals(MOCK_DEF_MSG, result.getDefaultText());
-        assertNotNull(result.getAvailableTranslations());
-        assertTrue(result.getAvailableTranslations().isEmpty());
+        final I18nStringMap result = new I18nStringMap();
+        assertEquals("", result.getDefaultText());
+        assertNotNull(result.getI18n());
+        assertTrue(result.getI18n().isEmpty());
     }
 
     /**
      * Test {@link I18nStringMap#I18nStringMap(String)}.
      */
     @Test
-    void testConstructor_Null() {
+    void testConstructor_Default() {
+        final I18nStringMap result = new I18nStringMap(MOCK_DEF_MSG);
+        assertEquals(MOCK_DEF_MSG, result.getDefaultText());
+        assertNotNull(result.getI18n());
+        assertTrue(result.getI18n().isEmpty());
+    }
+
+    /**
+     * Test {@link I18nStringMap#I18nStringMap(String)}.
+     */
+    @Test
+    void testConstructor_Default_Null() {
         assertThrows(NullPointerException.class, () -> {
             new I18nStringMap((String) null);
         });
@@ -127,7 +140,7 @@ class I18nStringMapTest {
         final I18nStringMap result = new I18nStringMap(copy);
         assertEquals(copy, result);
         assertEquals(copy.getDefaultText(), result.getDefaultText());
-        assertEquals(copy.getAvailableTranslations(), result.getAvailableTranslations());
+        assertEquals(copy.getI18n(), result.getI18n());
         assertEquals(copy.get(XX_LANG), result.get(XX_LANG));
         assertEquals(copy.get(YY_LANG), result.get(YY_LANG));
         assertEquals(copy.get(ZZ_LANG), result.get(ZZ_LANG));
@@ -141,8 +154,8 @@ class I18nStringMapTest {
         final I18nFixedString copy = I18nFixedString.from(MOCK_DEF_MSG);
         final I18nStringMap result = new I18nStringMap(copy);
         assertEquals(MOCK_DEF_MSG, result.getDefaultText());
-        assertNotNull(result.getAvailableTranslations());
-        assertTrue(result.getAvailableTranslations().isEmpty());
+        assertNotNull(result.getI18n());
+        assertTrue(result.getI18n().isEmpty());
     }
 
     /**
@@ -157,9 +170,9 @@ class I18nStringMapTest {
         willReturn(MOCK_CONTEXT_MSG).given(copy).get();
         final I18nStringMap result = new I18nStringMap(copy);
         assertEquals(MOCK_DEF_MSG, result.getDefaultText());
-        assertNotNull(result.getAvailableTranslations());
-        assertEquals(1, result.getAvailableTranslations().size());
-        assertTrue(result.getAvailableTranslations().contains(CONTEXT_LANG));
+        assertNotNull(result.getI18n());
+        assertEquals(1, result.getI18n().size());
+        assertTrue(result.getI18n().containsKey(CONTEXT_LANG));
         assertEquals(MOCK_CONTEXT_MSG, result.get(CONTEXT_LANG));
     }
 
@@ -172,8 +185,8 @@ class I18nStringMapTest {
         willReturn(MOCK_DEF_MSG).given(mockI18nString).get();
         final I18nStringMap result = new I18nStringMap(mockI18nString);
         assertEquals(MOCK_DEF_MSG, result.getDefaultText());
-        assertNotNull(result.getAvailableTranslations());
-        assertTrue(result.getAvailableTranslations().isEmpty());
+        assertNotNull(result.getI18n());
+        assertTrue(result.getI18n().isEmpty());
     }
 
     /**
@@ -195,8 +208,8 @@ class I18nStringMapTest {
         final I18nStringMap result = bean.setDefaultText(MOCK_XX_MSG);
         assertSame(bean, result);
         assertEquals(MOCK_XX_MSG, bean.getDefaultText());
-        assertNotNull(result.getAvailableTranslations());
-        assertTrue(result.getAvailableTranslations().isEmpty());
+        assertNotNull(result.getI18n());
+        assertTrue(result.getI18n().isEmpty());
     }
 
     /**
@@ -211,6 +224,57 @@ class I18nStringMapTest {
     }
 
     /**
+     * Test {@link I18nStringMap#setI18n(Map)}.
+     */
+    @Test
+    void testSetI18n() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
+        final Map<String, String> map = new HashMap<>();
+        map.put(XX_LANG, MOCK_XX_MSG);
+        map.put(YY_LANG, MOCK_YY_MSG);
+        map.put(ZZ_LANG, MOCK_ZZ_MSG);
+        final I18nStringMap result = bean.setI18n(map);
+        assertSame(bean, result);
+        assertEquals(MOCK_DEF_MSG, result.getDefaultText());
+        assertNotSame(map, result.getI18n());
+        assertEquals(map, result.getI18n());
+        assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
+        assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
+        assertEquals(MOCK_YY_MSG, bean.get(YY_LANG));
+        assertEquals(MOCK_YY_MSG, bean.get(YY_LOCALE));
+        assertEquals(MOCK_ZZ_MSG, bean.get(ZZ_LANG));
+        assertEquals(MOCK_ZZ_MSG, bean.get(ZZ_LOCALE));
+    }
+
+    /**
+     * Test {@link I18nStringMap#setI18n(Map)}.
+     */
+    @Test
+    void testSetI18n_Empty() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG)
+                .set(XX_LANG, MOCK_XX_MSG)
+                .set(XX_LANG, MOCK_XX_MSG)
+                .set(XX_LANG, MOCK_XX_MSG);
+        final Map<String, String> map = new HashMap<>();
+        final I18nStringMap result = bean.setI18n(map);
+        assertSame(bean, result);
+        assertEquals(MOCK_DEF_MSG, result.getDefaultText());
+        assertNotNull(result.getI18n());
+        assertTrue(result.getI18n().isEmpty());
+    }
+
+    /**
+     * Test {@link I18nStringMap#setI18n(Map)}.
+     */
+    @Test
+    void testSetI18n_Null() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
+        assertThrows(NullPointerException.class, () -> {
+            bean.setI18n((Map<String, String>) null);
+        });
+    }
+
+    /**
      * Test {@link I18nStringMap#set(String, String)}.
      */
     @Test
@@ -219,8 +283,8 @@ class I18nStringMapTest {
         final I18nStringMap result = bean.set(XX_LANG, MOCK_XX_MSG);
         assertSame(bean, result);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertEquals(1, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+        assertEquals(1, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
     }
@@ -257,10 +321,10 @@ class I18nStringMapTest {
                 .set(YY_LANG, MOCK_YY_MSG)
                 .set(ZZ_LANG, MOCK_ZZ_MSG);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertEquals(3, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
-        assertTrue(bean.getAvailableTranslations().contains(YY_LANG));
-        assertTrue(bean.getAvailableTranslations().contains(ZZ_LANG));
+        assertEquals(3, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
+        assertTrue(bean.getI18n().containsKey(YY_LANG));
+        assertTrue(bean.getI18n().containsKey(ZZ_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
         assertEquals(MOCK_YY_MSG, bean.get(YY_LANG));
@@ -278,8 +342,8 @@ class I18nStringMapTest {
         final I18nStringMap result = bean.set(XX_LOCALE, MOCK_XX_MSG);
         assertSame(bean, result);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertEquals(1, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+        assertEquals(1, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
     }
@@ -316,10 +380,10 @@ class I18nStringMapTest {
                 .set(YY_LOCALE, MOCK_YY_MSG)
                 .set(ZZ_LOCALE, MOCK_ZZ_MSG);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertEquals(3, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
-        assertTrue(bean.getAvailableTranslations().contains(YY_LANG));
-        assertTrue(bean.getAvailableTranslations().contains(ZZ_LANG));
+        assertEquals(3, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
+        assertTrue(bean.getI18n().containsKey(YY_LANG));
+        assertTrue(bean.getI18n().containsKey(ZZ_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
         assertEquals(MOCK_YY_MSG, bean.get(YY_LANG));
@@ -371,8 +435,8 @@ class I18nStringMapTest {
                 .set(XX_LOCALE, MOCK_XX_MSG);
         final String result = bean.get(XX_YY_LANG);
         assertEquals(MOCK_XX_MSG, result);
-        assertEquals(1, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+        assertEquals(1, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
     }
 
     /**
@@ -417,8 +481,8 @@ class I18nStringMapTest {
                 .set(XX_LOCALE, MOCK_XX_MSG);
         final String result = bean.get(XX_YY_LOCALE);
         assertEquals(MOCK_XX_MSG, result);
-        assertEquals(1, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+        assertEquals(1, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
     }
 
     /**
@@ -443,8 +507,8 @@ class I18nStringMapTest {
         final I18nStringMap result = bean.remove(YY_LANG);
         assertSame(bean, result);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertEquals(1, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+        assertEquals(1, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
     }
@@ -473,7 +537,7 @@ class I18nStringMapTest {
                 .remove(YY_LANG)
                 .remove(XX_LANG);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertTrue(bean.getAvailableTranslations().isEmpty());
+        assertTrue(bean.getI18n().isEmpty());
     }
 
     /**
@@ -487,8 +551,8 @@ class I18nStringMapTest {
         final I18nStringMap result = bean.remove(YY_LOCALE);
         assertSame(bean, result);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertEquals(1, bean.getAvailableTranslations().size());
-        assertTrue(bean.getAvailableTranslations().contains(XX_LANG));
+        assertEquals(1, bean.getI18n().size());
+        assertTrue(bean.getI18n().containsKey(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LANG));
         assertEquals(MOCK_XX_MSG, bean.get(XX_LOCALE));
     }
@@ -517,7 +581,7 @@ class I18nStringMapTest {
                 .remove(YY_LOCALE)
                 .remove(XX_LOCALE);
         assertEquals(MOCK_DEF_MSG, bean.getDefaultText());
-        assertTrue(bean.getAvailableTranslations().isEmpty());
+        assertTrue(bean.getI18n().isEmpty());
     }
 
     /**
