@@ -585,7 +585,7 @@ class I18nStringMapTest {
     }
 
     /**
-     * Test {@link I18nResourcesString#equals(Object)} and {@link I18nResourcesString#hashCode()}.
+     * Test {@link I18nStringMap#equals(Object)} and {@link I18nStringMap#hashCode()}.
      */
     @Test
     void testEqualsHash() {
@@ -615,7 +615,7 @@ class I18nStringMapTest {
     }
 
     /**
-     * Test {@link I18nResourcesString#isEquivalent(I18nString)}.
+     * Test {@link I18nStringMap#isEquivalent(I18nString)}.
      */
     @Test
     void testIsEquivalent() {
@@ -629,7 +629,7 @@ class I18nStringMapTest {
     }
 
     /**
-     * Test {@link I18nResourcesString#isEquivalent(I18nString)}.
+     * Test {@link I18nStringMap#isEquivalent(I18nString)}.
      */
     @Test
     void testIsEquivalent_I18nString_Other() {
@@ -653,7 +653,7 @@ class I18nStringMapTest {
     }
 
     /**
-     * Test {@link I18nResourcesString#isEquivalent(I18nString)}.
+     * Test {@link I18nStringMap#isEquivalent(I18nString)}.
      */
     @Test
     void testIsEquivalent_I18nStringMap() {
@@ -670,7 +670,17 @@ class I18nStringMapTest {
     }
 
     /**
-     * Test {@link I18nResourcesString#toString()}.
+     * Test {@link I18nStringMap#asMap()}.
+     */
+    @Test
+    void testAsMap() {
+        final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
+        final I18nStringMap result = bean.asMap();
+        assertSame(bean, result);
+    }
+
+    /**
+     * Test {@link I18nStringMap#toString()}.
      */
     @Test
     void testToString() {

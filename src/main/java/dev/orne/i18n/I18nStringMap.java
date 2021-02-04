@@ -271,6 +271,14 @@ implements I18nString {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public I18nStringMap asMap() {
+        return this;
+    }
+
+    /**
      * Returns the default text.
      * 
      * @return The default text.

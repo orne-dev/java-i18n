@@ -171,6 +171,14 @@ implements I18nString {
      * {@inheritDoc}
      */
     @Override
+    public I18nStringMap asMap() {
+        return new I18nStringMap(this.text);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         return this.text;
     }

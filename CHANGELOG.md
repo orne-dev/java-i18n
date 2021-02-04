@@ -18,6 +18,7 @@
 01. :gift: Added `dev.orne.i18n.I18nStringMap`
 01. :gift: Added `dev.orne.i18n.I18nStringEditor`
 01. :gift: Added `dev.orne.i18n.I18nStringMapEditor`
+01. :gift: Added `dev.orne.i18n.I18nStringConverter`
 01. :gift: Added Spring framework integration support
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringContext`
     01. :gift: Added `dev.orne.i18n.spring.I18nSpringResources`
@@ -37,4 +38,6 @@
     01. :gift: Added `dev.orne.i18n.validation.javax.NotBlankValidatorForI18nString`
     01. :gift: Added `dev.orne.i18n.validation.javax.SizeValidatorForI18nString`
     01. :gift: Added `dev.orne.i18n.validation.javax.PatternValidatorForI18nString`
-    
+01. :gift: Added Jackson 2.11 support
+    01. :gift: Added `dev.orne.i18n.I18nStringJacksonSerializer`
+    01. :gift: Added `dev.orne.i18n.I18nStringJacksonDeserializer`

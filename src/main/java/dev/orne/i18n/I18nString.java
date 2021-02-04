@@ -25,7 +25,8 @@ package dev.orne.i18n;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -36,6 +37,8 @@ import jakarta.validation.constraints.NotNull;
  * @version 1.0, 2021-01
  * @since 0.1
  */
+@JsonSerialize(using=I18nStringJacksonSerializer.class)
+@JsonDeserialize(using=I18nStringJacksonDeserializer.class)
 public interface I18nString
 extends Serializable {
 
@@ -79,4 +82,11 @@ extends Serializable {
      * @return If both instances are equivalent
      */
     boolean isEquivalent(I18nString other);
+
+    /**
+     * Returns this instance represented as an {@code I18nStringMap} instance.
+     * 
+     * @return This instance represented as an {@code I18nStringMap} instance
+     */
+    I18nStringMap asMap();
 }

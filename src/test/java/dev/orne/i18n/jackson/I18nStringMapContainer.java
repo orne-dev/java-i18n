@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.jackson;
 
 /*-
  * #%L
@@ -25,24 +25,24 @@ package dev.orne.i18n;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import dev.orne.i18n.I18nStringMap;
+
 /**
- * {@code I18nString} JSON/XML serialization test container.
+ * {@code I18nStringMap} Jackson serialization test container.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-01
+ * @version 1.0, 2021-02
  * @since 0.1
  */
-public class I18nStringContainer {
+public class I18nStringMapContainer {
 
-    public static final String BEAN_PROPERTY = "bean";
+    private I18nStringMap bean;
 
-    private I18nString bean;
-
-    public I18nString getBean() {
+    public I18nStringMap getBean() {
         return this.bean;
     }
 
-    public void setBean(final I18nString bean) {
+    public void setBean(final I18nStringMap bean) {
         this.bean = bean;
     }
 
@@ -58,7 +58,7 @@ public class I18nStringContainer {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (!getClass().equals(obj.getClass())) { return false; }
-        final I18nStringContainer other = (I18nStringContainer) obj;
+        final I18nStringMapContainer other = (I18nStringMapContainer) obj;
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();

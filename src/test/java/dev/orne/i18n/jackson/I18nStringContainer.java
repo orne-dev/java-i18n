@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.jackson;
 
 /*-
  * #%L
@@ -25,11 +25,13 @@ package dev.orne.i18n;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import dev.orne.i18n.I18nString;
+
 /**
- * {@code I18nString} JSON/XML serialization test container.
+ * {@code I18nString} XML serialization test container.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-01
+ * @version 1.0, 2021-02
  * @since 0.1
  */
 public class I18nStringContainer {

@@ -161,6 +161,19 @@ class I18nFixedStringTest {
     }
 
     /**
+     * Test {@link I18nFixedString#asMap()}.
+     */
+    @Test
+    void testAsMap() {
+        String text = RandomStringUtils.random(RND_STR_LENGTH);
+        I18nFixedString bean = I18nFixedString.from(text);
+        final I18nStringMap result = bean.asMap();
+        assertNotNull(result);
+        assertEquals(text, result.getDefaultText());
+        assertTrue(result.getI18n().isEmpty());
+    }
+
+    /**
      * Test {@link I18nFixedString#toString()}.
      */
     @Test

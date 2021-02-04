@@ -33,6 +33,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -42,6 +45,7 @@ import jakarta.validation.constraints.NotNull;
  * @version 1.0, 2021-01
  * @since 0.1
  */
+@JsonDeserialize(using=JsonDeserializer.None.class)
 public class I18nResourcesString
 implements I18nString {
 
@@ -184,17 +188,6 @@ implements I18nString {
      * {@inheritDoc}
      */
     @Override
-    public boolean isEquivalent(final I18nString obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
-        if (getClass().equals(obj.getClass())) { return equals(obj); }
-        return get().equals(obj.get());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(this.defaultText)
@@ -219,6 +212,26 @@ implements I18nString {
                 .append(this.arguments, other.arguments)
                 .append(this.i18nResourcesKey, other.i18nResourcesKey)
                 .isEquals();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEquivalent(final I18nString obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (getClass().equals(obj.getClass())) { return equals(obj); }
+        return get().equals(obj.get());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public I18nStringMap asMap() {
+        return new I18nStringMap(this.getFormattedDefaultText())
+                .set(I18N.getLocale(), get());
     }
 
     /**

@@ -931,6 +931,29 @@ class I18nResourcesStringTest {
     }
 
     /**
+     * Test {@link I18nFixedString#asMap()}.
+     */
+    @Test
+    void testAsMap() {
+        final I18nResourcesString bean = I18nResourcesString
+                .forDefault(MOCK_DEF_MSG)
+                .ofResources(MOCK_RESOURCES_KEY)
+                .withCodes(CODES)
+                .withArgs(ARGS)
+                .build();
+        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(MOCK_LOCALE).given(mockContext).getLocale();
+        willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
+        final I18nStringMap result = bean.asMap();
+        assertNotNull(result);
+        assertEquals(MOCK_DEF_MSG, result.getDefaultText());
+        assertEquals(1, result.getI18n().size());
+        assertEquals(MOCK_MSG, result.getI18n().get(MOCK_LANG));
+    }
+
+    /**
      * Test {@link I18nResourcesString#toString()}.
      */
     @Test
