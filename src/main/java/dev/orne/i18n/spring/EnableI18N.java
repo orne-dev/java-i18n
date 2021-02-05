@@ -51,8 +51,8 @@ import org.springframework.context.annotation.Import;
 @Import(I18nSpringConfigurer.class)
 public @interface EnableI18N {
 
-    /** The {@code ClassLoader} level to apply the configuration to. */
+    /** @return The {@code ClassLoader} level to apply the configuration to. */
     Class<?> targetClass() default Void.class;
-    /** The supported languages. */
+    /** @return The supported languages. */
     String[] availableLanguages() default {};
 }

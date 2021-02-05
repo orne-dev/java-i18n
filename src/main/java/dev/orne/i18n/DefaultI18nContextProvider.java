@@ -126,7 +126,7 @@ implements I18nContextProvider {
     /**
      * Returns the default I18N resources.
      * 
-     * @return The default I18N resources
+     * @param resources The default I18N resources
      */
     public void setDefaultI18nResources(
             final @NotNull I18nResources resources) {

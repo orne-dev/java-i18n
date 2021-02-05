@@ -70,7 +70,6 @@ extends Serializable {
     /**
      * Returns {@code true} if the specified {@code I18nString} is equivalent
      * to this instance.
-     * <p>
      * <ol>
      * <li>If {@code other} is {@code null} returns {@code false}.</li>
      * <li>If {@code other} is of the same type calls {@code equals()}.</li>

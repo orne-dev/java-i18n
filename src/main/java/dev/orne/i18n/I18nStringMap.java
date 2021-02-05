@@ -186,6 +186,7 @@ implements I18nString {
      * 
      * @param language The language of the translation
      * @param text The translated text
+     * @return This instance for method chaining
      */
     public @NotNull I18nStringMap set(
             final @NotNull String language,
@@ -199,8 +200,9 @@ implements I18nString {
     /**
      * Sets the translation for the specified locale.
      * 
-     * @param language The language of the translation
+     * @param locale The language of the translation
      * @param text The translated text
+     * @return This instance for method chaining
      */
     public @NotNull I18nStringMap set(
             final @NotNull Locale locale,
@@ -224,7 +226,7 @@ implements I18nString {
     /**
      * Removes the translation for the specified language.
      * 
-     * @param language The language of the translation
+     * @param locale The language of the translation
      * @return This instance for method chaining
      */
     public @NotNull I18nStringMap remove(
