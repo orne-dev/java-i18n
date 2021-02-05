@@ -22,6 +22,9 @@ package dev.orne.i18n;
  * #L%
  */
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -32,8 +35,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @version 1.0, 2021-01
  * @since 0.1
  */
+@XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nStringContainer {
 
+    public static final String TEST_NS = "http://orne.dev/i18n/test";
+    public static final String ROOT_ELEMENT = "container";
+    public static final String BEAN_ELEMENT = "bean";
     public static final String BEAN_PROPERTY = "bean";
 
     private I18nString bean;
@@ -42,6 +49,7 @@ public class I18nStringContainer {
         return this.bean;
     }
 
+    @XmlElement(namespace=TEST_NS, name=BEAN_ELEMENT)
     public void setBean(final I18nString bean) {
         this.bean = bean;
     }

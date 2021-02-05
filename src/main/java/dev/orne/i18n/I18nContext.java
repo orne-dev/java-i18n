@@ -58,22 +58,4 @@ public interface I18nContext {
      * @param language The user's language to set
      */
     void setLocale(Locale language);
-
-    /**
-     * Returns if all available translations should be retrieved.
-     * 
-     * @return {@code true} if all available translations should be retrieved.
-     * {@code false} if only the translation in user locale is required
-     */
-    boolean isFullMode();
-
-    /**
-     * Sets if all available translations should be retrieved.
-     * <p>
-     * If {@code true} all available translations should be retrieved.
-     * Otherwise only the translation in user locale is required.
-     * 
-     * @param value If all available translations should be retrieved
-     */
-    void setFullMode(boolean value);
 }

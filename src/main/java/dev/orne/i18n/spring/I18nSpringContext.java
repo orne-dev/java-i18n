@@ -55,8 +55,6 @@ implements I18nContext, Serializable {
 
     /** The UUID of the provider owner of this context. */
     private final @NotNull UUID providerUUID;
-    /** If all available translations should be retrieved. */
-    private boolean fullMode;
 
     /**
      * Creates a new instance.
@@ -79,7 +77,6 @@ implements I18nContext, Serializable {
         super();
         Validate.notNull(copy);
         this.providerUUID = copy.providerUUID;
-        this.fullMode = copy.fullMode;
     }
 
     /**
@@ -112,26 +109,9 @@ implements I18nContext, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public boolean isFullMode() {
-        return this.fullMode;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setFullMode(final boolean value) {
-        this.fullMode = value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(this.providerUUID)
-                .append(this.fullMode)
                 .toHashCode();
     }
 
@@ -146,7 +126,6 @@ implements I18nContext, Serializable {
         final I18nSpringContext other = (I18nSpringContext) obj;
         return new EqualsBuilder()
                 .append(this.providerUUID, other.providerUUID)
-                .append(this.fullMode, other.fullMode)
                 .isEquals();
     }
 
@@ -157,7 +136,6 @@ implements I18nContext, Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
                 .append("locale", getLocale())
-                .append("fullMode", this.fullMode)
                 .toString();
     }
 }

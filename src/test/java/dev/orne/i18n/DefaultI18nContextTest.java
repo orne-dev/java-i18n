@@ -70,7 +70,6 @@ class DefaultI18nContextTest {
     void testConstructor() {
         final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         assertEquals(MOCK_DEFAULT_LOCALE, context.getLocale());
-        assertFalse(context.isFullMode());
     }
 
     /**
@@ -90,10 +89,8 @@ class DefaultI18nContextTest {
     void testCopyConstructor() {
         final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         context.setLocale(MOCK_LOCALE);
-        context.setFullMode(true);
         final DefaultI18nContext result = new DefaultI18nContext(context);
         assertEquals(context.getProviderUUID(), result.getProviderUUID());
-        assertEquals(context.isFullMode(), result.isFullMode());
         assertEquals(context, result);
         assertEquals(context.hashCode(), result.hashCode());
     }
@@ -130,16 +127,6 @@ class DefaultI18nContextTest {
     }
 
     /**
-     * Test {@link DefaultI18nContext#setFullMode(boolean)}.
-     */
-    @Test
-    void testSetFullMode() {
-        final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
-        context.setFullMode(true);
-        assertTrue(context.isFullMode());
-    }
-
-    /**
      * Test {@link DefaultI18nContext#equals(Object)} and
      * {@link DefaultI18nContext#hashCode()}.
      */
@@ -155,21 +142,10 @@ class DefaultI18nContextTest {
         assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
-        other.setFullMode(true);
-        assertNotEquals(context, other);
-        assertNotNull(other.toString());
         other.setLocale(MOCK_LOCALE);
         assertNotEquals(context, other);
         assertNotNull(other.toString());
-        other.setFullMode(false);
-        assertNotEquals(context, other);
-        assertNotNull(other.toString());
         context.setLocale(MOCK_LOCALE);
-        assertEquals(context, other);
-        assertEquals(context.hashCode(), other.hashCode());
-        assertNotNull(other.toString());
-        context.setFullMode(true);
-        other.setFullMode(true);
         assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
@@ -182,7 +158,6 @@ class DefaultI18nContextTest {
     void testSerializable() throws IOException, ClassNotFoundException {
         final DefaultI18nContext context = new DefaultI18nContext(UUID.randomUUID());
         context.setLocale(MOCK_LOCALE);
-        context.setFullMode(true);
         final byte[] serializationResult;
         try (
                 final ByteArrayOutputStream baos = new ByteArrayOutputStream();

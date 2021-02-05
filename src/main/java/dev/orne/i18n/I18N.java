@@ -358,32 +358,4 @@ public final class I18N {
     public static void setLocale(final Locale locale) {
         getContext().setLocale(locale);
     }
-
-    /**
-     * Returns {@code true} if the current {@code I18nContext} requests the
-     * full {@code I18nString} translations sets. If {@code false} only the
-     * text in the current {@code I18nContext} locale must be returned.
-     * <p>
-     * Shortcut for {@code getContext().isFullMode()}.
-     * 
-     * @return If the full {@code I18nString} translations must be returned
-     * @see I18nContext#isFullMode()
-     */
-    public static boolean isFullMode() {
-        return getContext().isFullMode();
-    }
-
-    /**
-     * Sets if the current {@code I18nContext} requests the full
-     * {@code I18nString} translations sets. If {@code false} only the
-     * text in the current {@code I18nContext} locale must be returned.
-     * <p>
-     * Shortcut for {@code getContext().setFullMode(value)}.
-     * 
-     * @return If the full {@code I18nString} translations must be returned
-     * @see I18nContext#setFullMode(boolean)
-     */
-    public static void setFullMode(final boolean value) {
-        getContext().setFullMode(value);
-    }
 }

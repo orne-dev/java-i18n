@@ -166,7 +166,6 @@ class SpringJavaAnnotationConfigurationIT {
         final I18nContext context = I18N.getContext();
         assertNotNull(context);
         assertTrue(context instanceof I18nSpringContext);
-        assertFalse(context.isFullMode());
         assertEquals(Locale.getDefault(), context.getLocale());
         assertEquals(LocaleContextHolder.getLocale(), context.getLocale());
         assertEquals(BUNDLE_VALUE_DEFAULT, I18N.getDefaultI18nResources().getMessage(

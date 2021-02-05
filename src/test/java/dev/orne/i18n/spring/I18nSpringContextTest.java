@@ -83,7 +83,6 @@ class I18nSpringContextTest {
     void testConstructor() {
         final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
         assertEquals(MOCK_DEFAULT_CONTEXT_LOCALE, context.getLocale());
-        assertFalse(context.isFullMode());
     }
 
     /**
@@ -102,10 +101,8 @@ class I18nSpringContextTest {
     @Test
     void testCopyConstructor() {
         final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
-        context.setFullMode(true);
         final I18nSpringContext result = new I18nSpringContext(context);
         assertEquals(context.getProviderUUID(), result.getProviderUUID());
-        assertEquals(context.isFullMode(), result.isFullMode());
         assertEquals(context, result);
         assertEquals(context.hashCode(), result.hashCode());
     }
@@ -143,16 +140,6 @@ class I18nSpringContextTest {
     }
 
     /**
-     * Test {@link I18nSpringContext#setFullMode(boolean)}.
-     */
-    @Test
-    void testSetFullMode() {
-        final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
-        context.setFullMode(true);
-        assertTrue(context.isFullMode());
-    }
-
-    /**
      * Test {@link I18nSpringContext#equals(Object)} and
      * {@link I18nSpringContext#hashCode()}.
      */
@@ -168,18 +155,6 @@ class I18nSpringContextTest {
         assertEquals(context, other);
         assertEquals(context.hashCode(), other.hashCode());
         assertNotNull(other.toString());
-        other.setFullMode(true);
-        assertNotEquals(context, other);
-        assertNotNull(other.toString());
-        other.setFullMode(false);
-        assertEquals(context, other);
-        assertEquals(context.hashCode(), other.hashCode());
-        assertNotNull(other.toString());
-        context.setFullMode(true);
-        other.setFullMode(true);
-        assertEquals(context, other);
-        assertEquals(context.hashCode(), other.hashCode());
-        assertNotNull(other.toString());
     }
 
     /**
@@ -188,7 +163,6 @@ class I18nSpringContextTest {
     @Test
     void testSerializable() throws IOException, ClassNotFoundException {
         final I18nSpringContext context = new I18nSpringContext(UUID.randomUUID());
-        context.setFullMode(true);
         final byte[] serializationResult;
         try (
                 final ByteArrayOutputStream baos = new ByteArrayOutputStream();

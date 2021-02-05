@@ -48,13 +48,6 @@ implements I18nContextProvider {
 
     /** The UUID of this provider instance. */
     private @NotNull UUID sessionUUID = UUID.randomUUID();
-    /**
-     * If the created {@code I18nContext} instances should be in full mode by
-     * default.
-     * 
-     * @see {@link I18nContext#isFullMode()}
-     */
-    private boolean fullModeByDefault;
     /** The supported languages. */
     private @NotNull Locale[] availableLocales =
             Locale.getAvailableLocales();
@@ -100,32 +93,6 @@ implements I18nContextProvider {
      */
     public @NotNull UUID getSessionUUID() {
         return this.sessionUUID;
-    }
-
-    /**
-     * Returns if the created {@code I18nContext} instances should be in full
-     * mode by default.
-     * 
-     * @return {@code true} if all available translations should be retrieved
-     * by default
-     */
-    public boolean isFullModeByDefault() {
-        return fullModeByDefault;
-    }
-
-    /**
-     * Sets if the created {@code I18nContext} instances should be in full mode
-     * by default.
-     * <p>
-     * If {@code true} all available translations should be retrieved.
-     * Otherwise only the translation in user locale is required.
-     * 
-     * @param value If all available translations should be retrieved by
-     * default
-     */
-    public void setFullModeByDefault(
-            final boolean value) {
-        this.fullModeByDefault = value;
     }
 
     /**
@@ -259,9 +226,7 @@ implements I18nContextProvider {
      * @return The new I18N context
      */
     public @NotNull I18nContext createContext() {
-        final DefaultI18nContext context = new DefaultI18nContext(this.sessionUUID);
-        context.setFullMode(this.fullModeByDefault);
-        return context;
+        return new DefaultI18nContext(this.sessionUUID);
     }
 
     /**
@@ -276,7 +241,6 @@ implements I18nContextProvider {
         Validate.notNull(parent);
         final I18nContext context = createContext();
         context.setLocale(parent.getLocale());
-        context.setFullMode(parent.isFullMode());
         return context;
     }
 
@@ -308,7 +272,6 @@ implements I18nContextProvider {
     @Override
     public synchronized void invalidate() {
         this.sessionUUID = UUID.randomUUID();
-        this.fullModeByDefault = false;
         this.availableLocales = Locale.getAvailableLocales();
         this.defaultI18nResources = DummyI18nResources.INSTANCE;
         this.i18nResources.clear();
@@ -321,7 +284,6 @@ implements I18nContextProvider {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(isInheritable())
-                .append(this.fullModeByDefault)
                 .append(this.availableLocales)
                 .append(this.defaultI18nResources)
                 .append(this.i18nResources)
@@ -339,7 +301,6 @@ implements I18nContextProvider {
         final DefaultI18nContextProvider other = (DefaultI18nContextProvider) obj;
         return new EqualsBuilder()
                 .append(this.isInheritable(), other.isInheritable())
-                .append(this.fullModeByDefault, other.fullModeByDefault)
                 .append(this.availableLocales, other.availableLocales)
                 .append(this.defaultI18nResources, other.defaultI18nResources)
                 .append(this.i18nResources, other.i18nResources)

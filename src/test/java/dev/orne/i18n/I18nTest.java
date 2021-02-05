@@ -303,42 +303,4 @@ class I18nTest {
         then(mockContext).should(order).setLocale(null);
         then(mockContext).shouldHaveNoMoreInteractions();
     }
-
-    /**
-     * Test {@link I18N#isFullMode()}.
-     */
-    @Test
-    void testIsFullMode() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockContext).given(mockProvider).getContext();
-        willReturn(true).given(mockContext).isFullMode();
-        final boolean result = I18N.isFullMode();
-        assertTrue(result);
-        final InOrder order = inOrder(mockStrategy, mockProvider, mockContext);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getContext();
-        then(mockProvider).shouldHaveNoMoreInteractions();
-        then(mockContext).should(order).isFullMode();
-        then(mockContext).shouldHaveNoMoreInteractions();
-    }
-
-    /**
-     * Test {@link I18N#isFullMode()}.
-     */
-    @Test
-    void testSetFullMode() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockContext).given(mockProvider).getContext();
-        I18N.setFullMode(true);
-        final InOrder order = inOrder(mockStrategy, mockProvider, mockContext);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getContext();
-        then(mockProvider).shouldHaveNoMoreInteractions();
-        then(mockContext).should(order).setFullMode(true);
-        then(mockContext).shouldHaveNoMoreInteractions();
-    }
 }

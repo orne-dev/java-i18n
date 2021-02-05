@@ -55,9 +55,4 @@ public @interface EnableI18N {
     Class<?> targetClass() default Void.class;
     /** The supported languages. */
     String[] availableLanguages() default {};
-    /**
-     * If the created {@code I18nContext} instances should be in full mode by
-     * default.
-     */
-    boolean fullModeByDefault() default false;
 }

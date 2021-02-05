@@ -66,7 +66,6 @@ class DefaultI18nContextProviderTest {
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
-        assertFalse(provider.isFullModeByDefault());
         assertFalse(provider.isInheritable());
     }
 
@@ -80,7 +79,6 @@ class DefaultI18nContextProviderTest {
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
-        assertFalse(provider.isFullModeByDefault());
         assertTrue(provider.isInheritable());
     }
 
@@ -242,16 +240,6 @@ class DefaultI18nContextProviderTest {
     }
 
     /**
-     * Test {@link DefaultI18nContextProvider#setFullModeByDefault(boolean)}.
-     */
-    @Test
-    void testSetFullModeByDefault() {
-        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
-        provider.setFullModeByDefault(true);
-        assertTrue(provider.isFullModeByDefault());
-    }
-
-    /**
      * Test {@link DefaultI18nContextProvider#getContext()}.
      */
     @Test
@@ -317,19 +305,6 @@ class DefaultI18nContextProviderTest {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
         final I18nContext result = provider.createContext();
         assertTrue(result instanceof DefaultI18nContext);
-        assertFalse(result.isFullMode());
-    }
-
-    /**
-     * Test {@link DefaultI18nContextProvider#createContext()}.
-     */
-    @Test
-    void testCreateContext_FullMode() {
-        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
-        provider.setFullModeByDefault(true);
-        final I18nContext result = provider.createContext();
-        assertTrue(result instanceof DefaultI18nContext);
-        assertTrue(result.isFullMode());
     }
 
     /**
@@ -338,11 +313,9 @@ class DefaultI18nContextProviderTest {
     @Test
     void testCreateContext_Parent() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
-        willReturn(true).given(mockContext).isFullMode();
         willReturn(MOCK_LOCALE).given(mockContext).getLocale();
         final I18nContext result = provider.createContext(mockContext);
         assertTrue(result instanceof DefaultI18nContext);
-        assertTrue(result.isFullMode());
     }
 
     /**
@@ -448,7 +421,6 @@ class DefaultI18nContextProviderTest {
         };
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
         provider.setAvailableLocales(locales);
-        provider.setFullModeByDefault(true);
         final String key = "mock key";
         provider.setDefaultI18nResources(mockDefaultResources);
         provider.addI18nResources(key, mockResources);
@@ -458,7 +430,6 @@ class DefaultI18nContextProviderTest {
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
-        assertFalse(provider.isFullModeByDefault());
         assertFalse(provider.isInheritable());
         assertFalse(provider.isContextAlive(context));
         provider.clearContext();
@@ -475,7 +446,6 @@ class DefaultI18nContextProviderTest {
         };
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
         provider.setAvailableLocales(locales);
-        provider.setFullModeByDefault(true);
         final String key = "mock key";
         provider.setDefaultI18nResources(mockDefaultResources);
         provider.addI18nResources(key, mockResources);
@@ -485,7 +455,6 @@ class DefaultI18nContextProviderTest {
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
-        assertFalse(provider.isFullModeByDefault());
         assertTrue(provider.isInheritable());
         assertFalse(provider.isContextAlive(context));
         provider.clearContext();
@@ -510,17 +479,9 @@ class DefaultI18nContextProviderTest {
         final DefaultI18nContextProvider other = new DefaultI18nContextProvider(true);
         assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
         assertEquals(provider, other);
-        other.setFullModeByDefault(true);
-        assertNotEquals(provider, other);
         other.setAvailableLocales(locales);
         assertNotEquals(provider, other);
-        other.setFullModeByDefault(false);
-        assertNotEquals(provider, other);
         provider.setAvailableLocales(locales);
-        assertEquals(provider, other);
-        assertEquals(provider.hashCode(), other.hashCode());
-        provider.setFullModeByDefault(true);
-        other.setFullModeByDefault(true);
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
         provider.setDefaultI18nResources(mockDefaultResources);

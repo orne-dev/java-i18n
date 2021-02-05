@@ -130,7 +130,6 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
-        assertFalse(configurer.isFullModeByDefault());
     }
 
     /**
@@ -226,27 +225,6 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setFullModeByDefault(boolean)}.
-     */
-    @Test
-    void testSetFullModeByDefault() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
-        configurer.setFullModeByDefault(true);
-        assertTrue(configurer.isFullModeByDefault());
-    }
-
-    /**
-     * Test {@link I18nSpringConfigurer#setFullModeByDefault(boolean)}.
-     */
-    @Test
-    void testSetFullModeByDefault_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
-        configurer.setFullModeByDefault(true);
-        configurer.setFullModeByDefault(false);
-        assertFalse(configurer.isFullModeByDefault());
-    }
-
-    /**
      * Test {@link I18nSpringConfigurer#setDefaultMessageSource(MessageSource)}.
      */
     @Test
@@ -332,7 +310,6 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
-        assertFalse(configurer.isFullModeByDefault());
     }
 
     /**
@@ -352,7 +329,6 @@ class I18nSpringConfigurerTest {
         final Map<String, Object> attrs = new HashMap<>();
         attrs.put("targetClass", I18nSpringConfigurerTest.class);
         attrs.put("availableLanguages", langs);
-        attrs.put("fullModeByDefault", true);
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
         final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
         configurer.setImportMetadata(metadata);
@@ -362,7 +338,6 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
-        assertTrue(configurer.isFullModeByDefault());
     }
 
     /**
@@ -383,7 +358,6 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
-        assertFalse(configurer.isFullModeByDefault());
     }
 
     /**
@@ -402,7 +376,6 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
-        assertFalse(configurer.isFullModeByDefault());
     }
 
     /**
@@ -420,7 +393,6 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
-        assertFalse(configurer.isFullModeByDefault());
     }
 
     /**
@@ -445,7 +417,6 @@ class I18nSpringConfigurerTest {
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
         assertTrue(springProvider.isInheritable());
         assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
-        assertFalse(springProvider.isFullModeByDefault());
         assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertNotNull(springProvider.getI18nResources());
         assertTrue(springProvider.getI18nResources().isEmpty());
@@ -463,7 +434,6 @@ class I18nSpringConfigurerTest {
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
         assertFalse(springProvider.isInheritable());
         assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
-        assertFalse(springProvider.isFullModeByDefault());
         assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertNotNull(springProvider.getI18nResources());
         assertTrue(springProvider.getI18nResources().isEmpty());
@@ -485,25 +455,6 @@ class I18nSpringConfigurerTest {
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
         assertTrue(springProvider.isInheritable());
         assertArrayEquals(locales, springProvider.getAvailableLocales());
-        assertFalse(springProvider.isFullModeByDefault());
-        assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
-        assertNotNull(springProvider.getI18nResources());
-        assertTrue(springProvider.getI18nResources().isEmpty());
-    }
-
-    /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
-     */
-    @Test
-    void testCreateContextProvider_FullMode() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
-        configurer.setFullModeByDefault(true);
-        final I18nContextProvider provider = configurer.createContextProvider();
-        assertTrue(provider instanceof I18nSpringContextProvider);
-        final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
-        assertTrue(springProvider.isInheritable());
-        assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
-        assertTrue(springProvider.isFullModeByDefault());
         assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertNotNull(springProvider.getI18nResources());
         assertTrue(springProvider.getI18nResources().isEmpty());
@@ -521,7 +472,6 @@ class I18nSpringConfigurerTest {
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
         assertTrue(springProvider.isInheritable());
         assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
-        assertFalse(springProvider.isFullModeByDefault());
         assertTrue(springProvider.getDefaultI18nResources() instanceof I18nSpringResources);
         assertSame(this.messageSource, ((I18nSpringResources) provider.getDefaultI18nResources()).getSource());
         assertNotNull(springProvider.getI18nResources());
@@ -540,7 +490,6 @@ class I18nSpringConfigurerTest {
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
         assertTrue(springProvider.isInheritable());
         assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
-        assertFalse(springProvider.isFullModeByDefault());
         assertSame(this.resources, springProvider.getDefaultI18nResources());
         assertNotNull(springProvider.getI18nResources());
         assertTrue(springProvider.getI18nResources().isEmpty());
@@ -561,7 +510,6 @@ class I18nSpringConfigurerTest {
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
         assertTrue(springProvider.isInheritable());
         assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
-        assertFalse(springProvider.isFullModeByDefault());
         assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertEquals(namedResources, springProvider.getI18nResources());
     }

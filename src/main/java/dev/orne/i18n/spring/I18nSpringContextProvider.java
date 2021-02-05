@@ -109,9 +109,7 @@ extends DefaultI18nContextProvider {
      */
     @Override
     public @NotNull I18nContext createContext() {
-        final I18nSpringContext result = new I18nSpringContext(getSessionUUID());
-        result.setFullMode(isFullModeByDefault());
-        return result;
+        return new I18nSpringContext(getSessionUUID());
     }
 
     /**
@@ -120,9 +118,8 @@ extends DefaultI18nContextProvider {
     @Override
     public @NotNull I18nContext createContext(
             final @NotNull I18nContext parent) {
-        final I18nSpringContext result = new I18nSpringContext(getSessionUUID());
-        result.setFullMode(Validate.notNull(parent).isFullMode());
-        return result;
+        Validate.notNull(parent);
+        return new I18nSpringContext(getSessionUUID());
     }
 
     @Override
