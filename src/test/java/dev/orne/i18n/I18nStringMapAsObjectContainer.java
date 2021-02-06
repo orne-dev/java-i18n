@@ -26,34 +26,34 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
- * {@code I18nString} JSON/XML serialization test container.
+ * {@code I18nStringMap} Jackson serialization test container.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-01
+ * @version 1.0, 2021-02
  * @since 0.1
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
-public class I18nStringContainer {
+public class I18nStringMapAsObjectContainer {
 
-    public static final String TEST_NS = "http://orne.dev/i18n/test";
-    public static final String ROOT_ELEMENT = "container";
-    public static final String BEAN_ELEMENT = "bean";
-    public static final String BEAN_PROPERTY = "bean";
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @XmlJavaTypeAdapter(I18nStringMap.FullJaxbAdapter.class)
+    @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    private I18nStringMap bean;
 
-    @XmlElement(namespace=TEST_NS, name=BEAN_ELEMENT)
-    private I18nString bean;
-
-    public I18nString getBean() {
+    public I18nStringMap getBean() {
         return this.bean;
     }
 
-    public void setBean(final I18nString bean) {
+    public void setBean(final I18nStringMap bean) {
         this.bean = bean;
     }
 
@@ -69,7 +69,7 @@ public class I18nStringContainer {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (!getClass().equals(obj.getClass())) { return false; }
-        final I18nStringContainer other = (I18nStringContainer) obj;
+        final I18nStringMapAsObjectContainer other = (I18nStringMapAsObjectContainer) obj;
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();

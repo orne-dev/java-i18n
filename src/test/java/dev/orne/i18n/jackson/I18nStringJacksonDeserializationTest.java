@@ -52,11 +52,16 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import dev.orne.i18n.I18N;
+import dev.orne.i18n.I18nBilingualString;
 import dev.orne.i18n.I18nFixedString;
 import dev.orne.i18n.I18nResourcesString;
 import dev.orne.i18n.I18nString;
+import dev.orne.i18n.I18nStringAsObjectContainer;
+import dev.orne.i18n.I18nStringContainer;
 import dev.orne.i18n.I18nStringJacksonDeserializer;
 import dev.orne.i18n.I18nStringMap;
+import dev.orne.i18n.I18nStringMapAsObjectContainer;
+import dev.orne.i18n.I18nStringMapContainer;
 import jakarta.validation.constraints.NotNull;
 
 /**

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Orne I18N
+
+ Copyright (C) 2021 Orne Developments
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Lesser Public License for more details.
+
+You should have received a copy of the GNU General Lesser Public
+License along with this program.  If not, see
+<http://www.gnu.org/licenses/lgpl-3.0.html>.
+-->
+<bindings version="2.1"
+        xmlns="http://java.sun.com/xml/ns/jaxb"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        xmlns:annox="http://annox.dev.java.net"
+        extensionBindingPrefixes="xjc annox"
+        xsi:schemaLocation="
+            http://java.sun.com/xml/ns/jaxb https://java.sun.com/xml/ns/jaxb/bindingschema_2_1.xsd
+        ">
+  <bindings scd="x-schema::tns" xmlns:tns="http://orne.dev/i18n/">
+    <globalBindings>
+      <serializable uid="1" />
+      <xjc:simple />
+    </globalBindings>
+    <schemaBindings>
+      <!--
+      <package name="dev.orne.i18n"/>
+      -->
+      <package name="dev.orne.i18n.jaxb"/>
+    </schemaBindings>
+    <bindings scd="~tns:string">
+      <class name="XmlI18nString" />
+    </bindings>
+    <bindings scd="~tns:translation">
+      <!--
+      <class name="XmlI18nStringTranslation" />
+      -->
+    </bindings>
+  </bindings>
+</bindings>

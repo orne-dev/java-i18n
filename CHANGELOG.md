@@ -41,3 +41,15 @@
 01. :gift: Added Jackson 2.11 support
     01. :gift: Added `dev.orne.i18n.I18nStringJacksonSerializer`
     01. :gift: Added `dev.orne.i18n.I18nStringJacksonDeserializer`
+01. :gift: Added JAXB 2.1 support
+    01. :gift: Added `dev.orne.i18n.XmlI18nString`
+    01. :gift: Added `dev.orne.i18n.XmlI18nStringTranslation`
+    01. :gift: Added `dev.orne.i18n.ObjectFactory`
+    01. :gift: Added `dev.orne.i18n.I18nString.JaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nString.FullJaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nFixedString.JaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nFixedString.FullJaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nResourcesString.JaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nResourcesString.FullJaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nStringMap.JaxbAdapter`
+    01. :gift: Added `dev.orne.i18n.I18nStringMap.FullJaxbAdapter`

@@ -1,4 +1,4 @@
-package dev.orne.i18n.jackson;
+package dev.orne.i18n;
 
 /*-
  * #%L
@@ -22,27 +22,33 @@ package dev.orne.i18n.jackson;
  * #L%
  */
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import dev.orne.i18n.I18nStringMap;
-
 /**
- * {@code I18nStringMap} Jackson serialization test container.
+ * {@code I18nResourcesString} JSON/XML serialization test container.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @since 0.1
  */
-public class I18nStringMapContainer {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
+public class I18nResourcesStringContainer {
 
-    private I18nStringMap bean;
+    @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    private I18nResourcesString bean;
 
-    public I18nStringMap getBean() {
+    public I18nResourcesString getBean() {
         return this.bean;
     }
 
-    public void setBean(final I18nStringMap bean) {
+    public void setBean(final I18nResourcesString bean) {
         this.bean = bean;
     }
 
@@ -58,7 +64,7 @@ public class I18nStringMapContainer {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (!getClass().equals(obj.getClass())) { return false; }
-        final I18nStringMapContainer other = (I18nStringMapContainer) obj;
+        final I18nResourcesStringContainer other = (I18nResourcesStringContainer) obj;
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();

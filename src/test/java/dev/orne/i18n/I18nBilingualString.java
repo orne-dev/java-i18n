@@ -1,4 +1,4 @@
-package dev.orne.i18n.jackson;
+package dev.orne.i18n;
 
 /*-
  * #%L
@@ -31,10 +31,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
 
-import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nString;
-import dev.orne.i18n.I18nStringJacksonDeserializer;
-import dev.orne.i18n.I18nStringMap;
 import jakarta.validation.constraints.NotNull;
 
 /**

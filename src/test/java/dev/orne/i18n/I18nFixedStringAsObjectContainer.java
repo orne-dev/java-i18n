@@ -1,4 +1,4 @@
-package dev.orne.i18n.jackson;
+package dev.orne.i18n;
 
 /*-
  * #%L
@@ -22,29 +22,38 @@ package dev.orne.i18n.jackson;
  * #L%
  */
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import dev.orne.i18n.I18nString;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
- * {@code I18nString} XML serialization test container.
+ * {@code I18nFixedString} Jackson serialization test container.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @since 0.1
  */
-public class I18nStringContainer {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
+public class I18nFixedStringAsObjectContainer {
 
-    public static final String BEAN_PROPERTY = "bean";
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @XmlJavaTypeAdapter(I18nFixedString.FullJaxbAdapter.class)
+    @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    private I18nFixedString bean;
 
-    private I18nString bean;
-
-    public I18nString getBean() {
+    public I18nFixedString getBean() {
         return this.bean;
     }
 
-    public void setBean(final I18nString bean) {
+    public void setBean(final I18nFixedString bean) {
         this.bean = bean;
     }
 
@@ -60,7 +69,7 @@ public class I18nStringContainer {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (!getClass().equals(obj.getClass())) { return false; }
-        final I18nStringContainer other = (I18nStringContainer) obj;
+        final I18nFixedStringAsObjectContainer other = (I18nFixedStringAsObjectContainer) obj;
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();

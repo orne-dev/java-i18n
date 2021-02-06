@@ -22,6 +22,8 @@ package dev.orne.i18n;
  * #L%
  */
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -35,21 +37,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @version 1.0, 2021-01
  * @since 0.1
  */
-@XmlRootElement(namespace=I18nStringMapContainer.TEST_NS, name=I18nStringMapContainer.ROOT_ELEMENT)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nStringMapContainer {
 
-    public static final String TEST_NS = "http://orne.dev/i18n/test";
-    public static final String ROOT_ELEMENT = "container";
-    public static final String BEAN_ELEMENT = "bean";
-    public static final String BEAN_PROPERTY = "bean";
-
+    @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nStringMap bean;
 
     public I18nStringMap getBean() {
         return this.bean;
     }
 
-    @XmlElement(namespace=TEST_NS, name=BEAN_ELEMENT)
     public void setBean(final I18nStringMap bean) {
         this.bean = bean;
     }
