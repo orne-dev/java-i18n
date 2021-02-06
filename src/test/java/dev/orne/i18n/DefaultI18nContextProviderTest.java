@@ -471,7 +471,7 @@ class DefaultI18nContextProviderTest {
                 Locale.FRENCH
         };
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
-        assertNotEquals(provider, null);
+        assertNotEquals(provider, (Object) null);
         assertEquals(provider, provider);
         assertEquals(provider.hashCode(), provider.hashCode());
         assertNotEquals(provider, new Object());

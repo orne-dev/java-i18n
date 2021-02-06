@@ -40,7 +40,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nBilingualString;
 import dev.orne.i18n.I18nFixedString;
+import dev.orne.i18n.I18nFixedStringAsObjectContainer;
+import dev.orne.i18n.I18nFixedStringContainer;
 import dev.orne.i18n.I18nResourcesString;
+import dev.orne.i18n.I18nResourcesStringAsObjectContainer;
+import dev.orne.i18n.I18nResourcesStringContainer;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringAsObjectContainer;
 import dev.orne.i18n.I18nStringContainer;
@@ -239,7 +243,7 @@ class I18nStringJacksonSerializationTest {
      */
     @Test
     void testAsObjectContainer_Null() {
-        final I18nStringContainer container = new I18nStringContainer();
+        final I18nStringAsObjectContainer container = new I18nStringAsObjectContainer();
         final String json = toJson(container);
         assertNotNull(json);
         final JsonNode tree = jsonToTree(json);
@@ -334,6 +338,144 @@ class I18nStringJacksonSerializationTest {
         final JsonNode beanNode = assertContainerNode(tree);
         final JsonNode i18nNode = assertMapNode(xxText, beanNode);
         assertContainsTranslationNode(I18nBilingualString.TRANSLATION_LANG, yyText, i18nNode);
+        assertEquals(1, i18nNode.size());
+    }
+
+    /**
+     * Test Jackson JSON serialization support for null {@code I18nString}
+     * in containers.
+     */
+    @Test
+    void testFixedContainer_Null() {
+        final I18nFixedStringContainer container = new I18nFixedStringContainer();
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        assertNullNode(beanNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for {@code I18nFixedString}
+     * in containers.
+     */
+    @Test
+    void testFixedContainer_I18nFixedString() {
+        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final I18nFixedString bean = I18nFixedString.from(text);
+        final I18nFixedStringContainer container = new I18nFixedStringContainer();
+        container.setBean(bean);
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        assertStringNode(text, beanNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for null {@code I18nString}
+     * in containers.
+     */
+    @Test
+    void testFixedAsObjectContainer_Null() {
+        final I18nFixedStringAsObjectContainer container = new I18nFixedStringAsObjectContainer();
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        assertNullNode(beanNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for {@code I18nFixedString}
+     * in containers.
+     */
+    @Test
+    void testFixedAsObjectContainer_I18nFixedString() {
+        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final I18nFixedString bean = I18nFixedString.from(text);
+        final I18nFixedStringAsObjectContainer container = new I18nFixedStringAsObjectContainer();
+        container.setBean(bean);
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        final JsonNode i18nNode = assertMapNode(text, beanNode);
+        assertTranslationNodeEmpty(i18nNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for null {@code I18nString}
+     * in containers.
+     */
+    @Test
+    void testResourcesContainer_Null() {
+        final I18nResourcesStringContainer container = new I18nResourcesStringContainer();
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        assertNullNode(beanNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for {@code I18nResourcesString}
+     * in containers.
+     */
+    @Test
+    void testResourcesContainer_I18nResourcesString() {
+        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
+        final I18nResourcesString bean = spy(I18nResourcesString
+                .forDefault(defaultText)
+                .withCode(RandomStringUtils.random(RND_STR_LENGTH))
+                .build());
+        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        willReturn(text).given(bean).get();
+        final I18nResourcesStringContainer container = new I18nResourcesStringContainer();
+        container.setBean(bean);
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        assertStringNode(text, beanNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for null {@code I18nString}
+     * in containers.
+     */
+    @Test
+    void testResourcesAsObjectContainer_Null() {
+        final I18nResourcesStringAsObjectContainer container = new I18nResourcesStringAsObjectContainer();
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        assertNullNode(beanNode);
+    }
+
+    /**
+     * Test Jackson JSON serialization support for {@code I18nResourcesString}
+     * in containers.
+     */
+    @Test
+    void testResourcesAsObjectContainer_I18nResourcesString() {
+        I18N.setLocale(MOCK_LOCALE);
+        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
+        final I18nResourcesString bean = spy(I18nResourcesString
+                .forDefault(defaultText)
+                .withCode(RandomStringUtils.random(RND_STR_LENGTH))
+                .build());
+        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        willReturn(text).given(bean).get();
+        final I18nResourcesStringAsObjectContainer container = new I18nResourcesStringAsObjectContainer();
+        container.setBean(bean);
+        final String json = toJson(container);
+        assertNotNull(json);
+        final JsonNode tree = jsonToTree(json);
+        final JsonNode beanNode = assertContainerNode(tree);
+        final JsonNode i18nNode = assertMapNode(defaultText, beanNode);
+        assertContainsTranslationNode(MOCK_LANG, text, i18nNode);
         assertEquals(1, i18nNode.size());
     }
 

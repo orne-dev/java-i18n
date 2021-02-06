@@ -69,8 +69,6 @@ implements ConstraintValidator<T, I18nString> {
         } else {
             valid = isTextValid(value.get());
         }
-        if (valid && value instanceof I18nStringMap) {
-        }
         return valid;
     }
 
