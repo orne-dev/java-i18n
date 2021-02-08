@@ -44,7 +44,6 @@ import dev.orne.i18n.I18nString;
  * @see PatternValidatorForI18nString
  */
 @Tag("ut")
-@SuppressWarnings("deprecation")
 class PatternValidatorForI18nStringTest
 extends AbstractI18nValidatorTest<Pattern> {
 

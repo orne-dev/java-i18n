@@ -38,9 +38,7 @@ import dev.orne.i18n.I18nString;
  * @see Pattern
  * @see I18nString
  * @since 0.1
- * @deprecated Use Jakarta Bean Validation 3.0 if possible.
  */
-@Deprecated
 public class PatternValidatorForI18nString
 extends AbstractValidatorForI18nString<Pattern> {
 

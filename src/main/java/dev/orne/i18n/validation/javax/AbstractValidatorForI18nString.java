@@ -41,9 +41,7 @@ import dev.orne.i18n.I18nStringMap;
  * @see ConstraintValidator
  * @see I18nString
  * @since 0.1
- * @deprecated Use Jakarta Bean Validation 3.0 if possible.
  */
-@Deprecated
 public abstract class AbstractValidatorForI18nString<T extends Annotation>
 implements ConstraintValidator<T, I18nString> {
 
