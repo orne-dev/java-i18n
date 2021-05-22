@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -52,10 +53,16 @@ class I18nContextProviderByClassLoaderStrategyTest {
     private @Mock Map<ClassLoader, I18nContextProvider> mockProviderMap;
     private @Mock ClassLoader mockClassLoader;
     private @Mock Thread mockThread;
+    protected AutoCloseable mocks;
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     /**

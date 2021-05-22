@@ -28,6 +28,7 @@ import static org.mockito.BDDMockito.*;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -50,10 +51,16 @@ class DefaultI18nContextProviderTest {
     private @Mock I18nResources mockDefaultResources;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
+    protected AutoCloseable mocks;
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     /**

@@ -66,6 +66,7 @@ class I18nSpringConfigurerTest {
     private @Mock MessageSource messageSource;
     private @Mock I18nResources resources;
     private @Mock I18nResources altResources;
+    protected AutoCloseable mocks;
 
     private static ClassLoader bootCL;
     private static ClassLoader springCL;
@@ -109,7 +110,12 @@ class I18nSpringConfigurerTest {
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     @AfterEach

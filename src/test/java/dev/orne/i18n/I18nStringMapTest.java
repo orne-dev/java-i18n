@@ -74,6 +74,7 @@ class I18nStringMapTest {
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
+    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
@@ -82,13 +83,18 @@ class I18nStringMapTest {
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
         I18N.setContextProviderStrategy(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
         willReturn(mockResources).given(mockProvider).getI18nResources(any());
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     @AfterEach

@@ -24,6 +24,7 @@ package dev.orne.i18n.validation.javax;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -67,11 +69,17 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
     protected @Mock I18nStringMap mockI18nStringMap;
     protected @Mock ConstraintValidatorContext mockContext;
     protected T mockAnnotation;
+    protected AutoCloseable mocks;
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
         mockAnnotation = mock(annotationType);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     protected AbstractI18nValidatorTest(

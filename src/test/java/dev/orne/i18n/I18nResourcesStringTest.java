@@ -83,6 +83,7 @@ class I18nResourcesStringTest {
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
     private @Mock I18nString mockI18nString;
+    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
@@ -91,8 +92,13 @@ class I18nResourcesStringTest {
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
         I18N.setContextProviderStrategy(mockStrategy);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     @AfterEach

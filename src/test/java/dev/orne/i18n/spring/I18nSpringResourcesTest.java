@@ -28,6 +28,7 @@ import static org.mockito.BDDMockito.*;
 import java.util.Locale;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -85,6 +86,7 @@ class I18nSpringResourcesTest {
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nContext mockContext;
     private @Mock MessageSource source;
+    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
@@ -98,11 +100,16 @@ class I18nSpringResourcesTest {
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
         I18N.setContextProviderStrategy(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_DEFAULT_LOCALE).given(mockContext).getLocale();
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     /**
