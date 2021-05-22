@@ -42,7 +42,6 @@ import dev.orne.i18n.I18nString;
  * @see NotEmptyValidatorForI18nString
  */
 @Tag("ut")
-@SuppressWarnings("deprecation")
 class NotEmptyValidatorForI18nStringTest
 extends AbstractI18nValidatorTest<NotEmpty> {
 

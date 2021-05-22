@@ -53,7 +53,6 @@ import dev.orne.i18n.I18nStringMap;
  * @see AbstractValidatorForI18nString
  */
 @Tag("ut")
-@SuppressWarnings("deprecation")
 class AbstractValidatorForI18nStringTest {
 
     private static final int RND_STR_LENGTH = 20;

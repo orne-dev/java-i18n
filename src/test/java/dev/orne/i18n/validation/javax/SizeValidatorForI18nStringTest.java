@@ -45,7 +45,6 @@ import dev.orne.i18n.I18nString;
  * @see SizeValidatorForI18nString
  */
 @Tag("ut")
-@SuppressWarnings("deprecation")
 class SizeValidatorForI18nStringTest
 extends AbstractI18nValidatorTest<Size> {
 
