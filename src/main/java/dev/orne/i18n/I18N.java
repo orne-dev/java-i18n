@@ -198,7 +198,7 @@ public final class I18N {
             }
             if (result == null) {
                 try {
-                    result = clazz.newInstance();
+                    result = clazz.getDeclaredConstructor().newInstance();
                 } catch (final Exception e) {
                     LOG.error("Error instantiating custom I18N context provider strategy class with default constructor.", e);
                 }
