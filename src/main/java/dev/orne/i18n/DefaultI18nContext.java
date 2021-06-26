@@ -31,6 +31,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -42,6 +44,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nContext
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public class DefaultI18nContext
 implements I18nContext, Serializable {
 

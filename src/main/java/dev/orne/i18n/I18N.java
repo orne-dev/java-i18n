@@ -29,6 +29,8 @@ import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nContext
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public final class I18N {
 
     /** The configuration file path. */

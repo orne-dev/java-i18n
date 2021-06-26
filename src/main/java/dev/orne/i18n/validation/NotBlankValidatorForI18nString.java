@@ -1,5 +1,8 @@
 package dev.orne.i18n.validation;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /*-
  * #%L
  * Orne I18N
@@ -37,6 +40,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public class NotBlankValidatorForI18nString
 extends AbstractValidatorForI18nString<NotBlank> {
 

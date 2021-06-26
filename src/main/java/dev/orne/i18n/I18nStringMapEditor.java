@@ -24,6 +24,9 @@ package dev.orne.i18n;
 
 import java.beans.PropertyEditorSupport;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * Java Beans Editor for {@code I18nStringMap} that converts between
  * {@code String} and {@code I18nStringMap}.
@@ -32,6 +35,7 @@ import java.beans.PropertyEditorSupport;
  * @version 1.0, 2021-02
  * @since 0.1
  */
+@API(status=Status.INTERNAL, since="0.1")
 public class I18nStringMapEditor
 extends PropertyEditorSupport {
 

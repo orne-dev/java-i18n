@@ -24,6 +24,9 @@ package dev.orne.i18n;
 
 import java.util.Locale;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -37,6 +40,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nResources
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public interface I18nContextProvider {
 
     /**

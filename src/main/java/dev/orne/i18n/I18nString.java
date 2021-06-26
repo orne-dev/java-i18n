@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -45,6 +47,7 @@ import jakarta.validation.constraints.NotNull;
  * @version 1.0, 2021-01
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 @XmlJavaTypeAdapter(I18nString.JaxbAdapter.class)
 @JsonSerialize(using=I18nStringJacksonSerializer.class)
 @JsonDeserialize(using=I18nStringJacksonDeserializer.class)
@@ -106,6 +109,7 @@ extends Serializable {
      * @see I18nString
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     class JaxbAdapter
     extends XmlAdapter<XmlI18nString, I18nString> {
 
@@ -190,6 +194,7 @@ extends Serializable {
      * @see I18nString
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     class FullJaxbAdapter
     extends JaxbAdapter {
 

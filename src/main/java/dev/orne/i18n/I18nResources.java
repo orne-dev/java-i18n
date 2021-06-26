@@ -25,6 +25,9 @@ package dev.orne.i18n;
 import java.text.MessageFormat;
 import java.util.Locale;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -40,6 +43,7 @@ import jakarta.validation.constraints.NotNull;
  * @see MessageFormat
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public interface I18nResources {
 
     /**

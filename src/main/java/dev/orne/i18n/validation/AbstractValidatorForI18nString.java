@@ -24,6 +24,9 @@ package dev.orne.i18n.validation;
 
 import java.lang.annotation.Annotation;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
 import jakarta.validation.ConstraintValidator;
@@ -41,6 +44,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public abstract class AbstractValidatorForI18nString<T extends Annotation>
 implements ConstraintValidator<T, I18nString> {
 

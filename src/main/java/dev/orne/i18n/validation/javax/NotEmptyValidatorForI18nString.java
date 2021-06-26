@@ -26,6 +26,9 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import dev.orne.i18n.I18nString;
 
 /**
@@ -38,6 +41,7 @@ import dev.orne.i18n.I18nString;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public class NotEmptyValidatorForI18nString
 extends AbstractValidatorForI18nString<NotEmpty> {
 

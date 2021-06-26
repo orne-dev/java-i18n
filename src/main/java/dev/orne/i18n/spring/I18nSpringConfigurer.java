@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -57,6 +59,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nSpringContextProvider
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 @Configuration
 public class I18nSpringConfigurer
 implements InitializingBean, ImportAware {

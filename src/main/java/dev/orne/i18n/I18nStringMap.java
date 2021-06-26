@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -45,6 +47,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 @XmlJavaTypeAdapter(I18nStringMap.JaxbAdapter.class)
 public class I18nStringMap
 implements I18nString {
@@ -302,6 +305,7 @@ implements I18nString {
      * @see I18nStringMap
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     public static class JaxbAdapter
     extends XmlAdapter<XmlI18nString, I18nStringMap> {
 
@@ -331,6 +335,7 @@ implements I18nString {
      * @see I18nStringMap
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     public static class FullJaxbAdapter
     extends JaxbAdapter {
 

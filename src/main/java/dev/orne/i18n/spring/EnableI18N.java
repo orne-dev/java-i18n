@@ -30,6 +30,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -45,6 +47,7 @@ import org.springframework.context.annotation.Import;
  * @see I18nSpringConfigurer
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })

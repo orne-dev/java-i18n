@@ -28,6 +28,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -40,6 +42,7 @@ import jakarta.validation.constraints.NotNull;
  * @see ResourceBundle
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public class I18nBundleResources
 implements I18nResources {
 

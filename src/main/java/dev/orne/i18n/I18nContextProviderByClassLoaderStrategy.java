@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -38,6 +40,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nContextProviderStrategy
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public class I18nContextProviderByClassLoaderStrategy
 extends DefaultI18nContextProviderStrategy
 implements I18nContextProviderConfigurableStrategy {
@@ -123,18 +126,19 @@ implements I18nContextProviderConfigurableStrategy {
     @Override
     public synchronized @NotNull I18nContextProvider getContextProvider(
             final @NotNull ClassLoader classLoader) {
-        return this.contextProviders.computeIfAbsent(
-                Validate.notNull(classLoader),
-                key -> {
-                    I18nContextProvider inheritedResult;
-                    final ClassLoader parentClassLoader = classLoader.getParent();
-                    if (parentClassLoader == null) {
-                        inheritedResult = getDefaultContextProvider();
-                    } else {
-                        inheritedResult = getContextProvider(parentClassLoader);
-                    }
-                    return inheritedResult;
-                });
+        if (this.contextProviders.containsKey(Validate.notNull(classLoader))) {
+            return this.contextProviders.get(classLoader);
+        } else {
+            I18nContextProvider inheritedResult;
+            final ClassLoader parentClassLoader = classLoader.getParent();
+            if (parentClassLoader == null) {
+                inheritedResult = getDefaultContextProvider();
+            } else {
+                inheritedResult = getContextProvider(parentClassLoader);
+            }
+            this.contextProviders.put(classLoader, inheritedResult);
+            return inheritedResult;
+        }
     }
 
     /**

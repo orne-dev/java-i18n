@@ -24,6 +24,9 @@ package dev.orne.i18n;
 
 import java.io.IOException;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -44,6 +47,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.INTERNAL, since="0.1")
 public class I18nStringJacksonSerializer
 extends StdSerializer<I18nString>
 implements ContextualSerializer {
@@ -121,6 +125,7 @@ implements ContextualSerializer {
      * @see I18nStringMap
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     @JsonSerialize(using = JsonSerializer.None.class)
     private static class MapAsObject
     extends I18nStringMap {

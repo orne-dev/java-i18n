@@ -32,6 +32,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -43,6 +45,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nContextProvider
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public class DefaultI18nContextProvider
 implements I18nContextProvider {
 

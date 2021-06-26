@@ -32,6 +32,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import dev.orne.i18n.I18nContext;
@@ -47,6 +49,7 @@ import jakarta.validation.constraints.NotNull;
  * @see LocaleContextHolder
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public class I18nSpringContext
 implements I18nContext, Serializable {
 

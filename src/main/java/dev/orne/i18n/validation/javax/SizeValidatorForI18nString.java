@@ -25,6 +25,9 @@ package dev.orne.i18n.validation.javax;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import dev.orne.i18n.I18nString;
 
 /**
@@ -37,6 +40,7 @@ import dev.orne.i18n.I18nString;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public class SizeValidatorForI18nString
 extends AbstractValidatorForI18nString<Size> {
 

@@ -24,6 +24,9 @@ package dev.orne.i18n;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * This object contains factory methods for each Java content interface and
  * Java element interface in the dev.orne.i18n package.
@@ -36,6 +39,7 @@ import javax.xml.bind.annotation.XmlRegistry;
  * Factory methods for each of these are provided in this class.
  */
 @XmlRegistry
+@API(status=Status.INTERNAL, since="0.1")
 public class ObjectFactory {
 
     /** The package name space. */

@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -46,6 +49,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.INTERNAL, since="0.1")
 public class I18nStringJacksonDeserializer
 extends JsonDeserializer<I18nString>
 implements ContextualDeserializer {
@@ -149,6 +153,7 @@ implements ContextualDeserializer {
      * @see I18nStringMap
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     @JsonDeserialize(using = JsonDeserializer.None.class)
     private static  class MapFromObject
     extends I18nStringMap {

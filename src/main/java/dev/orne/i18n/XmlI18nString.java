@@ -33,6 +33,9 @@ import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * XML representation of I18N string.
  * <p>
@@ -59,6 +62,7 @@ import javax.xml.bind.annotation.XmlType;
  * @see https://github.com/javaee/jaxb-v2/issues/1108
  * @since 0.1
  */
+@API(status=Status.INTERNAL, since="0.1")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(
         name=ObjectFactory.STRING_TYPE,

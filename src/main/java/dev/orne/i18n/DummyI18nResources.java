@@ -26,6 +26,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -38,6 +40,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nResources
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public class DummyI18nResources
 implements I18nResources {
 

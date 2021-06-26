@@ -23,6 +23,8 @@ package dev.orne.i18n;
  */
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -35,6 +37,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nContextProviderStrategy
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public class DefaultI18nContextProviderStrategy
 implements I18nContextProviderStrategy {
 

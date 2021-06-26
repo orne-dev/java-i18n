@@ -35,6 +35,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -48,6 +50,7 @@ import jakarta.validation.constraints.NotNull;
  * @version 1.0, 2021-01
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 @JsonDeserialize(using=JsonDeserializer.None.class)
 @XmlJavaTypeAdapter(I18nResourcesString.JaxbAdapter.class)
 public class I18nResourcesString
@@ -253,6 +256,7 @@ implements I18nString {
      * @version 1.0, 2021-01
      * @since 0.1
      */
+    @API(status=Status.STABLE, since="0.1")
     public static class Builder {
 
         /** The key of the I18N resources to use. */
@@ -396,6 +400,7 @@ implements I18nString {
      * @see I18nResourcesString
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     public static class JaxbAdapter
     extends XmlAdapter<XmlI18nString, I18nResourcesString> {
 
@@ -426,6 +431,7 @@ implements I18nString {
      * @see I18nResourcesString
      * @since 0.1
      */
+    @API(status=Status.INTERNAL, since="0.1")
     public static class FullJaxbAdapter
     extends JaxbAdapter {
 

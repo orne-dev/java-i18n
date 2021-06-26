@@ -22,6 +22,9 @@ package dev.orne.i18n;
  * #L%
  */
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -33,6 +36,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public @FunctionalInterface interface I18nStringConverter {
 
     /**

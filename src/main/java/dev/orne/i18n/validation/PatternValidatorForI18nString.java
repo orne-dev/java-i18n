@@ -24,6 +24,9 @@ package dev.orne.i18n.validation;
 
 import java.util.regex.PatternSyntaxException;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import dev.orne.i18n.I18nString;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -38,6 +41,7 @@ import jakarta.validation.constraints.Pattern;
  * @see I18nString
  * @since 0.1
  */
+@API(status=Status.MAINTAINED, since="0.1")
 public class PatternValidatorForI18nString
 extends AbstractValidatorForI18nString<Pattern> {
 
