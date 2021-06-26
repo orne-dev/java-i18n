@@ -41,7 +41,7 @@
   </scm>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>9</java.version>
     <java.target.version>8</java.target.version>
     <license.licenseName>lgpl_v3</license.licenseName>
 
