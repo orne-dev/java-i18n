@@ -23,16 +23,16 @@ package dev.orne.i18n;
  */
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
 import java.util.Properties;
 
@@ -117,19 +117,15 @@ class I18nConfigurationTest {
     @Test
     void testLoadConfiguration_IOException()
     throws Exception {
-        final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
-        config.setProperty("mock.prop", "mock.value");
-        final ClassLoader cl = createConfigClassLoader(config);
-        final FileChannel channel = FileChannel.open(this.cfgFile, StandardOpenOption.WRITE);
-        channel.lock();
-        try {
-            final Properties result = I18N.loadConfiguration(cl);
-            assertNotNull(result);
-            assertTrue(result.isEmpty());
-        } finally {
-            channel.close();
-        }
+        final ClassLoader cl = mock(ClassLoader.class);
+        final InputStream is = mock(InputStream.class);
+        willReturn(is).given(cl).getResourceAsStream(I18N.CONFIG_FILE);
+        willThrow(IOException.class).given(is).read();
+        willThrow(IOException.class).given(is).read(any());
+        willThrow(IOException.class).given(is).read(any(), anyInt(), anyInt());
+        final Properties result = I18N.loadConfiguration(cl);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 
     /**

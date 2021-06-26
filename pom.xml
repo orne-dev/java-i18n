@@ -53,7 +53,7 @@
     <javax.activation.version>1.2.0</javax.activation.version>
     <javax.validation.version>2.0.1.Final</javax.validation.version>
     <jakarta.validation.version>3.0.0</jakarta.validation.version>
-    <jaxb.version>2.3.0</jaxb.version>
+    <jaxb.version>2.3.1</jaxb.version>
     <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
     <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
 

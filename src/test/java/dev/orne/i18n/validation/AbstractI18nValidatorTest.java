@@ -94,7 +94,7 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
     @Test
     void testConstructor() {
         final ConstraintValidator<T, I18nString> result = assertDoesNotThrow(() -> {
-            return this.type.newInstance();
+            return this.type.getDeclaredConstructor().newInstance();
         });
         assertNotNull(result);
     }
@@ -113,7 +113,7 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
      */
     ConstraintValidator<T, I18nString> assertInitialize() {
         final ConstraintValidator<T, I18nString> validator = assertDoesNotThrow(() -> {
-            return this.type.newInstance();
+            return this.type.getDeclaredConstructor().newInstance();
         });
         assertDoesNotThrow(() -> {
             validator.initialize(mockAnnotation);
@@ -123,7 +123,7 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
 
     protected ConstraintValidator<T, I18nString> createValidator() {
         final ConstraintValidator<T, I18nString> validator = assertDoesNotThrow(() -> {
-            return this.type.newInstance();
+            return this.type.getDeclaredConstructor().newInstance();
         });
         validator.initialize(mockAnnotation);
         return validator;

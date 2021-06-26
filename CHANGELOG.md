@@ -1,5 +1,6 @@
 # :package: 0.1.0
 
+01. :gift: Added Java 9+ module declaration
 01. :gift: Added `dev.orne.i18n.I18nContext`
 01. :gift: Added `dev.orne.i18n.DefaultI18nContext`
 01. :gift: Added `dev.orne.i18n.I18nResources`
@@ -41,7 +42,7 @@
 01. :gift: Added Jackson 2.11 support
     01. :gift: Added `dev.orne.i18n.I18nStringJacksonSerializer`
     01. :gift: Added `dev.orne.i18n.I18nStringJacksonDeserializer`
-01. :gift: Added JAXB 2.1 support
+01. :gift: Added JAXB 2.2.8 support
     01. :gift: Added `dev.orne.i18n.XmlI18nString`
     01. :gift: Added `dev.orne.i18n.XmlI18nStringTranslation`
     01. :gift: Added `dev.orne.i18n.ObjectFactory`

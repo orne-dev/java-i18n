@@ -33,6 +33,7 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -60,10 +61,16 @@ class AbstractValidatorForI18nStringTest {
     private @Mock I18nString mockI18nString;
     private @Mock I18nStringMap mockI18nStringMap;
     private @Mock ConstraintValidatorContext mockContext;
+    private AutoCloseable mocks;
 
     @BeforeEach
     void initMocks() {
-        MockitoAnnotations.initMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocks.close();
     }
 
     /**
