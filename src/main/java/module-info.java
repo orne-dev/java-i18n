@@ -22,16 +22,25 @@
 module dev.orne.i18n {
     exports dev.orne.i18n;
     exports dev.orne.i18n.spring;
-    requires java.desktop;
+    exports dev.orne.i18n.validation;
+    exports dev.orne.i18n.validation.javax;
     requires org.slf4j;
     requires org.apache.commons.lang3;
-    requires org.apache.commons.text;
-    requires static transitive java.validation;
-    requires static transitive jakarta.validation;
-    requires static java.xml.bind;
-    requires static transitive com.fasterxml.jackson.databind;
-    requires static spring.beans;
-    requires static spring.core;
-    requires static transitive spring.context;
     requires static org.apiguardian.api;
+    // Java Beans Support
+    requires static java.desktop;
+    // JAXB Support
+    requires static java.xml.bind;
+    requires static org.apache.commons.text;
+    // Java Validation Support
+    requires static java.validation;
+    // Jakarta Validation Support
+    requires static jakarta.validation;
+    // Jackson JSON Support
+    requires static transitive com.fasterxml.jackson.databind;
+    opens dev.orne.i18n to com.fasterxml.jackson.databind;
+    // Spring Support
+    requires static spring.beans;
+    requires static transitive spring.core;
+    requires static spring.context;
 }
