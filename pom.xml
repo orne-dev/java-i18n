@@ -43,6 +43,7 @@
   <properties>
     <java.version>9</java.version>
     <java.target.version>8</java.target.version>
+    <java.module.name>dev.orne.i18n</java.module.name>
     <license.licenseName>lgpl_v3</license.licenseName>
 
     <sonar.projectKey>java-i18n</sonar.projectKey>

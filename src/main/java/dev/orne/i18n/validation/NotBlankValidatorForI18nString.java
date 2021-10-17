@@ -1,8 +1,5 @@
 package dev.orne.i18n.validation;
 
-import org.apiguardian.api.API;
-import org.apiguardian.api.API.Status;
-
 /*-
  * #%L
  * Orne I18N
@@ -24,6 +21,9 @@ import org.apiguardian.api.API.Status;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nString;
 import jakarta.validation.ConstraintValidatorContext;

@@ -1,9 +1,5 @@
 package dev.orne.i18n.spring;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-
 /*-
  * #%L
  * Orne I18N
@@ -26,6 +22,9 @@ import java.util.HashMap;
  * #L%
  */
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -50,8 +49,13 @@ import jakarta.validation.constraints.NotNull;
 /**
  * I18N context provider configuration for Spring. Configures a
  * {@code I18nContextProvider} (an instance of
- * {@code I18nSpringContextProvider} by default) for a {@code ClassLoader}
- * (the {@code ClassLoader} of this library by default).
+ * {@code I18nSpringContextProvider} by default).
+ * <p>
+ * By default configures the provider for all {@code ClassLoader}s.
+ * In J2EE environments supports selecting a target class that will configure
+ * the provider for the {@code ClassLoader} of the given class and all its
+ * children {@code ClassLoader}, allowing different configurations for each
+ * application even when the library is deployed as a shared library.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
