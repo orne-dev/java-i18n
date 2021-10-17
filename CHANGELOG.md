@@ -1,6 +1,9 @@
 # :package: 0.1.0
 
-01. :gift: Added Java 9+ module declaration
+01. :gift: Initial version
+01. :wrench: Added `org.apache.commons:commons-lang3:3.12.0` dependency.
+01. :wrench: Added `org.apache.commons:commons-text:1.9` dependency.
+01. :gift: Added JPMS module declaration
 01. :gift: Added `dev.orne.i18n.I18nContext`
 01. :gift: Added `dev.orne.i18n.DefaultI18nContext`
 01. :gift: Added `dev.orne.i18n.I18nResources`
