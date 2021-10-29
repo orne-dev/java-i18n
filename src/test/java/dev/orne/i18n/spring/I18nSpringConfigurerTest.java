@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.type.AnnotationMetadata;
@@ -62,8 +63,10 @@ import jakarta.validation.constraints.NotNull;
 class I18nSpringConfigurerTest {
 
     private @Mock ClassLoader classLoader;
+    private @Mock ApplicationContext springContext;
     private @Mock I18nContextProvider provider;
     private @Mock MessageSource messageSource;
+    private @Mock MessageSource altMessageSource;
     private @Mock I18nResources resources;
     private @Mock I18nResources altResources;
     protected AutoCloseable mocks;
@@ -136,6 +139,16 @@ class I18nSpringConfigurerTest {
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
+    }
+
+    /**
+     * Test {@link I18nSpringConfigurer#setContext(ApplicationContext)}.
+     */
+    @Test
+    void testSetContext() {
+        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        configurer.setContext(springContext);
+        assertSame(springContext, configurer.getContext());
     }
 
     /**
@@ -335,15 +348,20 @@ class I18nSpringConfigurerTest {
         final Map<String, Object> attrs = new HashMap<>();
         attrs.put("targetClass", I18nSpringConfigurerTest.class);
         attrs.put("availableLanguages", langs);
+        attrs.put("scanI18nResources", false);
+        attrs.put("scanMessageSources", false);
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
         final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
         configurer.setImportMetadata(metadata);
         assertSame(I18nSpringConfigurerTest.class, configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
+        assertTrue(configurer.isInheritableContexts());
         assertArrayEquals(locales, configurer.getAvailableLocales());
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
+        assertFalse(configurer.isScanI18nResources());
+        assertFalse(configurer.isScanMessageSources());
     }
 
     /**
@@ -355,15 +373,20 @@ class I18nSpringConfigurerTest {
         final Map<String, Object> attrs = new HashMap<>();
         attrs.put("targetClass", Void.class);
         attrs.put("availableLanguages", new String[0]);
+        attrs.put("scanI18nResources", true);
+        attrs.put("scanMessageSources", true);
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
         final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
+        assertTrue(configurer.isInheritableContexts());
         assertNull(configurer.getAvailableLocales());
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
+        assertTrue(configurer.isScanI18nResources());
+        assertTrue(configurer.isScanMessageSources());
     }
 
     /**
@@ -378,10 +401,13 @@ class I18nSpringConfigurerTest {
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
+        assertTrue(configurer.isInheritableContexts());
         assertNull(configurer.getAvailableLocales());
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
+        assertFalse(configurer.isScanI18nResources());
+        assertFalse(configurer.isScanMessageSources());
     }
 
     /**
@@ -395,10 +421,13 @@ class I18nSpringConfigurerTest {
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
+        assertTrue(configurer.isInheritableContexts());
         assertNull(configurer.getAvailableLocales());
         assertNull(configurer.getDefaultMessageSource());
         assertNull(configurer.getDefaultI18nResources());
         assertNull(configurer.getNamedI18nResources());
+        assertFalse(configurer.isScanI18nResources());
+        assertFalse(configurer.isScanMessageSources());
     }
 
     /**
@@ -518,6 +547,112 @@ class I18nSpringConfigurerTest {
         assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
         assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertEquals(namedResources, springProvider.getI18nResources());
+    }
+
+    /**
+     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     */
+    @Test
+    void testCreateContextProvider_ScanI18nResources() {
+        final Map<String, I18nResources> namedResources = new HashMap<>();
+        namedResources.put("main", resources);
+        namedResources.put("alt", altResources);
+        willReturn(namedResources).given(springContext).getBeansOfType(I18nResources.class);
+        willReturn(new String[0]).given(springContext).getAliases("main");
+        willReturn(new String[0]).given(springContext).getAliases("alt");
+        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        configurer.setContext(springContext);
+        configurer.setScanI18nResources(true);
+        final I18nContextProvider provider = configurer.createContextProvider();
+        assertTrue(provider instanceof I18nSpringContextProvider);
+        final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
+        assertTrue(springProvider.isInheritable());
+        assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
+        assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertEquals(namedResources, springProvider.getI18nResources());
+    }
+
+    /**
+     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     */
+    @Test
+    void testCreateContextProvider_ScanMessageSources() {
+        final Map<String, MessageSource> namedSources = new HashMap<>();
+        namedSources.put("main", messageSource);
+        namedSources.put("alt", altMessageSource);
+        willReturn(namedSources).given(springContext).getBeansOfType(MessageSource.class);
+        willReturn(new String[0]).given(springContext).getAliases("main");
+        willReturn(new String[0]).given(springContext).getAliases("alt");
+        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        configurer.setContext(springContext);
+        configurer.setScanMessageSources(true);
+        final I18nContextProvider provider = configurer.createContextProvider();
+        assertTrue(provider instanceof I18nSpringContextProvider);
+        final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
+        assertTrue(springProvider.isInheritable());
+        assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
+        assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
+        final Map<String, I18nResources> namedResources = springProvider.getI18nResources();
+        assertEquals(2, namedResources.size());
+        assertTrue(namedResources.containsKey("main"));
+        assertTrue(namedResources.get("main") instanceof I18nSpringResources);
+        assertSame(messageSource, ((I18nSpringResources) namedResources.get("main")).getSource());
+        assertTrue(namedResources.containsKey("alt"));
+        assertTrue(namedResources.get("alt") instanceof I18nSpringResources);
+        assertSame(altMessageSource, ((I18nSpringResources) namedResources.get("alt")).getSource());
+    }
+
+    /**
+     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     */
+    @Test
+    void testCreateContextProvider_Scan() {
+        final Map<String, I18nResources> namedResources = new HashMap<>();
+        namedResources.put("mainRes", resources);
+        namedResources.put("altRes", altResources);
+        final Map<String, MessageSource> namedSources = new HashMap<>();
+        namedSources.put("mainSource", messageSource);
+        namedSources.put("altSource", altMessageSource);
+        willReturn(namedResources).given(springContext).getBeansOfType(I18nResources.class);
+        willReturn(namedSources).given(springContext).getBeansOfType(MessageSource.class);
+        willReturn(new String[] { "mainResAlias1" }).given(springContext).getAliases("mainRes");
+        willReturn(new String[] { "altResAlias1", "altResAlias2" }).given(springContext).getAliases("altRes");
+        willReturn(new String[] { "mainSourceAlias1", "mainSourceAlias2" }).given(springContext).getAliases("mainSource");
+        willReturn(new String[] { "altSourceAlias1" }).given(springContext).getAliases("altSource");
+        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        configurer.setContext(springContext);
+        configurer.setScanI18nResources(true);
+        configurer.setScanMessageSources(true);
+        final I18nContextProvider provider = configurer.createContextProvider();
+        assertTrue(provider instanceof I18nSpringContextProvider);
+        final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
+        assertTrue(springProvider.isInheritable());
+        assertArrayEquals(Locale.getAvailableLocales(), springProvider.getAvailableLocales());
+        assertTrue(springProvider.getDefaultI18nResources() instanceof DummyI18nResources);
+        final Map<String, I18nResources> result = springProvider.getI18nResources();
+        assertEquals(10, result.size());
+        assertTrue(result.containsKey("mainRes"));
+        assertSame(resources, result.get("mainRes"));
+        assertTrue(result.containsKey("mainResAlias1"));
+        assertSame(result.get("mainRes"), result.get("mainResAlias1"));
+        assertTrue(result.containsKey("altRes"));
+        assertSame(altResources, result.get("altRes"));
+        assertTrue(result.containsKey("altResAlias1"));
+        assertSame(result.get("altRes"), result.get("altResAlias1"));
+        assertTrue(result.containsKey("altResAlias2"));
+        assertSame(result.get("altRes"), result.get("altResAlias2"));
+        assertTrue(result.containsKey("mainSource"));
+        assertTrue(result.get("mainSource") instanceof I18nSpringResources);
+        assertSame(messageSource, ((I18nSpringResources) result.get("mainSource")).getSource());
+        assertTrue(result.containsKey("mainSourceAlias1"));
+        assertSame(result.get("mainSource"), result.get("mainSourceAlias1"));
+        assertTrue(result.containsKey("mainSourceAlias2"));
+        assertSame(result.get("mainSource"), result.get("mainSourceAlias2"));
+        assertTrue(result.containsKey("altSource"));
+        assertTrue(result.get("altSource") instanceof I18nSpringResources);
+        assertSame(altMessageSource, ((I18nSpringResources) result.get("altSource")).getSource());
+        assertTrue(result.containsKey("altSourceAlias1"));
+        assertSame(result.get("altSource"), result.get("altSourceAlias1"));
     }
 
     /**

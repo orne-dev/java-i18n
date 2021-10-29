@@ -380,10 +380,8 @@ implements InitializingBean, ImportAware {
                 this.namedI18nResources.putAll(scanContextForMessageSources());
             }
         }
-        if (this.namedI18nResources != null) {
-            for (final Map.Entry<String, I18nResources> entry : this.namedI18nResources.entrySet()) {
-                bean.addI18nResources(entry.getKey(), entry.getValue());
-            }
+        for (final Map.Entry<String, I18nResources> entry : this.namedI18nResources.entrySet()) {
+            bean.addI18nResources(entry.getKey(), entry.getValue());
         }
         return bean;
     }
@@ -455,8 +453,14 @@ implements InitializingBean, ImportAware {
                         .map(Locale::new)
                         .toArray(Locale[]::new);
             }
-            this.scanI18nResources = (boolean) annotAttrs.get("scanI18nResources");
-            this.scanMessageSources = (boolean) annotAttrs.get("scanMessageSources");
+            final Boolean scanResources = (Boolean) annotAttrs.get("scanI18nResources");
+            if (scanResources != null) {
+                this.scanI18nResources = scanResources;
+            }
+            final Boolean scanSources = (Boolean) annotAttrs.get("scanI18nResources");
+            if (scanSources != null) {
+                this.scanMessageSources = scanSources;
+            }
         }
     }
 
