@@ -34,6 +34,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportAware;
@@ -68,6 +69,9 @@ import jakarta.validation.constraints.NotNull;
 public class I18nSpringConfigurer
 implements InitializingBean, ImportAware {
 
+    /** The Spring context. */
+    private ApplicationContext context;
+
     /**
      * The {@code Class} whose {@code ClassLoader} this configuration will be
      * applied to.
@@ -84,10 +88,34 @@ implements InitializingBean, ImportAware {
     private MessageSource defaultMessageSource;
     /** The default I18N resources. */
     private I18nResources defaultI18nResources;
+    /** If the Spring context must be scanned for additional {@code I18nResources} beans. */
+    private boolean scanI18nResources;
+    /** If the Spring context must be scanned for additional {@code MessageSource} beans. */
+    private boolean scanMessageSources;
     /** The additional named I18N resources. */
     private Map<String, I18nResources> namedI18nResources;
     /** The custom I18N context provider to use. */
     private I18nContextProvider contextProvider;
+
+    /**
+     * Returns the Spring context.
+     * 
+     * @return The Spring context
+     */
+    protected ApplicationContext getContext() {
+        return this.context;
+    }
+
+    /**
+     * Sets the Spring context.
+     * 
+     * @param context The Spring context
+     */
+    @Autowired
+    public void setContext(
+            final ApplicationContext context) {
+        this.context = context;
+    }
 
     /**
      * Returns the {@code Class} whose {@code ClassLoader} this configuration
@@ -221,9 +249,52 @@ implements InitializingBean, ImportAware {
      * 
      * @param resources The default I18N resources
      */
+    @Autowired(required=false)
     public void setDefaultI18nResources(
             final I18nResources resources) {
         this.defaultI18nResources = resources;
+    }
+
+    /**
+     * Returns {@code true} if the Spring context must be scanned for
+     * additional {@code I18nResources} beans.
+     * 
+     * @return If the Spring context must be scanned
+     */
+    public boolean isScanI18nResources() {
+        return scanI18nResources;
+    }
+
+    /**
+     * Sets if the Spring context must be scanned for
+     * additional {@code I18nResources} beans.
+     * 
+     * @param scan If the Spring context must be scanned
+     */
+    public void setScanI18nResources(
+            final boolean scan) {
+        this.scanI18nResources = scan;
+    }
+
+    /**
+     * Returns {@code true} if the Spring context must be scanned for
+     * additional {@code MessageSource} beans.
+     * 
+     * @return If the Spring context must be scanned
+     */
+    public boolean isScanMessageSources() {
+        return this.scanMessageSources;
+    }
+
+    /**
+     * Sets if the Spring context must be scanned for
+     * additional {@code MessageSource} beans.
+     * 
+     * @param scan If the Spring context must be scanned
+     */
+    public void setScanMessageSources(
+            final boolean scan) {
+        this.scanMessageSources = scan;
     }
 
     /**
@@ -300,12 +371,64 @@ implements InitializingBean, ImportAware {
         if (this.availableLocales != null) {
             bean.setAvailableLocales(this.availableLocales);
         }
+        if (this.namedI18nResources == null) {
+            this.namedI18nResources = new HashMap<String, I18nResources>();
+            if (this.scanI18nResources) {
+                this.namedI18nResources.putAll(scanContextForI18nResources());
+            }
+            if (this.scanMessageSources) {
+                this.namedI18nResources.putAll(scanContextForMessageSources());
+            }
+        }
         if (this.namedI18nResources != null) {
             for (final Map.Entry<String, I18nResources> entry : this.namedI18nResources.entrySet()) {
                 bean.addI18nResources(entry.getKey(), entry.getValue());
             }
         }
         return bean;
+    }
+
+    /**
+     * Scans the Spring context for {@code I18nResources} beans.
+     * <p>
+     * Found resources are mapped by bean name and any existing alias.
+     * 
+     * @return The {@code I18nResources} of the context,
+     * mapped by bean names and aliases
+     */
+    protected @NotNull Map<String, I18nResources> scanContextForI18nResources() {
+        final Map<String, I18nResources> i18nResources =
+                this.context.getBeansOfType(I18nResources.class);
+        final Map<String, I18nResources> result = new HashMap<>(i18nResources);
+        for (final Map.Entry<String, I18nResources> entry : i18nResources.entrySet()) {
+            for (final String alias : this.context.getAliases(entry.getKey())) {
+                result.put(alias, entry.getValue());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Scans the Spring context for {@code MessageSource} beans.
+     * <p>
+     * For each source found a {@code I18nResources} is created and mapped
+     * by bean name and any existing alias.
+     * 
+     * @return The providers for the {@code MessageSource} of the context,
+     * mapped by bean names and aliases
+     */
+    protected @NotNull Map<String, I18nResources> scanContextForMessageSources() {
+        final Map<String, MessageSource> messageSources =
+                this.context.getBeansOfType(MessageSource.class);
+        final Map<String, I18nResources> result = new HashMap<>(messageSources.size());
+        for (final Map.Entry<String, MessageSource> entry : messageSources.entrySet()) {
+            final I18nResources resources = new I18nSpringResources(entry.getValue());
+            result.put(entry.getKey(), resources);
+            for (final String alias : this.context.getAliases(entry.getKey())) {
+                result.put(alias, resources);
+            }
+        }
+        return result;
     }
 
     /**
@@ -332,6 +455,8 @@ implements InitializingBean, ImportAware {
                         .map(Locale::new)
                         .toArray(Locale[]::new);
             }
+            this.scanI18nResources = (boolean) annotAttrs.get("scanI18nResources");
+            this.scanMessageSources = (boolean) annotAttrs.get("scanMessageSources");
         }
     }
 

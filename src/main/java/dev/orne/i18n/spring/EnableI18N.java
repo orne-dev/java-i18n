@@ -58,4 +58,8 @@ public @interface EnableI18N {
     Class<?> targetClass() default Void.class;
     /** @return The supported languages. */
     String[] availableLanguages() default {};
+    /** @return If the Spring context must be scanned for additional {@code I18nResources} beans. */
+    boolean scanI18nResources() default true;
+    /** @return If the Spring context must be scanned for additional {@code MessageSource} beans. */
+    boolean scanMessageSources() default true;
 }
