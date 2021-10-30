@@ -39,9 +39,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nFixedStringContainer {
 
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nFixedString bean;
 
     public I18nFixedString getBean() {

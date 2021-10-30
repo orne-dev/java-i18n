@@ -26,16 +26,15 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 import java.util.WeakHashMap;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.jaxb.I18nFixedStringAdapter;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} that doesn't contain translations.
@@ -49,7 +48,9 @@ import jakarta.validation.constraints.NotNull;
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
-@XmlJavaTypeAdapter(I18nFixedString.JaxbAdapter.class)
+@XmlJavaTypeAdapter(I18nFixedStringAdapter.class)
+@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
+        dev.orne.i18n.jaxb.javax.I18nFixedStringAdapter.class)
 public final class I18nFixedString
 implements I18nString {
 
@@ -188,56 +189,5 @@ implements I18nString {
     @Override
     public String toString() {
         return this.text;
-    }
-
-    /**
-     * JAXB adapter for {@code I18nFixedString} instances.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nFixedString
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    public static class JaxbAdapter
-    extends XmlAdapter<XmlI18nString, I18nFixedString> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nFixedString value) {
-            return I18nString.JaxbAdapter.toXml(value);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public I18nFixedString unmarshal(final XmlI18nString value) {
-            return I18nFixedString.from(I18nString.JaxbAdapter.fromXml(value));
-        }
-    }
-
-    /**
-     * JAXB adapter for {@code I18nFixedString} instances that marshalls
-     * all available translations.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nFixedString
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    public static class FullJaxbAdapter
-    extends JaxbAdapter {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nFixedString value) {
-            return I18nString.FullJaxbAdapter.toXml(value);
-        }
     }
 }

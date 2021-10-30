@@ -29,9 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -41,7 +38,9 @@ import org.apiguardian.api.API.Status;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import dev.orne.i18n.jaxb.I18nResourcesStringAdapter;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} based on {@code I18nResources}.
@@ -52,7 +51,9 @@ import jakarta.validation.constraints.NotNull;
  */
 @API(status=Status.STABLE, since="0.1")
 @JsonDeserialize(using=JsonDeserializer.None.class)
-@XmlJavaTypeAdapter(I18nResourcesString.JaxbAdapter.class)
+@XmlJavaTypeAdapter(I18nResourcesStringAdapter.class)
+@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
+        dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter.class)
 public class I18nResourcesString
 implements I18nString {
 
@@ -389,58 +390,6 @@ implements I18nString {
                     this.defaultText,
                     codes.toArray(new String[0]),
                     arguments.toArray(new Serializable[0]));
-        }
-    }
-
-    /**
-     * JAXB adapter for {@code I18nResourcesString} instances.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nResourcesString
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    public static class JaxbAdapter
-    extends XmlAdapter<XmlI18nString, I18nResourcesString> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nResourcesString value) {
-            return I18nString.JaxbAdapter.toXml(value);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public I18nResourcesString unmarshal(final XmlI18nString value) {
-            throw new UnsupportedOperationException(
-                    "Unmarshalling I18nResourcesString from XmlI18NString is not supported");
-        }
-    }
-
-    /**
-     * JAXB adapter for {@code I18nResourcesString} instances that marshalls
-     * all available translations.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nResourcesString
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    public static class FullJaxbAdapter
-    extends JaxbAdapter {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nResourcesString value) {
-            return I18nString.FullJaxbAdapter.toXml(value);
         }
     }
 }

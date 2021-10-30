@@ -44,15 +44,29 @@
 01. :gift: Added Jackson 2.11 support
     01. :gift: Added `dev.orne.i18n.I18nStringJacksonSerializer`
     01. :gift: Added `dev.orne.i18n.I18nStringJacksonDeserializer`
-01. :gift: Added JAXB 2.2.8 support
-    01. :gift: Added `dev.orne.i18n.XmlI18nString`
-    01. :gift: Added `dev.orne.i18n.XmlI18nStringTranslation`
-    01. :gift: Added `dev.orne.i18n.ObjectFactory`
-    01. :gift: Added `dev.orne.i18n.I18nString.JaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nString.FullJaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nFixedString.JaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nFixedString.FullJaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nResourcesString.JaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nResourcesString.FullJaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nStringMap.JaxbAdapter`
-    01. :gift: Added `dev.orne.i18n.I18nStringMap.FullJaxbAdapter`
+01. :gift: Added `dev.orne.i18n.I18nXmlSchema`
+01. :gift: Added Jakarta XML Binding (JAXB) 3.0 support
+    01. :gift: Added `dev.orne.i18n.jaxb.XmlI18nString`
+    01. :gift: Added `dev.orne.i18n.jaxb.XmlI18nStringTranslation`
+    01. :gift: Added `dev.orne.i18n.jaxb.ObjectFactory`
+    01. :gift: Added `dev.orne.i18n.jaxb.JaxbUtils`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nStringAdapter.Full`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nFixedStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nResourcesStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nResourcesStringAdapter.Full`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.I18nStringAdapter.Full`
+01. :gift: Added Javax XML Binding (JAXB) 2.2.8 support
+    01. :warning: Deprecated. Use Jakarta XML Binding 3.0 if possible
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.XmlI18nString`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.XmlI18nStringTranslation`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.ObjectFactory`
+    01. :gift: Added `dev.orne.i18n.jaxb.JaxbUtils`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter.Full`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nFixedStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter.Full`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter`
+    01. :gift: Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter.Full`

@@ -21,21 +21,19 @@
   #L%
   -->
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
-      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-    ">
+<configuration>
 
-  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    <property name="basenames">
-      <array>
-        <value>dev/orne/i18n/test-messages</value>
-      </array>
-    </property>
-    <property name="defaultEncoding" value="UTF-8" />
-  </bean>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
 
-  <bean class="dev.orne.i18n.spring.I18nSpringConfigurer" />
+  <root level="off">
+    <appender-ref ref="STDOUT" />
+  </root>
 
-</beans>
+  <logger name="dev.orne.i18n" level="off" />
+  <logger name="dev.orne.i18n.it" level="off" />
+
+</configuration>

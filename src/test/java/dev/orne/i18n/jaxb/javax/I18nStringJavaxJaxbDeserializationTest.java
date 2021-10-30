@@ -1,4 +1,4 @@
-package dev.orne.i18n.jaxb;
+package dev.orne.i18n.jaxb.javax;
 
 /*-
  * #%L
@@ -33,6 +33,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -40,7 +41,6 @@ import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nFixedString;
-import dev.orne.i18n.I18nFixedStringAsObjectContainer;
 import dev.orne.i18n.I18nFixedStringContainer;
 import dev.orne.i18n.I18nResourcesStringAsObjectContainer;
 import dev.orne.i18n.I18nString;
@@ -49,9 +49,6 @@ import dev.orne.i18n.I18nStringContainer;
 import dev.orne.i18n.I18nStringMap;
 import dev.orne.i18n.I18nStringMapAsObjectContainer;
 import dev.orne.i18n.I18nStringMapContainer;
-import dev.orne.i18n.ObjectFactory;
-import dev.orne.i18n.XmlI18nString;
-import dev.orne.i18n.XmlI18nStringTranslation;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -64,7 +61,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nString.FullJaxbAdapter
  */
 @Tag("ut")
-class I18nStringJaxbDeserializationTest {
+class I18nStringJavaxJaxbDeserializationTest {
 
     private static final int RND_STR_LENGTH = 20;
     private static final String MOCK_LANG = "xx";
@@ -78,6 +75,12 @@ class I18nStringJaxbDeserializationTest {
     @AfterAll
     static void resetI18N() {
         I18N.reconfigure();
+    }
+
+    private String randomXmlText() {
+        final String raw = RandomStringUtils.random(RND_STR_LENGTH);
+        final String escaped = StringEscapeUtils.escapeXml10(raw);
+        return StringEscapeUtils.unescapeXml(escaped);
     }
 
     /**
@@ -110,7 +113,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -127,10 +130,10 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testContainer_Full() {
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set("xx", xxText)
                 .set("yy", yyText)
@@ -164,7 +167,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testAsObjectContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -181,10 +184,10 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testAsObjectContainer_Full() {
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set("xx", xxText)
                 .set("yy", yyText)
@@ -218,7 +221,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testFixedContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -236,10 +239,10 @@ class I18nStringJaxbDeserializationTest {
     @Test
     void testFixedContainer_I18nStringMap() {
         I18N.setLocale(MOCK_LOCALE);
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set(MOCK_LANG, xxText)
                 .set("yy", yyText)
@@ -249,61 +252,6 @@ class I18nStringJaxbDeserializationTest {
         final String xml = toXml(container);
         assertNotNull(xml);
         final I18nFixedStringContainer result = fromXml(xml, I18nFixedStringContainer.class);
-        assertNotNull(result);
-        assertEquals(xxText, result.getBean().get());
-    }
-
-    /**
-     * Test JAXB XML unmarshalling support for null {@code I18nFixedString}
-     * in containers.
-     */
-    @Test
-    void testFixedAsObjectContainer_Null() {
-        final I18nStringContainer container = new I18nStringContainer();
-        final String xml = toXml(container);
-        assertNotNull(xml);
-        final I18nFixedStringAsObjectContainer result = fromXml(xml, I18nFixedStringAsObjectContainer.class);
-        assertNotNull(result);
-        assertNull(result.getBean());
-    }
-
-    /**
-     * Test JAXB XML unmarshalling support for {@code I18nFixedString}
-     * in containers.
-     */
-    @Test
-    void testFixedAsObjectContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
-        final I18nFixedString bean = I18nFixedString.from(text);
-        final I18nStringContainer container = new I18nStringContainer();
-        container.setBean(bean);
-        final String xml = toXml(container);
-        assertNotNull(xml);
-        final I18nFixedStringAsObjectContainer result = fromXml(xml, I18nFixedStringAsObjectContainer.class);
-        assertNotNull(result);
-        assertEquals(text, result.getBean().get());
-    }
-
-    /**
-     * Test JAXB XML unmarshalling support for {@code I18nFixedString}
-     * in containers.
-     */
-    @Test
-    void testFixedAsObjectContainer_I18nStringMap() {
-        I18N.setLocale(MOCK_LOCALE);
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
-        final I18nStringMap bean = new I18nStringMap(defaultText)
-                .set(MOCK_LANG, xxText)
-                .set("yy", yyText)
-                .set("zz", zzText);
-        final I18nStringAsObjectContainer container = new I18nStringAsObjectContainer();
-        container.setBean(bean);
-        final String xml = toXml(container);
-        assertNotNull(xml);
-        final I18nFixedStringAsObjectContainer result = fromXml(xml, I18nFixedStringAsObjectContainer.class);
         assertNotNull(result);
         assertEquals(xxText, result.getBean().get());
     }
@@ -328,7 +276,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testResourcesContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -346,10 +294,10 @@ class I18nStringJaxbDeserializationTest {
     @Test
     void testResourcesContainer_I18nStringMap() {
         I18N.setLocale(MOCK_LOCALE);
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set(MOCK_LANG, xxText)
                 .set("yy", yyText)
@@ -383,7 +331,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testResourcesAsObjectContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -401,10 +349,10 @@ class I18nStringJaxbDeserializationTest {
     @Test
     void testResourcesAsObjectContainer_I18nStringMap() {
         I18N.setLocale(MOCK_LOCALE);
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set(MOCK_LANG, xxText)
                 .set("yy", yyText)
@@ -438,7 +386,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testMapContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -456,10 +404,10 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testMapContainer_I18nStringMap() {
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set("xx", xxText)
                 .set("yy", yyText)
@@ -493,7 +441,7 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testMapAsObjectContainer_String() {
-        final String text = RandomStringUtils.random(RND_STR_LENGTH);
+        final String text = randomXmlText();
         final I18nFixedString bean = I18nFixedString.from(text);
         final I18nStringContainer container = new I18nStringContainer();
         container.setBean(bean);
@@ -511,10 +459,10 @@ class I18nStringJaxbDeserializationTest {
      */
     @Test
     void testMapAsObjectContainer_I18nStringMap() {
-        final String defaultText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String xxText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String yyText = RandomStringUtils.random(RND_STR_LENGTH);
-        final String zzText = RandomStringUtils.random(RND_STR_LENGTH);
+        final String defaultText = randomXmlText();
+        final String xxText = randomXmlText();
+        final String yyText = randomXmlText();
+        final String zzText = randomXmlText();
         final I18nStringMap bean = new I18nStringMap(defaultText)
                 .set("xx", xxText)
                 .set("yy", yyText)

@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.jaxb;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package dev.orne.i18n;
  * #L%
  */
 
-import javax.xml.bind.annotation.XmlRegistry;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -31,29 +31,20 @@ import org.apiguardian.api.API.Status;
  * This object contains factory methods for each Java content interface and
  * Java element interface in the dev.orne.i18n package.
  * <p>
- * An ObjectFactory allows you to programatically construct new instances of
+ * An ObjectFactory allows you to programmatically construct new instances of
  * the Java representation for XML content. The Java representation of XML
  * content can consist of schema derived interfaces and classes representing
  * the binding of schema type definitions, element declarations and model
  * groups.
  * Factory methods for each of these are provided in this class.
+ * 
+ * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @version 1.0, 2021-10
+ * @since 0.1
  */
 @XmlRegistry
 @API(status=Status.INTERNAL, since="0.1")
 public class ObjectFactory {
-
-    /** The package name space. */
-    public static final String NS = "http://orne.dev/i18n/";
-    /** The I18n string XML type local name. */
-    public static final String STRING_TYPE = "string";
-    /** The I18n string XML element local name. */
-    public static final String STRING_ELEMENT = "string";
-    /** The I18n string translation XML type local name. */
-    public static final String TRANSLATION_TYPE = "translation";
-    /** The I18n string translation XML element local name. */
-    public static final String TRANSLATION_ELEMENT = "translation";
-    /** The I18n string translation XML element language attribute. */
-    public static final String TRANSLATION_LANG_ATTR = "lang";
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of

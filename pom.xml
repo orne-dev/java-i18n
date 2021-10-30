@@ -52,12 +52,13 @@
 
     <javax.activation.version>1.2.0</javax.activation.version>
     <javax.validation.version>2.0.1.Final</javax.validation.version>
+    <javax.jaxb.version>2.3.1</javax.jaxb.version>
     <jakarta.validation.version>3.0.0</jakarta.validation.version>
-    <jaxb.version>2.3.1</jaxb.version>
+    <jakarta.jaxb.version>3.0.0</jakarta.jaxb.version>
     <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
     <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
 
-    <hibernate.validation.version>7.0.0.Final</hibernate.validation.version>
+    <hibernate.validation.version>7.0.1.Final</hibernate.validation.version>
     <glassfish.jakarta.el.version>4.0.0</glassfish.jakarta.el.version>
 
     <jaxb2.maven.plugin.version>2.5.0</jaxb2.maven.plugin.version>
@@ -106,7 +107,13 @@
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>${jaxb.version}</version>
+      <version>${javax.jaxb.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jakarta.jaxb.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -157,7 +164,13 @@
     <dependency>
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
-      <version>${jaxb.version}</version>
+      <version>${javax.jaxb.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>${jakarta.jaxb.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

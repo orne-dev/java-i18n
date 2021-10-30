@@ -52,7 +52,8 @@
 
     <javax.validation.version>2.0.1.Final</javax.validation.version>
     <jakarta.validation.version>3.0.0</jakarta.validation.version>
-    <jaxb.version>2.3.1</jaxb.version>
+    <javax.jaxb.version>2.3.1</javax.jaxb.version>
+    <jakarta.jaxb.version>3.0.0</jakarta.jaxb.version>
     <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
     <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
 
@@ -91,7 +92,13 @@
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>${jaxb.version}</version>
+      <version>${javax.jaxb.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jakarta.jaxb.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>

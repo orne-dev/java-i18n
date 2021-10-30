@@ -29,6 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import dev.orne.i18n.I18nFixedString;
 
@@ -40,9 +42,12 @@ import dev.orne.i18n.I18nFixedString;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nFixedStringContainer {
 
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nFixedString bean;
 
     public I18nFixedString getBean() {
@@ -69,5 +74,10 @@ public class I18nFixedStringContainer {
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -30,10 +30,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import dev.orne.i18n.I18nString;
+import dev.orne.i18n.jaxb.javax.I18nStringAdapter;
 
 /**
  * {@code I18nString} Jackson serialization test container.
@@ -43,11 +46,15 @@ import dev.orne.i18n.I18nString;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nStringAsObjectContainer {
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @XmlJavaTypeAdapter(I18nString.FullJaxbAdapter.class)
+    @XmlJavaTypeAdapter(I18nStringAdapter.Full.class)
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter(dev.orne.i18n.jaxb.I18nStringAdapter.Full.class)
+    @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nString bean;
 
     public I18nString getBean() {
@@ -74,5 +81,10 @@ public class I18nStringAsObjectContainer {
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

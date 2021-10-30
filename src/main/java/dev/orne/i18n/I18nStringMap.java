@@ -26,16 +26,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.jaxb.I18nStringMapAdapter;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} populated with translations.
@@ -48,7 +47,8 @@ import jakarta.validation.constraints.NotNull;
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
-@XmlJavaTypeAdapter(I18nStringMap.JaxbAdapter.class)
+@XmlJavaTypeAdapter(I18nStringMapAdapter.class)
+@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(dev.orne.i18n.jaxb.javax.I18nStringMapAdapter.class)
 public class I18nStringMap
 implements I18nString {
 
@@ -295,56 +295,5 @@ implements I18nString {
     @Override
     public String toString() {
         return this.getDefaultText();
-    }
-
-    /**
-     * JAXB adapter for {@code I18nStringMap} instances.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nStringMap
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    public static class JaxbAdapter
-    extends XmlAdapter<XmlI18nString, I18nStringMap> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nStringMap value) {
-            return I18nString.JaxbAdapter.toXml(value);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public I18nStringMap unmarshal(final XmlI18nString value) {
-            return new I18nStringMap(I18nString.JaxbAdapter.fromXml(value));
-        }
-    }
-
-    /**
-     * JAXB adapter for {@code I18nStringMap} instances that marshalls
-     * all available translations.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nStringMap
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    public static class FullJaxbAdapter
-    extends JaxbAdapter {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nStringMap value) {
-            return I18nString.FullJaxbAdapter.toXml(value);
-        }
     }
 }

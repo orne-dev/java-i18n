@@ -23,22 +23,17 @@ package dev.orne.i18n;
  */
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.apache.commons.text.StringEscapeUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import dev.orne.i18n.jaxb.I18nStringAdapter;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Interface for I18N texts.
@@ -48,7 +43,9 @@ import jakarta.validation.constraints.NotNull;
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
-@XmlJavaTypeAdapter(I18nString.JaxbAdapter.class)
+@XmlJavaTypeAdapter(I18nStringAdapter.class)
+@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
+        dev.orne.i18n.jaxb.javax.I18nStringAdapter.class)
 @JsonSerialize(using=I18nStringJacksonSerializer.class)
 @JsonDeserialize(using=I18nStringJacksonDeserializer.class)
 public interface I18nString
@@ -100,138 +97,4 @@ extends Serializable {
      * @return This instance represented as an {@code I18nStringMap} instance
      */
     I18nStringMap asMap();
-
-    /**
-     * JAXB adapter for {@code I18nString} instances.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nString
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    class JaxbAdapter
-    extends XmlAdapter<XmlI18nString, I18nString> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nString value) {
-            return toXml(value);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public I18nString unmarshal(final XmlI18nString value) {
-            return fromXml(value);
-        }
-
-        /**
-         * Converts the specified {@code I18nString} to {@code XmlI18NString}
-         * containing only the current language translation.
-         * 
-         * @param value The {@code I18nString} to convert
-         * @return The {@code XmlI18NString} to marshall
-         */
-        public static XmlI18nString toXml(
-                final I18nString value) {
-            final XmlI18nString result;
-            if (value == null) {
-                result = null;
-            } else {
-                result = new XmlI18nString();
-                result.getContent().add(StringEscapeUtils.escapeXml10(value.get()));
-            }
-            return result;
-        }
-
-        /**
-         * Converts the specified {@code XmlI18NString} to {@code I18nString}.
-         * If {@code XmlI18NString} contains {@code XmlI18NStringTranslation}
-         * instances a {@code I18nStringMap} is returned.
-         * Otherwise a {@code I18nFixedString} is returned.
-         * 
-         * @param value The {@code XmlI18NString} to convert
-         * @return The equivalent {@code I18nString}
-         */
-        public static I18nString fromXml(
-                final @NotNull XmlI18nString value) {
-            final StringBuilder buffer = new StringBuilder();
-            final List<XmlI18nStringTranslation> translations = new ArrayList<>();
-            for (final Serializable part : value.getContent()) {
-                if (part instanceof XmlI18nStringTranslation) {
-                    translations.add((XmlI18nStringTranslation) part);
-                } else {
-                    buffer.append(StringEscapeUtils.unescapeXml(part.toString()));
-                }
-            }
-            final String text = buffer.toString().trim();
-            final I18nString result;
-            if (translations.isEmpty()) {
-                result = I18nFixedString.from(text);
-            } else {
-                final I18nStringMap tmp = new I18nStringMap(text);
-                for (final XmlI18nStringTranslation trans : translations) {
-                    tmp.set(
-                            StringEscapeUtils.unescapeXml(trans.getLang()),
-                            StringEscapeUtils.unescapeXml(trans.getValue()));
-                }
-                result = tmp;
-            }
-            return result;
-        }
-    }
-
-    /**
-     * JAXB adapter for {@code I18nString} instances that marshalls
-     * all available translations.
-     * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
-     * @version 1.0, 2021-02
-     * @see I18nString
-     * @since 0.1
-     */
-    @API(status=Status.INTERNAL, since="0.1")
-    class FullJaxbAdapter
-    extends JaxbAdapter {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public XmlI18nString marshal(final I18nString value) {
-            return toXml(value);
-        }
-
-        /**
-         * Converts the specified {@code I18nString} to {@code XmlI18NString}
-         * containing all the available translations.
-         * Calls {@code I18nString.asMap()} to retrieve the full translations
-         * version.
-         * 
-         * @param value The {@code I18nString} to convert
-         * @return The {@code XmlI18NString} to marshall
-         */
-        public static XmlI18nString toXml(
-                final I18nString value) {
-            final XmlI18nString result;
-            if (value == null) {
-                result = null;
-            } else {
-                final I18nStringMap map = value.asMap();
-                result = new XmlI18nString();
-                result.getContent().add(StringEscapeUtils.escapeXml10(map.getDefaultText()));
-                for (final Map.Entry<String,String> entry : map.getI18n().entrySet()) {
-                    final XmlI18nStringTranslation translation = new XmlI18nStringTranslation();
-                    translation.setLang(StringEscapeUtils.escapeXml10(entry.getKey()));
-                    translation.setValue(StringEscapeUtils.escapeXml10(entry.getValue()));
-                    result.getContent().add(translation);
-                }
-            }
-            return result;
-        }
-    }
 }

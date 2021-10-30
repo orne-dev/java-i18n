@@ -33,6 +33,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import dev.orne.i18n.jaxb.javax.I18nStringAdapter;
+
 /**
  * {@code I18nString} Jackson serialization test container.
  * 
@@ -42,11 +44,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nStringAsObjectContainer {
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @XmlJavaTypeAdapter(I18nString.FullJaxbAdapter.class)
+    @XmlJavaTypeAdapter(I18nStringAdapter.Full.class)
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
+    @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter(dev.orne.i18n.jaxb.I18nStringAdapter.Full.class)
+    @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nString bean;
 
     public I18nString getBean() {

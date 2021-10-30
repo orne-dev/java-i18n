@@ -33,6 +33,7 @@
     <appender-ref ref="STDOUT" />
   </root>
 
-  <logger name="dev.orne.i18n.test" level="off" />
+  <logger name="dev.orne.i18n" level="off" />
+  <logger name="dev.orne.i18n.it" level="off" />
 
 </configuration>
