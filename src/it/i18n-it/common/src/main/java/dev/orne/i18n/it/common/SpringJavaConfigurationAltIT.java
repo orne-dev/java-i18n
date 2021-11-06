@@ -52,7 +52,7 @@ import dev.orne.i18n.spring.I18nSpringResources;
 @Tag("spring")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringJavaConfigurationAltIT.SpringConfig.class)
-class SpringJavaConfigurationAltIT
+public class SpringJavaConfigurationAltIT
 extends AbstractSpringConfigurationAltIT {
 
     @Configuration

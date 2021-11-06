@@ -2,7 +2,7 @@ package dev.orne.i18n.it.common;
 
 /*-
  * #%L
- * Orne I18N
+ * i18n-it-common
  * %%
  * Copyright (C) 2021 Orne Developments
  * %%
@@ -22,21 +22,41 @@ package dev.orne.i18n.it.common;
  * #L%
  */
 
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.junit.jupiter.api.Nested;
 
 /**
- * Integration tests for Spring XML configuration of Orne I18N
- * with alternative configuration.
+ * Suite with Spring support tests.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-01
+ * @version 1.0, 2021-11
  * @since 0.1
  */
-@Tag("spring")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations={ "/dev/orne/i18n/it/common/spring/spring-context-alt.xml" })
-public class SpringXmlConfigurationAltIT
-extends AbstractSpringConfigurationAltIT {}
+public class SpringTests {
+
+    /**
+     * Spring Web binding tests.
+     */
+    @Nested
+    public class WebBinding
+    extends SpringWebBindingIT {}
+
+    /**
+     * Spring XML configuration support tests.
+     */
+    @Nested
+    public class XmlConfiguration
+    extends SpringXmlConfigurationTests {}
+
+    /**
+     * Spring Java configuration support tests.
+     */
+    @Nested
+    public class JavaConfiguration
+    extends SpringJavaConfigurationTests {}
+
+    /**
+     * Spring Java annotations configuration support tests.
+     */
+    public class AnnotationConfiguration
+    extends SpringAnnotationConfigurationTests {}
+}

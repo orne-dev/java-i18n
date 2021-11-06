@@ -52,7 +52,7 @@ import dev.orne.i18n.I18nStringMap;
  * @since 0.1
  * @see I18nString
  */
-@Tag("jaxb")
+@Tag("javax-jaxb")
 public class JavaxJaxbTest {
 
     private static final int RND_STR_LENGTH = 20;

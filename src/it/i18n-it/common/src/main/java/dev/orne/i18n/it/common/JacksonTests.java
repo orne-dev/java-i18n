@@ -2,7 +2,7 @@ package dev.orne.i18n.it.common;
 
 /*-
  * #%L
- * Orne I18N
+ * i18n-it-common
  * %%
  * Copyright (C) 2021 Orne Developments
  * %%
@@ -22,16 +22,28 @@ package dev.orne.i18n.it.common;
  * #L%
  */
 
+import org.junit.jupiter.api.Nested;
+
 /**
- * Forces inheritance of {@code dev.orne:i18n-it-common} tests in Eclipse.
+ * Suite with Jackson support tests.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-10
+ * @version 1.0, 2021-11
  * @since 0.1
  */
-public final class InheritCommonTests {
+public class JacksonTests {
 
-    private InheritCommonTests() {
-        // Utility class
-    }
+    /**
+     * Jackson serialization tests.
+     */
+    @Nested
+    public class Serialization
+    extends JacksonSerializationTest {}
+
+    /**
+     * Jackson deserialization tests.
+     */
+    @Nested
+    public class Deserialization
+    extends JacksonDeserializationTest {}
 }

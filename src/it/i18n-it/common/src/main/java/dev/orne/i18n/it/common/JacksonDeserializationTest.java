@@ -66,7 +66,7 @@ import dev.orne.i18n.I18nStringMap;
  * @see I18nStringJacksonDeserializer
  */
 @Tag("jackson")
-class JacksonDeserializationTest {
+public class JacksonDeserializationTest {
 
     private static final int RND_STR_LENGTH = 20;
     private static final String DEFAULT_TEXT_PROP = "defaultText";

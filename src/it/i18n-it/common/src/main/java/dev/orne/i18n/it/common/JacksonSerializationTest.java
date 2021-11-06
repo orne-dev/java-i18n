@@ -53,7 +53,7 @@ import dev.orne.i18n.I18nStringMap;
  * @see I18nStringJacksonSerializer
  */
 @Tag("jackson")
-class JacksonSerializationTest {
+public class JacksonSerializationTest {
 
     private static final int RND_STR_LENGTH = 20;
     private static final String DEFAULT_TEXT_PROP = "defaultText";
@@ -66,6 +66,11 @@ class JacksonSerializationTest {
     @BeforeAll
     static void createMapper() {
         mapper = new ObjectMapper();
+    }
+
+    @BeforeAll
+    static void configureI18nResources() {
+        TestMessages.configureI18N();
     }
 
     @BeforeEach

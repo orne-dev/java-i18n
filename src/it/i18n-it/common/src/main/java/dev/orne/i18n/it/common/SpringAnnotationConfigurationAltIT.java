@@ -1,5 +1,7 @@
 package dev.orne.i18n.it.common;
 
+import java.nio.charset.StandardCharsets;
+
 /*-
  * #%L
  * Orne I18N
@@ -22,41 +24,49 @@ package dev.orne.i18n.it.common;
  * #L%
  */
 
-import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import dev.orne.i18n.spring.EnableI18N;
-import dev.orne.i18n.spring.I18nSpringContextProvider;
 
 /**
- * Unit tests for {@code I18nSpringContextProvider}.
+ * Integration tests for Spring Java annotation based configuration of Orne I18N.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-01
  * @since 0.1
- * @see I18nSpringContextProvider
  */
 @Tag("spring")
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = SpringJavaAnnotationConfigurationIT.SpringConfig.class)
-class SpringJavaAnnotationConfigurationIT
-extends AbstractSpringConfigurationIT {
+@ContextConfiguration(classes = SpringAnnotationConfigurationAltIT.SpringConfig.class)
+public class SpringAnnotationConfigurationAltIT
+extends AbstractSpringConfigurationAltIT {
 
     @Configuration
-    @EnableI18N
+    @EnableI18N(availableLanguages= {
+            TestMessages.DEFAULT_LANG,
+            TestMessages.YY_LANG,
+            TestMessages.ZZ_LANG
+    })
     static class SpringConfig {
         @Bean
+        @Primary
         public MessageSource messageSource() {
             final ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
             source.addBasenames(TestMessages.BUNDLE_PATH);
+            source.setDefaultEncoding(StandardCharsets.UTF_8.name());
+            return source;
+        }
+        @Bean(name = { ALT_RESOURCES_BEAN, ALT_I18N_RESOURCES_KEY})
+        public MessageSource altMessageSource() {
+            final ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
+            source.addBasenames(TestMessages.BUNDLE_ALT_PATH);
             source.setDefaultEncoding(StandardCharsets.UTF_8.name());
             return source;
         }

@@ -37,5 +37,5 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Tag("spring")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations={ "/dev/orne/i18n/it/common/spring/spring-context.xml" })
-class SpringXmlConfigurationIT
+public class SpringXmlConfigurationIT
 extends AbstractSpringConfigurationIT {}

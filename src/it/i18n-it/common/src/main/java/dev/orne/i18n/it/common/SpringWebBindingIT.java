@@ -48,7 +48,7 @@ import dev.orne.i18n.I18nStringMap;
  * @see I18nString
  */
 @Tag("spring")
-class SpringWebBindingIT {
+public class SpringWebBindingIT {
 
     private static final int RND_STR_LENGTH = 20;
     private static final String XX_LANG = "xx";

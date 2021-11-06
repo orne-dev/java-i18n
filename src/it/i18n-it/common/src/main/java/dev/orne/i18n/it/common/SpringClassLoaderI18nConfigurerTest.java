@@ -1,4 +1,4 @@
-package dev.orne.i18n.it;
+package dev.orne.i18n.it.common;
 
 /*-
  * #%L
@@ -50,8 +50,8 @@ import dev.orne.i18n.spring.I18nSpringConfigurer;
  * @since 0.1
  * @see I18nSpringConfigurer
  */
-@Tag("spring")
-class I18nSpringConfigurerClassLoaderTest {
+@Tag("spring-classloader")
+public class SpringClassLoaderI18nConfigurerTest {
 
     private static I18nContextProvider provider;
     private static ClassLoader bootCL;
@@ -86,7 +86,7 @@ class I18nSpringConfigurerClassLoaderTest {
                 springCL);
         testCL = new URLClassLoader(
                 new URL[] {
-                    I18nSpringConfigurerClassLoaderTest.class.getProtectionDomain().getCodeSource().getLocation(),
+                    SpringClassLoaderI18nConfigurerTest.class.getProtectionDomain().getCodeSource().getLocation(),
                 },
                 libCL);
         threadCL = new URLClassLoader(
@@ -187,7 +187,7 @@ class I18nSpringConfigurerClassLoaderTest {
     void testAfterPropertiesSet_Configurable_TargetClass_Test()
     throws InterruptedException {
         final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
-        test.targetClass = I18nSpringConfigurerClassLoaderTest.class;
+        test.targetClass = SpringClassLoaderI18nConfigurerTest.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
