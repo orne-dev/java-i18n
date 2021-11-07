@@ -24,13 +24,13 @@
 
   <parent>
     <groupId>dev.orne</groupId>
-    <artifactId>java-root-pom</artifactId>
+    <artifactId>java-module-root-pom</artifactId>
     <version>0.4.0-SNAPSHOT</version>
     <relativePath />
   </parent>
 
   <groupId>dev.orne</groupId>
-  <artifactId>i18n-it-java8</artifactId>
+  <artifactId>i18n-it-java11-jpms</artifactId>
   <version>@project.version@</version>
   <packaging>jar</packaging>
 
@@ -46,15 +46,16 @@
   </licenses>
 
   <properties>
-    <java.version>8</java.version>
-    <java.module.name>dev.orne.i18n.it.java8</java.module.name>
+    <java.version>11</java.version>
     <license.licenseName>lgpl_v3</license.licenseName>
 
-    <javax.validation.version>2.0.1.Final</javax.validation.version>
-    <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
-    <hibernate.validation.version>6.1.5.Final</hibernate.validation.version>
-    <glassfish.jakarta.el.version>3.0.3</glassfish.jakarta.el.version>
-    <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
+    <jakarta.activation.version>1.2.2</jakarta.activation.version>
+    <jakarta.validation.version>3.0.0</jakarta.validation.version>
+    <jakarta.jaxb.version>3.0.0</jakarta.jaxb.version>
+    <fasterxml.jackson.version>2.12.3</fasterxml.jackson.version>
+    <hibernate.validation.version>7.0.1.Final</hibernate.validation.version>
+    <glassfish.jakarta.el.version>4.0.0</glassfish.jakarta.el.version>
+    <spring.framework.version>5.3.8</spring.framework.version>
 
     <maven.javadoc.skip>true</maven.javadoc.skip>
     <ut.skip>true</ut.skip>
@@ -70,6 +71,10 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
       <groupId>dev.orne</groupId>
       <artifactId>i18n</artifactId>
       <version>${project.version}</version>
@@ -78,6 +83,26 @@
       <groupId>dev.orne</groupId>
       <artifactId>i18n-it-common</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.activation</groupId>
+      <artifactId>jakarta.activation-api</artifactId>
+      <version>${jakarta.activation.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jakarta.jaxb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>${jakarta.jaxb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>${jakarta.validation.version}</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate.validator</groupId>
@@ -131,6 +156,9 @@
           <artifactId>maven-failsafe-plugin</artifactId>
           <configuration>
             <groups>it</groups>
+            <dependenciesToScan>
+              <dependency>dev.orne:i18n-it-common</dependency>
+            </dependenciesToScan>
           </configuration>
         </plugin>
       </plugins>

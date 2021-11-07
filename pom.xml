@@ -3,7 +3,7 @@
 
   <parent>
     <groupId>dev.orne</groupId>
-    <artifactId>java-module-root-pom</artifactId>
+    <artifactId>java-root-pom</artifactId>
     <version>0.4.0-SNAPSHOT</version>
     <relativePath />
   </parent>
@@ -41,13 +41,9 @@
   </scm>
 
   <properties>
-    <java.version>9</java.version>
-    <java.module.version>8</java.module.version>
-    <java.target.version>8</java.target.version>
+    <java.version>8</java.version>
     <java.module.name>dev.orne.i18n</java.module.name>
     <license.licenseName>lgpl_v3</license.licenseName>
-
-    <sonar.projectKey>java-i18n</sonar.projectKey>
 
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons.text.version>1.9</commons.text.version>
@@ -66,6 +62,8 @@
     <jaxb2.maven.plugin.version>2.5.0</jaxb2.maven.plugin.version>
     <jaxb2.basics.version>0.12.0</jaxb2.basics.version>
     <jaxb2.basics.annotate.version>1.1.0</jaxb2.basics.annotate.version>
+
+    <sonar.projectKey>java-i18n</sonar.projectKey>
   </properties>
 
   <dependencies>

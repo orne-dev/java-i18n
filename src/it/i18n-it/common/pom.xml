@@ -24,7 +24,7 @@
 
   <parent>
     <groupId>dev.orne</groupId>
-    <artifactId>java-module-root-pom</artifactId>
+    <artifactId>java-root-pom</artifactId>
     <version>0.4.0-SNAPSHOT</version>
     <relativePath />
   </parent>
@@ -46,9 +46,7 @@
   </licenses>
 
   <properties>
-    <java.version>9</java.version>
-    <java.module.version>8</java.module.version>
-    <java.target.version>8</java.target.version>
+    <java.version>8</java.version>
     <java.module.name>dev.orne.i18n.it.common</java.module.name>
     <license.licenseName>lgpl_v3</license.licenseName>
 
