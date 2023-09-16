@@ -1,0 +1,26 @@
+# Orne Java I18N utilities
+
+## Usage
+
+```xml
+<project ...>
+...
+  <dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>${project.artifactId}</artifactId>
+    <version>${project.version}</version>
+  </dependency>
+...
+</project>
+```
+
+## Features
+
+- [x] I18N strings
+- [x] I18N context
+- [x] I18N resources
+- [x] Jackson support
+- [x] JAXB support
+- [x] Apache Commons BeanUtils converters
+- [x] Spring integration
+- [ ] JavaFX integration

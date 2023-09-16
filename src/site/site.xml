@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Orne Root POM
+  %%
+  Copyright (C) 2019 - 2021 Orne Developments
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<project xmlns="http://maven.apache.org/DECORATION/1.6.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0
+            http://maven.apache.org/xsd/decoration-1.6.0.xsd"
+        name="${this.name}" >
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.12.0</version>
+  </skin>
+  <custom>
+    <fluidoSkin>
+      <gitHub>
+        <projectId>orne-dev/java-i18n</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>red</ribbonColor>
+      </gitHub>
+    </fluidoSkin>
+  </custom>
+  <body>
+    <menu name="Overview">
+      <item name="Introduction" href="index.html"/>
+    </menu>
+    <menu ref="reports" inherit="bottom" />
+  </body>
+</project>

@@ -4,11 +4,10 @@
   <parent>
     <groupId>dev.orne</groupId>
     <artifactId>java-root-pom</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.4</version>
     <relativePath />
   </parent>
 
-  <groupId>dev.orne</groupId>
   <artifactId>i18n</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -21,7 +20,7 @@
   <licenses>
     <license>
       <name>GNU Lesser General Public License (LGPL) version 3.0</name>
-      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+      <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -32,13 +31,6 @@
       <url>https://github.com/ihernaez</url>
     </developer>
   </developers>
-
-  <scm>
-    <url>http://github.com/orne-dev/java-i18n/tree/master</url>
-    <connection>scm:git:git://github.com/orne-dev/java-i18n.git</connection>
-    <developerConnection>scm:git:ssh://github.com:orne-dev/java-i18n.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 
   <properties>
     <java.version>8</java.version>
@@ -265,11 +257,16 @@
     </profile>
   </profiles>
 
+  <scm>
+    <connection>scm:git:https://github.com/orne-dev/java-i18n.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:orne-dev/java-i18n.git</developerConnection>
+    <url>https://github.com/orne-dev/java-i18n/</url>
+  </scm>
   <distributionManagement>
     <site>
       <id>github</id>
       <name>Github Project Pages</name>
-      <url>${project.scm.connection}</url>
+      <url>${project.url}</url>
     </site>
   </distributionManagement>
 
