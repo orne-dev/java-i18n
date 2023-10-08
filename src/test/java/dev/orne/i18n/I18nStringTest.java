@@ -45,6 +45,44 @@ import dev.orne.test.rnd.params.GenerationParameters;
 class I18nStringTest {
 
     /**
+     * Test {@link I18nString#fixed(String)}.
+     */
+    @Test
+    void testFixed() {
+        assertNull(I18nString.fixed((String) null));
+        final String text = Generators.randomValue(String.class);
+        final I18nFixedString result = I18nString.fixed(text);
+        assertNotNull(result);
+        assertSame(I18nFixedString.from(text), result);
+    }
+
+    /**
+     * Test {@link I18nString#mapped(String)}.
+     */
+    @Test
+    void testMapped() {
+        assertThrows(NullPointerException.class, () -> {
+            I18nString.mapped((String) null);
+        });
+        final String text = Generators.randomValue(String.class);
+        final I18nStringMap result = I18nString.mapped(text);
+        assertEquals(new I18nStringMap(text), result);
+    }
+
+    /**
+     * Test {@link I18nString#fromResources(String)}.
+     */
+    @Test
+    void testForDefault() {
+        assertThrows(NullPointerException.class, () -> {
+            I18nString.fromResources(null);
+        });
+        final String text = Generators.randomValue(String.class);
+        final I18nResourcesString.Builder result = I18nString.fromResources(text);
+        assertEquals(I18nResourcesString.forDefault(text), result);
+    }
+
+    /**
      * Test for {@link I18nStringGenerator#defaultValue()}.
      * @throws Throwable Should not happen
      */

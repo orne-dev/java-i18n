@@ -244,6 +244,9 @@ class I18nResourcesStringTest {
      */
     @Test
     void testForDefault() {
+        assertThrows(NullPointerException.class, () -> {
+            I18nResourcesString.forDefault(null);
+        });
         final I18nResourcesString.Builder builder = I18nResourcesString
                 .forDefault(MOCK_DEF_MSG);
         assertNotNull(builder);
@@ -253,16 +256,6 @@ class I18nResourcesStringTest {
         assertTrue(builder.getCodes().isEmpty());
         assertNotNull(builder.getArguments());
         assertTrue(builder.getArguments().isEmpty());
-    }
-
-    /**
-     * Test {@link I18nResourcesString#forDefault(String)}.
-     */
-    @Test
-    void testForDefault_Null() {
-        assertThrows(NullPointerException.class, () -> {
-            I18nResourcesString.forDefault(null);
-        });
     }
 
     /**

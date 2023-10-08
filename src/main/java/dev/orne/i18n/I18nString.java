@@ -52,6 +52,44 @@ public interface I18nString
 extends Serializable {
 
     /**
+     * Returns a {@code I18nFixedString} instance for the specified text.
+     * <p>
+     * Will return {@code null} if {@code text} is {@code null}.
+     * 
+     * @param text The fixed text for all languages
+     * @return The instance for the specified text, or {@code null} if
+     * {@code text} is {@code null}
+     */
+    public static I18nFixedString fixed(
+            final String text) {
+        return I18nFixedString.from(text);
+    }
+
+    /**
+     * Creates a new {@code I18nStringMap} instance with specified default
+     * text and no translations.
+     * 
+     * @param defaultText The default text
+     */
+    public static I18nStringMap mapped(
+            final @NotNull String defaultText) {
+        return new I18nStringMap(defaultText);
+    }
+
+    /**
+     * Creates a new {@code I18nResourcesString} builder with the specified
+     * default text.
+     * 
+     * @param defaultMessage The default text
+     * @return The new {@code I18nResourcesString} builder
+     */
+    public static I18nResourcesString.Builder fromResources(
+            final @NotNull String defaultMessage) {
+        return I18nResourcesString.forDefault(defaultMessage);
+    }
+
+
+    /**
      * Returns the text for the current language.
      * 
      * @return The text for the current language

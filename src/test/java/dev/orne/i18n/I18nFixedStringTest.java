@@ -79,6 +79,7 @@ class I18nFixedStringTest {
      */
     @Test
     void testFrom() {
+        assertNull(I18nFixedString.from((String) null));
         final String text = RandomStringUtils.random(RND_STR_LENGTH);
         final I18nFixedString result = I18nFixedString.from(text);
         assertNotNull(result);
@@ -89,18 +90,11 @@ class I18nFixedStringTest {
     }
 
     /**
-     * Test {@link I18nFixedString#from(String)}.
-     */
-    @Test
-    void testFrom_Null() {
-        assertNull(I18nFixedString.from((String) null));
-    }
-
-    /**
      * Test {@link I18nFixedString#from(I18nString)}.
      */
     @Test
     void testFrom_I18nString() {
+        assertNull(I18nFixedString.from((I18nString) null));
         final String text = RandomStringUtils.random(RND_STR_LENGTH);
         willReturn(text).given(mockI18nString).get();
         final I18nFixedString result = I18nFixedString.from(mockI18nString);
@@ -111,14 +105,6 @@ class I18nFixedStringTest {
         then(mockI18nString).should().get();
         then(mockI18nString).shouldHaveNoMoreInteractions();
         assertSame(result, I18nFixedString.from(text));
-    }
-
-    /**
-     * Test {@link I18nFixedString#from(I18nString)}.
-     */
-    @Test
-    void testFrom_I18nString_Null() {
-        assertNull(I18nFixedString.from((I18nString) null));
     }
 
     /**

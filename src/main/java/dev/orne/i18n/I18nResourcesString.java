@@ -376,6 +376,22 @@ implements I18nString {
         }
 
         /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(final Object obj) {
+            return EqualsBuilder.reflectionEquals(this, obj);
+        }
+
+        /**
          * Builds a {@code I18nResourcesString} with the configured properties.
          * Validates that the default text and that at least one text code
          * are set.

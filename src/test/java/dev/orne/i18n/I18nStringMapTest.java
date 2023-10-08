@@ -123,20 +123,13 @@ class I18nStringMapTest {
      */
     @Test
     void testConstructor_Default() {
+        assertThrows(NullPointerException.class, () -> {
+            new I18nStringMap((String) null);
+        });
         final I18nStringMap result = new I18nStringMap(MOCK_DEF_MSG);
         assertEquals(MOCK_DEF_MSG, result.getDefaultText());
         assertNotNull(result.getI18n());
         assertTrue(result.getI18n().isEmpty());
-    }
-
-    /**
-     * Test {@link I18nStringMap#I18nStringMap(String)}.
-     */
-    @Test
-    void testConstructor_Default_Null() {
-        assertThrows(NullPointerException.class, () -> {
-            new I18nStringMap((String) null);
-        });
     }
 
     /**
