@@ -30,6 +30,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.Duration;
+import java.util.HashSet;
 import java.util.Locale;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -40,6 +42,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import dev.orne.test.rnd.Generators;
+import dev.orne.test.rnd.params.GenerationParameters;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -229,5 +233,52 @@ class I18nFixedStringTest {
             result = RandomStringUtils.random(RND_STR_LENGTH);
         } while (avoid.equals(result));
         return result;
+    }
+
+    /**
+     * Test for {@link I18nFixedStringGenerator#defaultValue()}.
+     * @throws Throwable Should not happen
+     */
+    @Test
+    void testDefaultGeneration()
+    throws Throwable {
+        final I18nFixedString result = Generators.defaultValue(I18nFixedString.class);
+        assertNotNull(result);
+        final String text = result.get();
+        assertNotNull(text);
+        assertTrue(text.isEmpty());
+    }
+
+    /**
+     * Test for {@link I18nFixedStringGenerator#randomValue()}.
+     * @throws Throwable Should not happen
+     */
+    @Test
+    void testRandomGeneration()
+    throws Throwable {
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            final HashSet<String> texts = new HashSet<>();
+            while (texts.size() < 100) {
+                final I18nFixedString result = Generators.randomValue(I18nFixedString.class);
+                assertNotNull(result);
+                final String text = result.get();
+                assertNotNull(text);
+                texts.add(text);
+            }
+        });
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            final HashSet<String> texts = new HashSet<>();
+            while (texts.size() < 100) {
+                final I18nFixedString result = Generators.randomValue(
+                        I18nFixedString.class,
+                        GenerationParameters.forSizes().withMinSize(5).withMaxSize(10));
+                assertNotNull(result);
+                final String text = result.get();
+                assertNotNull(text);
+                assertTrue(text.length() >= 5);
+                assertTrue(text.length() <= 10);
+                texts.add(text);
+            }
+        });
     }
 }

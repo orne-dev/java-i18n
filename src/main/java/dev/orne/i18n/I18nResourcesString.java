@@ -95,7 +95,7 @@ implements I18nString {
     }
 
     /**
-     * Creates a builder for of a new instance with the specified default
+     * Creates a builder of a new instance with the specified default
      * text.
      * 
      * @param defaultMessage The default text

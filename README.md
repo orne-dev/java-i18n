@@ -23,6 +23,7 @@ The binaries can be obtained from [Maven Central][maven central] with the
 - [x] Apache Commons BeanUtils converters
 - [x] Spring integration
 - [ ] JavaFX integration
+- [x] Support for [random I18N strings generation for tests][orne generators site]
 
 ## Usage and further information
 

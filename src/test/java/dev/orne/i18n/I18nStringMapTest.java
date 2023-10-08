@@ -30,7 +30,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,6 +43,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import dev.orne.test.rnd.Generators;
+import dev.orne.test.rnd.params.GenerationParameters;
 
 /**
  * Unit tests for {@code I18nStringMap}.
@@ -723,5 +728,65 @@ class I18nStringMapTest {
         assertNotNull(result);
         assertEquals(bean, result);
         assertEquals(bean.hashCode(), result.hashCode());
+    }
+
+    /**
+     * Test for {@link I18nStringMapGenerator#defaultValue()}.
+     * @throws Throwable Should not happen
+     */
+    @Test
+    void testDefaultGeneration()
+    throws Throwable {
+        final I18nStringMap result = Generators.defaultValue(I18nStringMap.class);
+        assertNotNull(result);
+        assertTrue(result.getI18n().isEmpty());
+        final String text = result.get();
+        assertNotNull(text);
+        assertTrue(text.isEmpty());
+    }
+
+    /**
+     * Test for {@link I18nStringMapGenerator#randomValue()}.
+     * @throws Throwable Should not happen
+     */
+    @Test
+    void testRandomGeneration()
+    throws Throwable {
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            final HashSet<String> texts = new HashSet<>();
+            final HashSet<Integer> translations = new HashSet<>();
+            while (texts.size() < 100 ||
+                    translations.size() < I18nStringMapGenerator.MAX_TRANSLATIONS) {
+                final I18nStringMap result = Generators.randomValue(I18nStringMap.class);
+                assertNotNull(result);
+                final String text = result.get();
+                assertNotNull(text);
+                texts.add(text);
+                final Map<String, String> i18n = result.getI18n();
+                translations.add(i18n.size());
+            }
+        });
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            final HashSet<String> texts = new HashSet<>();
+            final HashSet<Integer> translations = new HashSet<>();
+            while (texts.size() < 100 ||
+                    translations.size() < I18nStringMapGenerator.MAX_TRANSLATIONS) {
+                final I18nStringMap result = Generators.randomValue(
+                        I18nStringMap.class,
+                        GenerationParameters.forSizes().withMinSize(5).withMaxSize(10));
+                assertNotNull(result);
+                final String text = result.get();
+                assertNotNull(text);
+                assertTrue(text.length() >= 5);
+                assertTrue(text.length() <= 10);
+                texts.add(text);
+                final Map<String, String> i18n = result.getI18n();
+                translations.add(i18n.size());
+                for (final String i18nText : i18n.values()) {
+                    assertTrue(i18nText.length() >= 5);
+                    assertTrue(i18nText.length() <= 10);
+                }
+            }
+        });
     }
 }

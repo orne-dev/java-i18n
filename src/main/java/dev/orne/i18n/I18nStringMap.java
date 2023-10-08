@@ -68,11 +68,12 @@ implements I18nString {
     }
 
     /**
-     * Creates a new instance with no translations.
+     * Creates a new instance  with specified default text and no translations.
      * 
      * @param defaultText The default text
      */
-    public I18nStringMap(final @NotNull String defaultText) {
+    public I18nStringMap(
+            final @NotNull String defaultText) {
         super();
         this.defaultText = Validate.notNull(defaultText);
     }
@@ -89,7 +90,8 @@ implements I18nString {
      * 
      * @param copy The instance to copy
      */
-    public I18nStringMap(final @NotNull I18nString copy) {
+    public I18nStringMap(
+            final @NotNull I18nString copy) {
         super();
         Validate.notNull(copy);
         if (copy instanceof I18nStringMap) {

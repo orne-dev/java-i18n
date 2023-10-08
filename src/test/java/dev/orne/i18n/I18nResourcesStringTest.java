@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.Duration;
+import java.util.HashSet;
 import java.util.Locale;
 
 import org.junit.jupiter.api.AfterEach;
@@ -40,6 +42,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import dev.orne.test.rnd.Generators;
+import dev.orne.test.rnd.params.GenerationParameters;
 
 /**
  * Unit tests for {@code I18nResourcesString}.
@@ -1008,5 +1013,94 @@ class I18nResourcesStringTest {
         assertNotNull(result);
         assertEquals(bean, result);
         assertEquals(bean.hashCode(), result.hashCode());
+    }
+
+    /**
+     * Test for {@link I18nResourcesStringGenerator#defaultValue()}.
+     * @throws Throwable Should not happen
+     */
+    @Test
+    void testDefaultGeneration()
+    throws Throwable {
+        final I18nResourcesString result = Generators.defaultValue(I18nResourcesString.class);
+        assertNotNull(result);
+        final String defaultText = result.getDefaultText();
+        assertNotNull(defaultText);
+        assertTrue(defaultText.isEmpty());
+        assertNull(result.getI18nResourcesKey());
+        assertNotNull(result.getCodes());
+        assertEquals(1, result.getCodes().length);
+        assertTrue(result.getCodes()[0].isEmpty());
+        assertNotNull(result.getArguments());
+        assertEquals(0, result.getArguments().length);
+    }
+
+    /**
+     * Test for {@link I18nResourcesStringGenerator#randomValue()}.
+     * @throws Throwable Should not happen
+     */
+    @Test
+    void testRandomGeneration()
+    throws Throwable {
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            final HashSet<String> texts = new HashSet<>();
+            final HashSet<Integer> codes = new HashSet<>();
+            boolean deaultResources = false;
+            final HashSet<String> resources = new HashSet<>();
+            final HashSet<Integer> args = new HashSet<>();
+            while (texts.size() < 100 ||
+                    codes.size() < I18nResourcesStringGenerator.MAX_CODES ||
+                    !deaultResources ||
+                    resources.size() < 3 ||
+                    args.size() < I18nResourcesStringGenerator.MAX_ARGS) {
+                final I18nResourcesString result = Generators.randomValue(I18nResourcesString.class);
+                assertNotNull(result);
+                final String text = result.getDefaultText();
+                assertNotNull(text);
+                texts.add(text);
+                assertNotNull(result.getCodes());
+                assertTrue(result.getCodes().length > 0);
+                codes.add(result.getCodes().length);
+                if (result.getI18nResourcesKey() == null) {
+                    deaultResources = true;
+                } else {
+                    resources.add(result.getI18nResourcesKey());
+                }
+                assertNotNull(result.getArguments());
+                args.add(result.getArguments().length);
+            }
+        });
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            final HashSet<String> texts = new HashSet<>();
+            final HashSet<Integer> codes = new HashSet<>();
+            boolean deaultResources = false;
+            final HashSet<String> resources = new HashSet<>();
+            final HashSet<Integer> args = new HashSet<>();
+            while (texts.size() < 100 ||
+                    codes.size() < I18nResourcesStringGenerator.MAX_CODES ||
+                    !deaultResources ||
+                    resources.size() < 3 ||
+                    args.size() < I18nResourcesStringGenerator.MAX_ARGS) {
+                final I18nResourcesString result = Generators.randomValue(
+                        I18nResourcesString.class,
+                        GenerationParameters.forSizes().withMinSize(5).withMaxSize(10));
+                assertNotNull(result);
+                final String text = result.getDefaultText();
+                assertNotNull(text);
+                texts.add(text);
+                assertTrue(text.length() >= 5);
+                assertTrue(text.length() <= 10);
+                assertNotNull(result.getCodes());
+                assertTrue(result.getCodes().length > 0);
+                codes.add(result.getCodes().length);
+                if (result.getI18nResourcesKey() == null) {
+                    deaultResources = true;
+                } else {
+                    resources.add(result.getI18nResourcesKey());
+                }
+                assertNotNull(result.getArguments());
+                args.add(result.getArguments().length);
+            }
+        });
     }
 }
