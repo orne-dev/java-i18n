@@ -11,6 +11,7 @@
 01. :gift: Added `dev.orne.i18n.I18nContextProvider`
     01. Added `dev.orne.i18n.AbstractI18nContextProvider`
     01. Added `dev.orne.i18n.DefaultI18nContextProvider`
+    01. Added `dev.orne.i18n.SharedI18nContextProvider`
     01. Added `dev.orne.i18n.I18nContextProviderStrategy`
     01. Added `dev.orne.i18n.DefaultI18nContextProviderStrategy`
     01. Added `dev.orne.i18n.I18nContextProviderConfigurableStrategy`
