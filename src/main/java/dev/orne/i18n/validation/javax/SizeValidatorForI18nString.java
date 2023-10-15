@@ -66,6 +66,9 @@ extends AbstractValidatorForI18nString<Size> {
         return length >= min && length <= max;
     }
 
+    /**
+     * Validates constraint annotation values.
+     */
     protected void validateParameters() {
         if ( this.min < 0 ) {
             throw new IllegalArgumentException("The min parameter cannot be negative.");

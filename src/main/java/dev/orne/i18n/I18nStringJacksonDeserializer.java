@@ -95,7 +95,7 @@ implements ContextualDeserializer {
         }
         if (!I18nString.class.equals(targetType) ) {
             return cache.computeIfAbsent(targetType, type -> {
-                final I18nStringConverter typeConverter = getConversor(targetType);
+                final I18nStringConverter typeConverter = getConverter(targetType);
                 if (typeConverter == null) {
                     return this;
                 } else {
@@ -106,7 +106,14 @@ implements ContextualDeserializer {
         return this;
     }
 
-    protected I18nStringConverter getConversor(
+    /**
+     * Returns a converter that converts {@code I18nString} instances to the
+     * specified target type.
+     * 
+     * @param targetType The target type.
+     * @return The {@code I18nString} type converter.
+     */
+    protected I18nStringConverter getConverter(
             final @NotNull Class<?> targetType) {
         final I18nStringConverter result;
         if (I18nFixedString.class.equals(targetType)) {

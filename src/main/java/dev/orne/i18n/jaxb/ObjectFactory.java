@@ -56,6 +56,8 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlI18nString}.
+     * 
+     * @return The instance of {@link XmlI18nString}.
      */
     public XmlI18nString createXmlI18NString() {
         return new XmlI18nString();
@@ -64,6 +66,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link XmlI18nStringTranslation}.
      * 
+     * @return The instance of {@link XmlI18nStringTranslation}.
      */
     public XmlI18nStringTranslation createTranslation() {
         return new XmlI18nStringTranslation();

@@ -70,6 +70,7 @@ extends Serializable {
      * text and no translations.
      * 
      * @param defaultText The default text
+     * @return The created instance
      */
     public static I18nStringMap mapped(
             final @NotNull String defaultText) {

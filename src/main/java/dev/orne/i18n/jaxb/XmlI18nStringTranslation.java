@@ -27,6 +27,7 @@ import java.io.Serializable;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nXmlSchema;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -56,7 +57,7 @@ import jakarta.xml.bind.annotation.XmlValue;
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @see I18nString
- * @see https://github.com/eclipse-ee4j/jaxb-ri/issues/1108
+ * @see <a href="https://github.com/eclipse-ee4j/jaxb-ri/issues/1108">JAXB RI Issue 1108</a>
  * @since 0.1
  */
 @API(status=Status.INTERNAL, since="0.1")

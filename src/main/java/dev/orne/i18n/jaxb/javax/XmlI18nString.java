@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nXmlSchema;
 
 /**
@@ -61,7 +62,7 @@ import dev.orne.i18n.I18nXmlSchema;
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @see I18nString
- * @see https://github.com/eclipse-ee4j/jaxb-ri/issues/1108
+ * @see <a href="https://github.com/eclipse-ee4j/jaxb-ri/issues/1108">JAXB RI Issue 1108</a>
  * @since 0.1
  */
 @API(status=Status.INTERNAL, since="0.1")
@@ -106,7 +107,7 @@ implements Serializable {
      * <ul>
      * <li>{@link XmlI18nStringTranslation}</li>
      * <li>{@link String}</li>
-     * <ul>
+     * </ul>
      * 
      * @return The contents of the I18N string
      */
