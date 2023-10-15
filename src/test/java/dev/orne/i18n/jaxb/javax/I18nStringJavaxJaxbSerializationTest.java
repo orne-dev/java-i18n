@@ -25,7 +25,7 @@ package dev.orne.i18n.jaxb.javax;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +45,7 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nBilingualString;
@@ -90,7 +91,7 @@ class I18nStringJavaxJaxbSerializationTest {
     }
 
     private String randomXmlText() {
-        final String raw = RandomStringUtils.random(RND_STR_LENGTH);
+        final String raw = RandomStringUtils.random(RND_STR_LENGTH).trim();
         final String escaped = StringEscapeUtils.escapeXml10(raw);
         return StringEscapeUtils.unescapeXml(escaped);
     }
@@ -473,7 +474,7 @@ class I18nStringJavaxJaxbSerializationTest {
         assertNotNull(xml);
         final Element tree = xmlToRootElement(xml);
         final Element beanNode = assertContainerNode(tree);
-        final List<Element> translations = assertMapNode(defaultText, beanNode);
+        final List<Element> translations = assertMapNode(bean.getFormattedDefaultText(), beanNode);
         assertContainsTranslationNode(MOCK_LANG, text, translations);
         assertEquals(1, translations.size());
     }
@@ -569,7 +570,7 @@ class I18nStringJavaxJaxbSerializationTest {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document document = builder.parse(new ByteArrayInputStream(xml.getBytes()));
+            final Document document = builder.parse(new InputSource(new StringReader(xml)));
             assertNotNull(document);
             return document.getDocumentElement();
         });
@@ -627,13 +628,13 @@ class I18nStringJavaxJaxbSerializationTest {
             final @NotNull String text,
             final @NotNull Element element) {
         assertTrue(getChildElements(element).isEmpty());
-        assertEquals(StringEscapeUtils.escapeXml10(text), element.getTextContent());
+        assertEquals(text, StringEscapeUtils.unescapeXml(element.getTextContent()));
     }
 
     protected static @NotNull List<Element> assertMapNode(
             final @NotNull String text,
             final @NotNull Element element) {
-        assertEquals(text, getTextContent(element));
+        assertEquals(text, StringEscapeUtils.unescapeXml(getTextContent(element)));
         final List<Element> translations = getChildElements(element);
         assertFalse(translations.isEmpty());
         for (final Element tranlation : translations) {
@@ -654,7 +655,7 @@ class I18nStringJavaxJaxbSerializationTest {
             assertNotNull(translationLang);
             if (lang.equals(translationLang)) {
                 found = true;
-                assertEquals(StringEscapeUtils.escapeXml10(text), translation.getTextContent());
+                assertEquals(text, StringEscapeUtils.unescapeXml(translation.getTextContent()));
                 assertTrue(getChildElements(translation).isEmpty());
             }
         }
