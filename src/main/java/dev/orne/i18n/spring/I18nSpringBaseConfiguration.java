@@ -4,7 +4,7 @@ package dev.orne.i18n.spring;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2023 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -59,14 +59,14 @@ import jakarta.validation.constraints.NotNull;
  * application even when the library is deployed as a shared library.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-01
+ * @version 1.0, 2023-05
  * @see I18nContextProvider
  * @see I18nSpringContextProvider
  * @since 0.1
  */
 @API(status=Status.MAINTAINED, since="0.1")
 @Configuration
-public class I18nSpringConfigurer
+public class I18nSpringBaseConfiguration
 implements InitializingBean, ImportAware {
 
     /** The Spring context. */

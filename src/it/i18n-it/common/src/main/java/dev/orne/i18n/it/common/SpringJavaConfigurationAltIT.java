@@ -40,7 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import dev.orne.i18n.I18nResources;
-import dev.orne.i18n.spring.I18nSpringConfigurer;
+import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
 import dev.orne.i18n.spring.I18nSpringResources;
 
 /**
@@ -73,9 +73,9 @@ extends AbstractSpringConfigurationAltIT {
             return source;
         }
         @Bean
-        public I18nSpringConfigurer i18nSpringConfigurer(
+        public I18nSpringBaseConfiguration I18nSpringBaseConfiguration(
                 final @Autowired MessageSource messageSource) {
-            final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+            final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setAvailableLocales(new Locale[] {
                     TestMessages.DEFAULT_LOCALE,
                     TestMessages.YY_LOCALE,

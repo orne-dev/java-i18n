@@ -28,7 +28,10 @@
     01. Added `dev.orne.i18n.spring.I18nSpringContext`
     01. Added `dev.orne.i18n.spring.I18nSpringResources`
     01. Added `dev.orne.i18n.spring.I18nSpringContextProvider`
-    01. Added `dev.orne.i18n.spring.I18nSpringConfigurer`
+    01. Added `dev.orne.i18n.spring.I18nSpringBaseConfiguration`
+    01. Added `dev.orne.i18n.spring.I18nSpringWebContextClearer`
+    01. Added `dev.orne.i18n.spring.I18nSpringWebConfiguration`
+    01. Added `dev.orne.i18n.spring.I18nSpringConfiguration`
     01. Added `dev.orne.i18n.spring.EnableI18N`
 01. :gift: Added Javax Bean Validation 2.0 support
     01. Added `dev.orne.i18n.validation.javax.AbstractValidatorForI18nString`

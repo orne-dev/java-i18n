@@ -44,14 +44,14 @@ import org.springframework.context.annotation.Import;
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
- * @see I18nSpringConfigurer
+ * @see I18nSpringConfiguration
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
-@Import(I18nSpringConfigurer.class)
+@Import(I18nSpringConfiguration.class)
 public @interface EnableI18N {
 
     /** @return The {@code ClassLoader} level to apply the configuration to. */

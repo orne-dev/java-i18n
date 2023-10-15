@@ -40,15 +40,15 @@ import dev.orne.i18n.DefaultI18nContextProvider;
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nContextProvider;
 import dev.orne.i18n.I18nContextProviderByClassLoaderStrategy;
-import dev.orne.i18n.spring.I18nSpringConfigurer;
+import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
 
 /**
- * Integrity test for {@code I18nSpringConfigurer.targetClass}.
+ * Integrity test for {@code I18nSpringBaseConfiguration.targetClass}.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @since 0.1
- * @see I18nSpringConfigurer
+ * @see I18nSpringBaseConfiguration
  */
 @Tag("spring-classloader")
 public class SpringClassLoaderI18nConfigurerTest {
@@ -101,7 +101,7 @@ public class SpringClassLoaderI18nConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Runtime()
@@ -121,7 +121,7 @@ public class SpringClassLoaderI18nConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_System()
@@ -141,7 +141,7 @@ public class SpringClassLoaderI18nConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Spring()
@@ -161,7 +161,7 @@ public class SpringClassLoaderI18nConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Lib()
@@ -181,7 +181,7 @@ public class SpringClassLoaderI18nConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Test()
@@ -201,7 +201,7 @@ public class SpringClassLoaderI18nConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Thread()
@@ -248,7 +248,7 @@ public class SpringClassLoaderI18nConfigurerTest {
             final TestI18nContextProviderByClassLoaderStrategy strategy =
                     new TestI18nContextProviderByClassLoaderStrategy();
             I18N.setContextProviderStrategy(strategy);
-            final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+            final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setContextProvider(this.provider);
             if (this.targetClass != null) {
                 try {

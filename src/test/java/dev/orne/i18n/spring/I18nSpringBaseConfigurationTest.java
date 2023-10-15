@@ -52,15 +52,15 @@ import dev.orne.i18n.I18nResources;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Unit tests for {@code I18nSpringConfigurer}.
+ * Unit tests for {@code I18nSpringBaseConfiguration}.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
- * @see I18nSpringConfigurer
+ * @see I18nSpringBaseConfiguration
  */
 @Tag("ut")
-class I18nSpringConfigurerTest {
+class I18nSpringBaseConfigurationTest {
 
     private @Mock ClassLoader classLoader;
     private @Mock ApplicationContext springContext;
@@ -102,7 +102,7 @@ class I18nSpringConfigurerTest {
                 springCL);
         testCL = new URLClassLoader(
                 new URL[] {
-                    I18nSpringConfigurerTest.class.getProtectionDomain().getCodeSource().getLocation(),
+                    I18nSpringBaseConfigurationTest.class.getProtectionDomain().getCodeSource().getLocation(),
                 },
                 libCL);
         threadCL = new URLClassLoader(
@@ -127,11 +127,11 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#I18nSpringConfigurer()}.
+     * Test {@link I18nSpringBaseConfiguration#I18nSpringBaseConfigurer()}.
      */
     @Test
     void testConstructor() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
         assertTrue(configurer.isInheritableContexts());
@@ -142,80 +142,80 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setContext(ApplicationContext)}.
+     * Test {@link I18nSpringBaseConfiguration#setContext(ApplicationContext)}.
      */
     @Test
     void testSetContext() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContext(springContext);
         assertSame(springContext, configurer.getContext());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setTargetClass(Class)}.
+     * Test {@link I18nSpringBaseConfiguration#setTargetClass(Class)}.
      */
     @Test
     void testSetTargetClass() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
-        configurer.setTargetClass(I18nSpringConfigurerTest.class);
-        assertSame(I18nSpringConfigurerTest.class, configurer.getTargetClass());
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
+        configurer.setTargetClass(I18nSpringBaseConfigurationTest.class);
+        assertSame(I18nSpringBaseConfigurationTest.class, configurer.getTargetClass());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setTargetClass(Class)}.
+     * Test {@link I18nSpringBaseConfiguration#setTargetClass(Class)}.
      */
     @Test
     void testSetTargetClass_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
-        configurer.setTargetClass(I18nSpringConfigurerTest.class);
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
+        configurer.setTargetClass(I18nSpringBaseConfigurationTest.class);
         configurer.setTargetClass(null);
         assertNull(configurer.getTargetClass());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setContextProvider(I18nContextProvider)}.
+     * Test {@link I18nSpringBaseConfiguration#setContextProvider(I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(provider);
         assertSame(provider, configurer.getContextProvider());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setContextProvider(I18nContextProvider)}.
+     * Test {@link I18nSpringBaseConfiguration#setContextProvider(I18nContextProvider)}.
      */
     @Test
     void testSetContextProvider_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(provider);
         configurer.setContextProvider(null);
         assertNull(configurer.getContextProvider());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setInheritableContexts(boolean)}.
+     * Test {@link I18nSpringBaseConfiguration#setInheritableContexts(boolean)}.
      */
     @Test
     void testSetInheritableContexts() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setInheritableContexts(false);
         assertFalse(configurer.isInheritableContexts());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setInheritableContexts(boolean)}.
+     * Test {@link I18nSpringBaseConfiguration#setInheritableContexts(boolean)}.
      */
     @Test
     void testSetInheritableContexts_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setInheritableContexts(false);
         configurer.setInheritableContexts(true);
         assertTrue(configurer.isInheritableContexts());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setAvailableLocales(Locale[])}.
+     * Test {@link I18nSpringBaseConfiguration#setAvailableLocales(Locale[])}.
      */
     @Test
     void testSetAvailableLocales() {
@@ -223,13 +223,13 @@ class I18nSpringConfigurerTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setAvailableLocales(locales);
         assertArrayEquals(locales, configurer.getAvailableLocales());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setAvailableLocales(Locale[])}.
+     * Test {@link I18nSpringBaseConfiguration#setAvailableLocales(Locale[])}.
      */
     @Test
     void testSetAvailableLocales_Null() {
@@ -237,83 +237,83 @@ class I18nSpringConfigurerTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setAvailableLocales(locales);
         configurer.setAvailableLocales(null);
         assertNull(configurer.getAvailableLocales());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setDefaultMessageSource(MessageSource)}.
+     * Test {@link I18nSpringBaseConfiguration#setDefaultMessageSource(MessageSource)}.
      */
     @Test
     void testSetDefaultMessageSource() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setDefaultMessageSource(messageSource);
         assertSame(messageSource, configurer.getDefaultMessageSource());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setDefaultMessageSource(MessageSource)}.
+     * Test {@link I18nSpringBaseConfiguration#setDefaultMessageSource(MessageSource)}.
      */
     @Test
     void testSetDefaultMessageSource_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setDefaultMessageSource(messageSource);
         configurer.setDefaultMessageSource(null);
         assertNull(configurer.getDefaultMessageSource());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setDefaultI18nResources(I18nResources)}.
+     * Test {@link I18nSpringBaseConfiguration#setDefaultI18nResources(I18nResources)}.
      */
     @Test
     void testSetDefaultI18nResources() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setDefaultI18nResources(resources);
         assertSame(resources, configurer.getDefaultI18nResources());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setDefaultI18nResources(I18nResources)}.
+     * Test {@link I18nSpringBaseConfiguration#setDefaultI18nResources(I18nResources)}.
      */
     @Test
     void testSetDefaultI18nResources_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setDefaultI18nResources(resources);
         configurer.setDefaultI18nResources(null);
         assertNull(configurer.getDefaultI18nResources());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setNamedI18nResources(Map)
+     * Test {@link I18nSpringBaseConfiguration#setNamedI18nResources(Map)
      */
     @Test
     void testSetNamedI18nResources() {
         final Map<String, I18nResources> namedResources = new HashMap<>();
         namedResources.put("main", resources);
         namedResources.put("alt", altResources);
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setNamedI18nResources(namedResources);
         assertEquals(namedResources, configurer.getNamedI18nResources());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setDefaultMessageSource(MessageSource)}.
+     * Test {@link I18nSpringBaseConfiguration#setDefaultMessageSource(MessageSource)}.
      */
     @Test
     void testSetNamedI18nResources_Null() {
         final Map<String, I18nResources> namedResources = new HashMap<>();
         namedResources.put("main", resources);
         namedResources.put("alt", altResources);
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setNamedI18nResources(namedResources);
         configurer.setNamedI18nResources(null);
         assertNull(configurer.getNamedI18nResources());
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setImportMetadata(AnnotationMetadata)}.
+     * Test {@link I18nSpringBaseConfiguration#setImportMetadata(AnnotationMetadata)}.
      */
     @Test
     void testSetImportMetadata() {
@@ -321,7 +321,7 @@ class I18nSpringConfigurerTest {
         final Map<String, Object> attrs = new HashMap<>();
         attrs.put("targetClass", Void.class);
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
@@ -332,7 +332,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setImportMetadata(AnnotationMetadata)}.
+     * Test {@link I18nSpringBaseConfiguration#setImportMetadata(AnnotationMetadata)}.
      */
     @Test
     void testSetImportMetadata_All() {
@@ -346,14 +346,14 @@ class I18nSpringConfigurerTest {
                 Locale.FRENCH
         };
         final Map<String, Object> attrs = new HashMap<>();
-        attrs.put("targetClass", I18nSpringConfigurerTest.class);
+        attrs.put("targetClass", I18nSpringBaseConfigurationTest.class);
         attrs.put("availableLanguages", langs);
         attrs.put("scanI18nResources", false);
         attrs.put("scanMessageSources", false);
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setImportMetadata(metadata);
-        assertSame(I18nSpringConfigurerTest.class, configurer.getTargetClass());
+        assertSame(I18nSpringBaseConfigurationTest.class, configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
         assertTrue(configurer.isInheritableContexts());
         assertArrayEquals(locales, configurer.getAvailableLocales());
@@ -365,7 +365,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setImportMetadata(AnnotationMetadata)}.
+     * Test {@link I18nSpringBaseConfiguration#setImportMetadata(AnnotationMetadata)}.
      */
     @Test
     void testSetImportMetadata_AvailableLocales_Empty() {
@@ -376,7 +376,7 @@ class I18nSpringConfigurerTest {
         attrs.put("scanI18nResources", true);
         attrs.put("scanMessageSources", true);
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
@@ -390,14 +390,14 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setImportMetadata(AnnotationMetadata)}.
+     * Test {@link I18nSpringBaseConfiguration#setImportMetadata(AnnotationMetadata)}.
      */
     @Test
     void testSetImportMetadata_Empty() {
         final AnnotationMetadata metadata = mock(AnnotationMetadata.class);
         final Map<String, Object> attrs = new HashMap<>();
         willReturn(attrs).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
@@ -411,13 +411,13 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setImportMetadata(AnnotationMetadata)}.
+     * Test {@link I18nSpringBaseConfiguration#setImportMetadata(AnnotationMetadata)}.
      */
     @Test
     void testSetImportMetadata_NoAnnotationAttributes() {
         final AnnotationMetadata metadata = mock(AnnotationMetadata.class);
         willReturn(null).given(metadata).getAnnotationAttributes(EnableI18N.class.getName());
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setImportMetadata(metadata);
         assertNull(configurer.getTargetClass());
         assertNull(configurer.getContextProvider());
@@ -431,22 +431,22 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#setImportMetadata(AnnotationMetadata)}.
+     * Test {@link I18nSpringBaseConfiguration#setImportMetadata(AnnotationMetadata)}.
      */
     @Test
     void testSetImportMetadata_Null() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         assertThrows(NullPointerException.class, () -> {
             configurer.setImportMetadata(null);
         });
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         final I18nContextProvider provider = configurer.createContextProvider();
         assertTrue(provider instanceof I18nSpringContextProvider);
         final I18nSpringContextProvider springProvider = (I18nSpringContextProvider) provider;
@@ -458,11 +458,11 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_NotInheritable() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setInheritableContexts(false);
         final I18nContextProvider provider = configurer.createContextProvider();
         assertTrue(provider instanceof I18nSpringContextProvider);
@@ -475,7 +475,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_AvailableLocales() {
@@ -483,7 +483,7 @@ class I18nSpringConfigurerTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setAvailableLocales(locales);
         final I18nContextProvider provider = configurer.createContextProvider();
         assertTrue(provider instanceof I18nSpringContextProvider);
@@ -496,11 +496,11 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_MessageSource() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setDefaultMessageSource(this.messageSource);
         final I18nContextProvider provider = configurer.createContextProvider();
         assertTrue(provider instanceof I18nSpringContextProvider);
@@ -514,11 +514,11 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_DefaultI18nResources() {
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setDefaultI18nResources(this.resources);
         final I18nContextProvider provider = configurer.createContextProvider();
         assertTrue(provider instanceof I18nSpringContextProvider);
@@ -531,14 +531,14 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_NamedI18nResources() {
         final Map<String, I18nResources> namedResources = new HashMap<>();
         namedResources.put("main", resources);
         namedResources.put("alt", altResources);
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setNamedI18nResources(namedResources);
         final I18nContextProvider provider = configurer.createContextProvider();
         assertTrue(provider instanceof I18nSpringContextProvider);
@@ -550,7 +550,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_ScanI18nResources() {
@@ -560,7 +560,7 @@ class I18nSpringConfigurerTest {
         willReturn(namedResources).given(springContext).getBeansOfType(I18nResources.class);
         willReturn(new String[0]).given(springContext).getAliases("main");
         willReturn(new String[0]).given(springContext).getAliases("alt");
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContext(springContext);
         configurer.setScanI18nResources(true);
         final I18nContextProvider provider = configurer.createContextProvider();
@@ -573,7 +573,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_ScanMessageSources() {
@@ -583,7 +583,7 @@ class I18nSpringConfigurerTest {
         willReturn(namedSources).given(springContext).getBeansOfType(MessageSource.class);
         willReturn(new String[0]).given(springContext).getAliases("main");
         willReturn(new String[0]).given(springContext).getAliases("alt");
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContext(springContext);
         configurer.setScanMessageSources(true);
         final I18nContextProvider provider = configurer.createContextProvider();
@@ -603,7 +603,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#createContextProvider()}.
+     * Test {@link I18nSpringBaseConfiguration#createContextProvider()}.
      */
     @Test
     void testCreateContextProvider_Scan() {
@@ -619,7 +619,7 @@ class I18nSpringConfigurerTest {
         willReturn(new String[] { "altResAlias1", "altResAlias2" }).given(springContext).getAliases("altRes");
         willReturn(new String[] { "mainSourceAlias1", "mainSourceAlias2" }).given(springContext).getAliases("mainSource");
         willReturn(new String[] { "altSourceAlias1" }).given(springContext).getAliases("altSource");
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContext(springContext);
         configurer.setScanI18nResources(true);
         configurer.setScanMessageSources(true);
@@ -656,12 +656,12 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet() {
         final I18nContextProvider previousProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         final I18nContextProvider expected = configurer.createContextProvider();
         configurer.afterPropertiesSet();
         final I18nContextProvider defaultProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
@@ -670,12 +670,12 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_ContextProvider() {
         final I18nContextProvider previousProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(this.provider);
         configurer.afterPropertiesSet();
         final I18nContextProvider defaultProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
@@ -684,14 +684,14 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_TargetClass() {
         final I18nContextProvider previousProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
-        final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+        final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(this.provider);
-        configurer.setTargetClass(I18nSpringConfigurerTest.class);
+        configurer.setTargetClass(I18nSpringBaseConfigurationTest.class);
         configurer.afterPropertiesSet();
         final I18nContextProvider defaultProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
         assertNotSame(previousProvider, defaultProvider);
@@ -699,7 +699,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable()
@@ -715,7 +715,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Runtime()
@@ -733,7 +733,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_System()
@@ -751,7 +751,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Spring()
@@ -769,7 +769,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Lib()
@@ -787,13 +787,13 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Test()
     throws InterruptedException {
         final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(this.provider);
-        test.targetClass = I18nSpringConfigurerTest.class;
+        test.targetClass = I18nSpringBaseConfigurationTest.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
@@ -805,7 +805,7 @@ class I18nSpringConfigurerTest {
     }
 
     /**
-     * Test {@link I18nSpringConfigurer#afterPropertiesSet()}.
+     * Test {@link I18nSpringBaseConfiguration#afterPropertiesSet()}.
      */
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Thread()
@@ -850,7 +850,7 @@ class I18nSpringConfigurerTest {
             final TestI18nContextProviderByClassLoaderStrategy strategy =
                     new TestI18nContextProviderByClassLoaderStrategy();
             I18N.setContextProviderStrategy(strategy);
-            final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+            final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setContextProvider(this.provider);
             if (this.targetClass != null) {
                 try {

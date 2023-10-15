@@ -415,6 +415,13 @@ class I18nResourcesStringTest {
         assertEquals(MOCK_MSG_CODE_3, builder.getCodes().get(2));
         assertNotNull(builder.getArguments());
         assertTrue(builder.getArguments().isEmpty());
+        final I18nResourcesString.Builder other = I18nResourcesString
+                .forDefault(MOCK_DEF_MSG)
+                .withCode(MOCK_MSG_CODE)
+                .withCode(MOCK_MSG_CODE_2)
+                .withCode(MOCK_MSG_CODE_3);
+        assertEquals(other, builder);
+        assertEquals(other.hashCode(), builder.hashCode());
     }
 
     /**
@@ -557,6 +564,13 @@ class I18nResourcesStringTest {
         assertEquals(MOCK_PARAM, builder.getArguments().get(0));
         assertEquals(MOCK_PARAM_2, builder.getArguments().get(1));
         assertEquals(MOCK_PARAM_3, builder.getArguments().get(2));
+        final I18nResourcesString.Builder other = I18nResourcesString
+                .forDefault(MOCK_DEF_MSG)
+                .withArg(MOCK_PARAM)
+                .withArg(MOCK_PARAM_2)
+                .withArg(MOCK_PARAM_3);
+        assertEquals(other, builder);
+        assertEquals(other.hashCode(), builder.hashCode());
     }
 
     /**

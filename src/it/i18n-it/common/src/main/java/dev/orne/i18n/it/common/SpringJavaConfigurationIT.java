@@ -34,7 +34,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.orne.i18n.spring.I18nSpringConfigurer;
+import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
 
 /**
  * Integration tests for Spring Java configuration of Orne I18N.
@@ -58,9 +58,9 @@ extends AbstractSpringConfigurationIT {
             return source;
         }
         @Bean
-        public I18nSpringConfigurer i18nSpringConfigurer(
+        public I18nSpringBaseConfiguration I18nSpringBaseConfiguration(
                 final @Autowired MessageSource messageSource) {
-            final I18nSpringConfigurer configurer = new I18nSpringConfigurer();
+            final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             return configurer;
         }
     }
