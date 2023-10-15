@@ -49,7 +49,7 @@ import dev.orne.i18n.I18nResources;
  * @see I18nSpringWebContextClearer
  */
 @Tag("ut")
-public class I18nSpringWebContextClearerTest {
+class I18nSpringWebContextClearerTest {
 
     private static I18nContextProviderStrategy preTestsStrategy;
 

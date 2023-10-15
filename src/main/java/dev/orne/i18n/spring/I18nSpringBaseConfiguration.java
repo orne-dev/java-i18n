@@ -189,9 +189,11 @@ implements InitializingBean, ImportAware {
     }
 
     /**
-     * Returns the supported languages.
+     * Returns the configured supported languages.
+     * <p>
+     * If no languages has been configured returns {@code null}.
      * 
-     * @return The supported languages
+     * @return The configured supported languages
      */
     public Locale[] getAvailableLocales() {
         if (this.availableLocales == null) {
@@ -298,9 +300,11 @@ implements InitializingBean, ImportAware {
     }
 
     /**
-     * Returns the additional named I18N resources.
+     * Returns the configured additional named I18N resources.
+     * <p>
+     * If no named I18N resources have been configured returns {@code null}.
      * 
-     * @return The additional named I18N resources
+     * @return The configured additional named I18N resources
      */
     public Map<@NotNull String, @NotNull I18nResources> getNamedI18nResources() {
         if (this.namedI18nResources == null) {
@@ -372,7 +376,7 @@ implements InitializingBean, ImportAware {
             bean.setAvailableLocales(this.availableLocales);
         }
         if (this.namedI18nResources == null) {
-            this.namedI18nResources = new HashMap<String, I18nResources>();
+            this.namedI18nResources = new HashMap<>();
             if (this.scanI18nResources) {
                 this.namedI18nResources.putAll(scanContextForI18nResources());
             }

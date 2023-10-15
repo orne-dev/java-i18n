@@ -301,10 +301,10 @@ class AbstractI18nContextProviderTest {
         };
         final AbstractI18nContextProvider provider = new TestImpl();
         assertFalse(provider.equals(null));
-        assertTrue(provider.equals(provider));
+        assertEquals(provider, provider);
         assertEquals(provider.hashCode(), provider.hashCode());
-        assertFalse(provider.equals(new Object()));
-        assertFalse(provider.equals(spy(AbstractI18nContextProvider.class)));
+        assertNotEquals(provider, new Object());
+        assertNotEquals(provider, spy(AbstractI18nContextProvider.class));
         final AbstractI18nContextProvider other = new TestImpl();
         assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
         assertEquals(provider, other);
