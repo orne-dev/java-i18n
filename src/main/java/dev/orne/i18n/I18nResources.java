@@ -34,8 +34,7 @@ import jakarta.validation.constraints.NotNull;
  * Interface for I18N messages source. Provides an implementation agnostic way
  * to retrieve I18N messages based in the current {@code I18nContext} locale.
  * <p>
- * The message formats and default messages are expect to be
- * {@code MessageFormat} compliant.
+ * The default messages are expect to be {@code MessageFormat} compliant.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01

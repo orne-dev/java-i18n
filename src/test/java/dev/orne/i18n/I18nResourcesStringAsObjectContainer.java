@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -48,6 +50,7 @@ import dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter;
 @jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nResourcesStringAsObjectContainer {
 
+    /** The I18N string. */
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @XmlJavaTypeAdapter(I18nResourcesStringAdapter.Full.class)
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
@@ -56,14 +59,27 @@ public class I18nResourcesStringAsObjectContainer {
     @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nResourcesString bean;
 
+    /**
+     * Returns the I18N string.
+     * 
+     * @return The I18N string.
+     */
     public I18nResourcesString getBean() {
         return this.bean;
     }
 
+    /**
+     * Sets the I18N string.
+     * 
+     * @param bean The I18N string.
+     */
     public void setBean(final I18nResourcesString bean) {
         this.bean = bean;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
@@ -71,6 +87,9 @@ public class I18nResourcesStringAsObjectContainer {
                 .toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj) {
         if (obj == null) { return false; }
@@ -80,5 +99,13 @@ public class I18nResourcesStringAsObjectContainer {
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

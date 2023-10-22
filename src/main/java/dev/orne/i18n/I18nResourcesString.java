@@ -44,10 +44,17 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} based on {@code I18nResources}.
+ * <p>
+ * The class supports providing arguments to be used when computing the
+ * resulting texts for the different languages.
+ * As the I18N resources formatting depends of the underlying implementation
+ * the default text will be formatted with {@code MessageFormat} passing the
+ * configured arguments, if any.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
+ * @see MessageFormat
  */
 @API(status=Status.STABLE, since="0.1")
 @JsonDeserialize(using=JsonDeserializer.None.class)
@@ -97,9 +104,13 @@ implements I18nString {
     /**
      * Creates a builder of a new instance with the specified default
      * text.
+     * <p>
+     * The text will be formatted with {@code MessageFormat} passing the
+     * configured arguments. 
      * 
      * @param defaultMessage The default text
      * @return The new instance builder
+     * @see MessageFormat
      */
     public static Builder forDefault(
             final @NotNull String defaultMessage) {

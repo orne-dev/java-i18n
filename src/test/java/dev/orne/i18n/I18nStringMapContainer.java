@@ -29,6 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * {@code I18nString} JSON/XML serialization test container.
@@ -43,18 +45,32 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nStringMapContainer {
 
+    /** The I18N string. */
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nStringMap bean;
 
+    /**
+     * Returns the I18N string.
+     * 
+     * @return The I18N string.
+     */
     public I18nStringMap getBean() {
         return this.bean;
     }
 
+    /**
+     * Sets the I18N string.
+     * 
+     * @param bean The I18N string.
+     */
     public void setBean(final I18nStringMap bean) {
         this.bean = bean;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
@@ -62,6 +78,9 @@ public class I18nStringMapContainer {
                 .toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj) {
         if (obj == null) { return false; }
@@ -71,5 +90,13 @@ public class I18nStringMapContainer {
         return new EqualsBuilder()
                 .append(this.bean, other.bean)
                 .isEquals();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

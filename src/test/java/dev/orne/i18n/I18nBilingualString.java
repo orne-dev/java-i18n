@@ -58,6 +58,12 @@ implements I18nString {
     /** The translation text. */
     private final @NotNull String translation;
 
+    /**
+     * Creates a new instance.
+     * 
+     * @param defaultText The default text.
+     * @param translation The translation text.
+     */
     public I18nBilingualString(
             final @NotNull String defaultText,
             final @NotNull String translation) {
@@ -66,6 +72,11 @@ implements I18nString {
         this.translation = Validate.notNull(translation);
     }
 
+    /**
+     * Copy constructor.
+     * 
+     * @param copy The instance to copy.
+     */
     public I18nBilingualString(
             final @NotNull I18nString copy) {
         super();
@@ -74,19 +85,35 @@ implements I18nString {
         this.translation = copy.get(TRANSLATION_LANG);
     }
 
+    /**
+     * Returns the default text.
+     * 
+     * @return The default text.
+     */
     public String getDefaultText() {
         return this.defaultText;
     }
 
+    /**
+     * Returns the translation text.
+     * 
+     * @return The translation text.
+     */
     public String getTranslation() {
         return this.translation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String get() {
         return get(I18N.getLocale());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String get(@NotNull String language) {
         if (TRANSLATION_LANG.equals(Validate.notNull(language))) {
@@ -96,6 +123,9 @@ implements I18nString {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String get(@NotNull Locale locale) {
         return get(Validate.notNull(locale).getLanguage());
@@ -158,9 +188,15 @@ implements I18nString {
         return this.getDefaultText();
     }
 
+    /**
+     * Example Apache commons converter.
+     */
     public static class Converter
     extends StdConverter<I18nString, I18nBilingualString> {
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull I18nBilingualString convert(
                 final @NotNull I18nString value) {

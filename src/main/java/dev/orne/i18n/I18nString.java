@@ -59,6 +59,7 @@ extends Serializable {
      * @param text The fixed text for all languages
      * @return The instance for the specified text, or {@code null} if
      * {@code text} is {@code null}
+     * @see I18nFixedString#from(String)
      */
     public static I18nFixedString fixed(
             final String text) {
@@ -83,6 +84,7 @@ extends Serializable {
      * 
      * @param defaultMessage The default text
      * @return The new {@code I18nResourcesString} builder
+     * @see I18nResourcesString#forDefault(String)
      */
     public static I18nResourcesString.Builder fromResources(
             final @NotNull String defaultMessage) {

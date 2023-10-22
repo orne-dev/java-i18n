@@ -38,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * {@code I18nFixedString} Jackson serialization test container.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @version 1.0, 2021-02
  * @since 0.1
  */
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -46,19 +47,33 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nFixedStringAsObjectContainer {
 
+    /** The I18N string. */
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nFixedString bean;
 
+    /**
+     * Returns the I18N string.
+     * 
+     * @return The I18N string.
+     */
     public I18nFixedString getBean() {
         return this.bean;
     }
 
+    /**
+     * Sets the I18N string.
+     * 
+     * @param bean The I18N string.
+     */
     public void setBean(final I18nFixedString bean) {
         this.bean = bean;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
@@ -66,6 +81,9 @@ public class I18nFixedStringAsObjectContainer {
                 .toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj) {
         if (obj == null) { return false; }
@@ -77,6 +95,9 @@ public class I18nFixedStringAsObjectContainer {
                 .isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
