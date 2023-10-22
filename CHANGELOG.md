@@ -3,6 +3,7 @@
 01. :wrench: Added JPMS default module name `dev.orne.i18n`
 01. :wrench: Added `org.apache.commons:commons-lang3:3.12.0` dependency.
 01. :wrench: Added `org.apache.commons:commons-text:1.9` dependency.
+01. :gift: Added `dev.orne.i18n.I18nConfigurationException`
 01. :gift: Added `dev.orne.i18n.I18nContext`
 01. :gift: Added `dev.orne.i18n.DefaultI18nContext`
 01. :gift: Added `dev.orne.i18n.I18nResources`

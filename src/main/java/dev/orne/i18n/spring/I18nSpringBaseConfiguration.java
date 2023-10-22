@@ -483,7 +483,7 @@ implements InitializingBean, ImportAware {
         final I18nContextProviderStrategy strategy = I18N.getContextProviderStrategy();
         if (this.targetClass != null &&
                 strategy instanceof I18nContextProviderConfigurableStrategy) {
-            ((I18nContextProviderConfigurableStrategy) I18N.getContextProviderStrategy()).setContextProvider(
+            ((I18nContextProviderConfigurableStrategy) strategy).setContextProvider(
                     getTargetClassLoader(),
                     provider);
         } else {

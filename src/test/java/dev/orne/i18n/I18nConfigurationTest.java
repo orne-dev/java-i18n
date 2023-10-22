@@ -150,10 +150,11 @@ class I18nConfigurationTest {
     throws Exception {
         final Properties config = new Properties();
         config.setProperty(I18N.STRATEGY_PROP, "dev.orne.i18n.I18nConfigurationTest.MissingClass");
-        final Class<? extends I18nContextProviderStrategy> result = I18N.getCustomStrategyClass(
-                Thread.currentThread().getContextClassLoader(),
-                config);
-        assertNull(result);
+        assertThrows(I18nConfigurationException.class, () -> {
+            I18N.getCustomStrategyClass(
+                    Thread.currentThread().getContextClassLoader(),
+                    config);
+        });
     }
 
     /**
@@ -164,10 +165,11 @@ class I18nConfigurationTest {
     throws Exception {
         final Properties config = new Properties();
         config.setProperty(I18N.STRATEGY_PROP, I18nConfigurationTest.class.getName());
-        final Class<? extends I18nContextProviderStrategy> result = I18N.getCustomStrategyClass(
-                Thread.currentThread().getContextClassLoader(),
-                config);
-        assertNull(result);
+        assertThrows(I18nConfigurationException.class, () -> {
+            I18N.getCustomStrategyClass(
+                    Thread.currentThread().getContextClassLoader(),
+                    config);
+        });
     }
 
     /**
@@ -207,10 +209,11 @@ class I18nConfigurationTest {
     throws Exception {
         final Properties config = new Properties();
         config.setProperty(I18N.STRATEGY_PROP, CustomNonAccesibleI18nContextProviderStrategy.class.getName());
-        final I18nContextProviderStrategy result = I18N.getCustomStrategy(
-                Thread.currentThread().getContextClassLoader(),
-                config);
-        assertNull(result);
+        assertThrows(I18nConfigurationException.class, () -> {
+            I18N.getCustomStrategy(
+                    Thread.currentThread().getContextClassLoader(),
+                    config);
+        });
     }
 
     /**
@@ -221,10 +224,11 @@ class I18nConfigurationTest {
     throws Exception {
         final Properties config = new Properties();
         config.setProperty(I18N.STRATEGY_PROP, CustomFlawedI18nContextProviderStrategy.class.getName());
-        final I18nContextProviderStrategy result = I18N.getCustomStrategy(
-                Thread.currentThread().getContextClassLoader(),
-                config);
-        assertNull(result);
+        assertThrows(I18nConfigurationException.class, () -> {
+            I18N.getCustomStrategy(
+                    Thread.currentThread().getContextClassLoader(),
+                    config);
+        });
     }
 
     /**
@@ -235,10 +239,11 @@ class I18nConfigurationTest {
     throws Exception {
         final Properties config = new Properties();
         config.setProperty(I18N.STRATEGY_PROP, CustomFlawedConfigurableI18nContextProviderStrategy.class.getName());
-        final I18nContextProviderStrategy result = I18N.getCustomStrategy(
-                Thread.currentThread().getContextClassLoader(),
-                config);
-        assertNull(result);
+        assertThrows(I18nConfigurationException.class, () -> {
+            I18N.getCustomStrategy(
+                    Thread.currentThread().getContextClassLoader(),
+                    config);
+        });
     }
 
     /**

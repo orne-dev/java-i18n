@@ -163,7 +163,7 @@ public final class I18N {
                 config.load(input);
             }
         } catch (final IOException ioe) {
-            LOG.error("Error loading Orne I18N configuration file.", ioe);
+            LOG.error("Error loading I18N configuration file. Using default configuration.", ioe);
         }
         return config;
     }
@@ -197,13 +197,17 @@ public final class I18N {
             } catch (final NoSuchMethodException ignore) {
                 // Ignored
             } catch (final Exception e) {
-                LOG.warn("Error calling custom I18N context provider strategy class Properties constructor", e);
+                throw new I18nConfigurationException(
+                        "Error instantiating custom I18N context provider strategy class with Properties constructor",
+                        e);
             }
             if (result == null) {
                 try {
                     result = clazz.getDeclaredConstructor().newInstance();
                 } catch (final Exception e) {
-                    LOG.error("Error instantiating custom I18N context provider strategy class with default constructor.", e);
+                    throw new I18nConfigurationException(
+                            "Error instantiating custom I18N context provider strategy class with default constructor.",
+                            e);
                 }
             }
         }
@@ -232,12 +236,14 @@ public final class I18N {
                 if (I18nContextProviderStrategy.class.isAssignableFrom(clazz)) {
                     result = (Class<? extends I18nContextProviderStrategy>) clazz;
                 } else {
-                    LOG.error(
-                            "Configured custom I18N context provider strategy class {} is not valid",
-                            strategyClassName);
+                    throw new I18nConfigurationException(String.format(
+                            "Configured custom I18N context provider strategy class '%s' is not valid",
+                            strategyClassName));
                 }
-            } catch (final ClassNotFoundException cnfe) {
-                LOG.error("Cannot found configured custom I18N context provider strategy class", cnfe);
+            } catch (final ClassNotFoundException e) {
+                throw new I18nConfigurationException(
+                        "Cannot found configured custom I18N context provider strategy class",
+                        e);
             }
         }
         return result;
