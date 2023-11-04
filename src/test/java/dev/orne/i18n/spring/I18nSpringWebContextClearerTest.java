@@ -34,11 +34,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.context.support.RequestHandledEvent;
 
-import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nContext;
-import dev.orne.i18n.I18nContextProvider;
-import dev.orne.i18n.I18nContextProviderStrategy;
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.I18nContext;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * Unit tests for {@code I18nSpringWebContextClearer}.
@@ -62,7 +61,7 @@ class I18nSpringWebContextClearerTest {
 
     @BeforeAll
     static void saveDefaultStrategy() {
-        preTestsStrategy = I18N.getContextProviderStrategy();
+        preTestsStrategy = I18nContextProviderStrategy.getInstance();
     }
 
     @BeforeEach
@@ -77,7 +76,7 @@ class I18nSpringWebContextClearerTest {
 
     @AfterEach
     void restoreDefaultStrategy() {
-        I18N.setContextProviderStrategy(preTestsStrategy);
+        I18nContextProviderStrategy.setInstance(preTestsStrategy);
     }
 
     /**
@@ -85,7 +84,7 @@ class I18nSpringWebContextClearerTest {
      */
     @Test
     void testClearContext() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         final I18nSpringWebContextClearer listener = new I18nSpringWebContextClearer();
         listener.onApplicationEvent(event);

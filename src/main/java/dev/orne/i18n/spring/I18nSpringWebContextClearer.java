@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.web.context.support.RequestHandledEvent;
 
-import dev.orne.i18n.I18N;
+import dev.orne.i18n.context.I18nContextProvider;
 
 /**
  * Listener for Spring web contexts that removes the I18N context when the HTTP
@@ -52,6 +52,6 @@ implements ApplicationListener<RequestHandledEvent> {
     public void onApplicationEvent(
             final RequestHandledEvent event) {
         LOG.debug("Clearing I18nContext...");
-        I18N.clearContext();
+        I18nContextProvider.getInstance().clearContext();
     }
 }

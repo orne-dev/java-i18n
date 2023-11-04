@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import dev.orne.i18n.I18nResources;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -285,7 +286,7 @@ class AbstractI18nContextProviderTest {
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
-        assertFalse(provider.isContextAlive(context));
+        assertFalse(provider.isContextValid(context));
         provider.clearContext();
     }
 
@@ -335,7 +336,7 @@ class AbstractI18nContextProviderTest {
             return null;
         }
         @Override
-        public boolean isContextAlive(@NotNull I18nContext context) {
+        public boolean isContextValid(@NotNull I18nContext context) {
             return false;
         }
         @Override

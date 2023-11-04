@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -34,6 +34,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import dev.orne.i18n.I18nResources;
 
 /**
  * Unit tests for {@code DefaultI18nContextProvider}.
@@ -138,7 +140,7 @@ class DefaultI18nContextProviderTest {
     void testGetContext_Invalid() {
         final DefaultI18nContextProvider provider = spy(new DefaultI18nContextProvider(false));
         provider.getContexts().set(mockContext);
-        willReturn(false).given(provider).isContextAlive(mockContext);
+        willReturn(false).given(provider).isContextValid(mockContext);
         final I18nContext result = provider.getContext();
         assertNotSame(mockContext, result);
         assertSame(result, provider.getContexts().get());
@@ -146,44 +148,44 @@ class DefaultI18nContextProviderTest {
     }
 
     /**
-     * Test {@link DefaultI18nContextProvider#isContextAlive(I18nContext)}.
+     * Test {@link DefaultI18nContextProvider#isContextValid(I18nContext)}.
      */
     @Test
     void testIsContextAlive() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
-        assertFalse(provider.isContextAlive(mockContext));
+        assertFalse(provider.isContextValid(mockContext));
     }
 
     /**
-     * Test {@link DefaultI18nContextProvider#isContextAlive(I18nContext)}.
+     * Test {@link DefaultI18nContextProvider#isContextValid(I18nContext)}.
      */
     @Test
     void testIsContextAlive_Same() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
         willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
-        assertTrue(provider.isContextAlive(mockContext));
+        assertTrue(provider.isContextValid(mockContext));
     }
 
     /**
-     * Test {@link DefaultI18nContextProvider#isContextAlive(I18nContext)}.
+     * Test {@link DefaultI18nContextProvider#isContextValid(I18nContext)}.
      */
     @Test
     void testIsContextAlive_WrongUUID() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
         willReturn(UUID.randomUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
-        assertFalse(provider.isContextAlive(mockContext));
+        assertFalse(provider.isContextValid(mockContext));
     }
 
     /**
-     * Test {@link DefaultI18nContextProvider#isContextAlive(I18nContext)}.
+     * Test {@link DefaultI18nContextProvider#isContextValid(I18nContext)}.
      */
     @Test
     void testIsContextAlive_Null() {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
         assertThrows(NullPointerException.class, () -> {
-            provider.isContextAlive(null);
+            provider.isContextValid(null);
         });
     }
 
@@ -247,7 +249,7 @@ class DefaultI18nContextProviderTest {
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
         assertFalse(provider.isInheritable());
-        assertFalse(provider.isContextAlive(context));
+        assertFalse(provider.isContextValid(context));
         provider.clearContext();
     }
 
@@ -272,7 +274,7 @@ class DefaultI18nContextProviderTest {
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
         assertTrue(provider.isInheritable());
-        assertFalse(provider.isContextAlive(context));
+        assertFalse(provider.isContextValid(context));
         provider.clearContext();
     }
 

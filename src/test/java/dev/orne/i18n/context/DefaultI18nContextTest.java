@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L

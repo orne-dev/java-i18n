@@ -40,11 +40,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.type.AnnotationMetadata;
 
-import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nContextProvider;
-import dev.orne.i18n.I18nContextProviderConfigurableStrategy;
-import dev.orne.i18n.I18nContextProviderStrategy;
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderConfigurableStrategy;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -480,7 +479,7 @@ implements InitializingBean, ImportAware {
         } else {
             provider = this.contextProvider;
         }
-        final I18nContextProviderStrategy strategy = I18N.getContextProviderStrategy();
+        final I18nContextProviderStrategy strategy = I18nContextProviderStrategy.getInstance();
         if (this.targetClass != null &&
                 strategy instanceof I18nContextProviderConfigurableStrategy) {
             ((I18nContextProviderConfigurableStrategy) strategy).setContextProvider(

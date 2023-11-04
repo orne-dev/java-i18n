@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 
-import dev.orne.i18n.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProvider;
 
 /**
  * I18N context provider configuration for Spring. Configures a

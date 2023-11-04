@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -33,6 +33,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import dev.orne.i18n.I18nResources;
 
 /**
  * Unit tests for {@code SharedI18nContextProvider}.
@@ -87,19 +89,19 @@ class SharedI18nContextProviderTest {
     }
 
     /**
-     * Test {@link SharedI18nContextProvider#isContextAlive(I18nContext)}.
+     * Test {@link SharedI18nContextProvider#isContextValid(I18nContext)}.
      */
     @Test
     void testIsContextAlive() {
         final I18nContext otherContext = mock(I18nContext.class);
         final SharedI18nContextProvider provider = spy(new SharedI18nContextProvider());
         willReturn(mockContext).given(provider).createContext();
-        assertFalse(provider.isContextAlive(mockContext));
-        assertFalse(provider.isContextAlive(otherContext));
+        assertFalse(provider.isContextValid(mockContext));
+        assertFalse(provider.isContextValid(otherContext));
         I18nContext context = provider.getContext();
         assertSame(mockContext, context);
-        assertTrue(provider.isContextAlive(mockContext));
-        assertFalse(provider.isContextAlive(otherContext));
+        assertTrue(provider.isContextValid(mockContext));
+        assertFalse(provider.isContextValid(otherContext));
     }
 
     /**
@@ -112,15 +114,15 @@ class SharedI18nContextProviderTest {
         willReturn(mockContext, otherContext).given(provider).createContext();
         I18nContext context = provider.getContext();
         assertSame(mockContext, context);
-        assertTrue(provider.isContextAlive(mockContext));
-        assertFalse(provider.isContextAlive(otherContext));
+        assertTrue(provider.isContextValid(mockContext));
+        assertFalse(provider.isContextValid(otherContext));
         provider.clearContext();
-        assertFalse(provider.isContextAlive(mockContext));
-        assertFalse(provider.isContextAlive(otherContext));
+        assertFalse(provider.isContextValid(mockContext));
+        assertFalse(provider.isContextValid(otherContext));
         context = provider.getContext();
         assertSame(otherContext, context);
-        assertFalse(provider.isContextAlive(mockContext));
-        assertTrue(provider.isContextAlive(otherContext));
+        assertFalse(provider.isContextValid(mockContext));
+        assertTrue(provider.isContextValid(otherContext));
     }
 
     /**

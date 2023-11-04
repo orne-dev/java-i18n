@@ -36,13 +36,15 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import dev.orne.i18n.context.I18nContext;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.test.rnd.Generators;
 import dev.orne.test.rnd.params.GenerationParameters;
 
@@ -82,7 +84,6 @@ class I18nResourcesStringTest {
     private static final String MOCK_LANG = "xx";
     private static final Locale MOCK_LOCALE = new Locale(MOCK_LANG);
 
-    private static I18nContextProviderStrategy preTestsStrategy;
     private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
@@ -90,15 +91,10 @@ class I18nResourcesStringTest {
     private @Mock I18nString mockI18nString;
     protected AutoCloseable mocks;
 
-    @BeforeAll
-    static void saveDefaultStrategy() {
-        preTestsStrategy = I18N.getContextProviderStrategy();
-    }
-
     @BeforeEach
     void initMocks() {
         mocks = MockitoAnnotations.openMocks(this);
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
     }
 
     @AfterEach
@@ -107,8 +103,8 @@ class I18nResourcesStringTest {
     }
 
     @AfterEach
-    void restoreDefaultStrategy() {
-        I18N.setContextProviderStrategy(preTestsStrategy);
+    void restStrategy() {
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     /**

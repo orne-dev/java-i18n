@@ -44,6 +44,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import dev.orne.i18n.context.I18nContext;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.test.rnd.Generators;
 import dev.orne.test.rnd.params.GenerationParameters;
 
@@ -83,13 +86,13 @@ class I18nStringMapTest {
 
     @BeforeAll
     static void saveDefaultStrategy() {
-        preTestsStrategy = I18N.getContextProviderStrategy();
+        preTestsStrategy = I18nContextProviderStrategy.getInstance();
     }
 
     @BeforeEach
     void initMocks() {
         mocks = MockitoAnnotations.openMocks(this);
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
         willReturn(mockResources).given(mockProvider).getI18nResources(any());
@@ -104,7 +107,7 @@ class I18nStringMapTest {
 
     @AfterEach
     void restoreDefaultStrategy() {
-        I18N.setContextProviderStrategy(preTestsStrategy);
+        I18nContextProviderStrategy.setInstance(preTestsStrategy);
     }
 
     /**

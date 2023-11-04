@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -27,6 +27,7 @@ import java.util.Locale;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.I18nResources;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -42,6 +43,16 @@ import jakarta.validation.constraints.NotNull;
  */
 @API(status=Status.STABLE, since="0.1")
 public interface I18nContextProvider {
+
+    /**
+     * Returns the I18N context provider.
+     * 
+     * @return The I18N context provider.
+     */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
+    public static @NotNull I18nContextProvider getInstance() {
+        return I18nContextProviderStrategy.getInstance().getContextProvider();
+    }
 
     /**
      * Returns the supported languages.
@@ -79,13 +90,13 @@ public interface I18nContextProvider {
     @NotNull I18nContext getContext();
 
     /**
-     * Returns {@code true} if the specified context is alive or should be
+     * Returns {@code true} if the specified context is valid or should be
      * discarded.
      * 
      * @param context The I18N context
-     * @return {@code true} if the specified context is alive
+     * @return {@code true} if the specified context is valid
      */
-    boolean isContextAlive(@NotNull I18nContext context);
+    boolean isContextValid(@NotNull I18nContext context);
 
     /**
      * Clears the I18N context for the current thread.

@@ -36,7 +36,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import dev.orne.i18n.I18nContext;
+import dev.orne.i18n.context.I18nContext;
 import jakarta.validation.constraints.NotNull;
 
 /**

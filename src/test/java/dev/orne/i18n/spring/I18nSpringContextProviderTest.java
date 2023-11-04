@@ -37,8 +37,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContext;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import dev.orne.i18n.DummyI18nResources;
-import dev.orne.i18n.I18nContext;
+import dev.orne.i18n.context.DummyI18nResources;
+import dev.orne.i18n.context.I18nContext;
 
 /**
  * Unit tests for {@code I18nSpringContextProvider}.
@@ -185,7 +185,7 @@ class I18nSpringContextProviderTest {
         assertNotNull(springContext);
         assertEquals(locale, springContext.getLocale());
         provider.clearContext();
-        assertFalse(provider.isContextAlive(context));
+        assertFalse(provider.isContextValid(context));
         assertNull(LocaleContextHolder.getLocaleContext());
     }
 }

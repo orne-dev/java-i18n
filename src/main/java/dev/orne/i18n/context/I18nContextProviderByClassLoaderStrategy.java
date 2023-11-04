@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -46,7 +46,7 @@ extends DefaultI18nContextProviderStrategy
 implements I18nContextProviderConfigurableStrategy {
 
     /** The {@code I18nContextProvider} mapping per {@code ClassLoader}. */
-    private final @NotNull Map<@NotNull ClassLoader, @NotNull I18nContextProvider> contextProviders;
+    private final @NotNull Map<@NotNull ClassLoader, dev.orne.i18n.context.I18nContextProvider> contextProviders;
 
     /**
      * Creates a new instance with an default instance of
@@ -81,7 +81,7 @@ implements I18nContextProviderConfigurableStrategy {
      */
     protected I18nContextProviderByClassLoaderStrategy(
             final @NotNull I18nContextProvider defaultContextProvider,
-            final @NotNull Map<@NotNull ClassLoader, @NotNull I18nContextProvider> contextProviders) {
+            final @NotNull Map<@NotNull ClassLoader, dev.orne.i18n.context.I18nContextProvider> contextProviders) {
         super(defaultContextProvider);
         Validate.notNull(contextProviders);
         Validate.noNullElements(contextProviders.keySet());
@@ -98,7 +98,7 @@ implements I18nContextProviderConfigurableStrategy {
      * 
      * @return The {@code I18nContextProvider} mapping per {@code ClassLoader}
      */
-    protected @NotNull Map<@NotNull ClassLoader, @NotNull I18nContextProvider> getContextProviders() {
+    protected @NotNull Map<@NotNull ClassLoader, dev.orne.i18n.context.I18nContextProvider> getContextProviders() {
         return this.contextProviders;
     }
 

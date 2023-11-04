@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -60,7 +60,7 @@ extends AbstractI18nContextProvider {
      * {@inheritDoc}
      */
     @Override
-    public synchronized boolean isContextAlive(
+    public synchronized boolean isContextValid(
             final @NotNull I18nContext context) {
         return this.context == context;
     }

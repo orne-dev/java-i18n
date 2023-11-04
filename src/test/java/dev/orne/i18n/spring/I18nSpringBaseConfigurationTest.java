@@ -43,12 +43,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.type.AnnotationMetadata;
 
-import dev.orne.i18n.DefaultI18nContextProvider;
-import dev.orne.i18n.DummyI18nResources;
 import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nContextProvider;
-import dev.orne.i18n.I18nContextProviderByClassLoaderStrategy;
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.DefaultI18nContextProvider;
+import dev.orne.i18n.context.DummyI18nResources;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderByClassLoaderStrategy;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -123,7 +124,7 @@ class I18nSpringBaseConfigurationTest {
 
     @AfterEach
     void resetI18N() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     /**
@@ -660,11 +661,11 @@ class I18nSpringBaseConfigurationTest {
      */
     @Test
     void testAfterPropertiesSet() {
-        final I18nContextProvider previousProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider previousProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         final I18nContextProvider expected = configurer.createContextProvider();
         configurer.afterPropertiesSet();
-        final I18nContextProvider defaultProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider defaultProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         assertNotSame(previousProvider, defaultProvider);
         assertEquals(expected, defaultProvider);
     }
@@ -674,11 +675,11 @@ class I18nSpringBaseConfigurationTest {
      */
     @Test
     void testAfterPropertiesSet_ContextProvider() {
-        final I18nContextProvider previousProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider previousProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(this.provider);
         configurer.afterPropertiesSet();
-        final I18nContextProvider defaultProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider defaultProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         assertNotSame(previousProvider, defaultProvider);
         assertSame(this.provider, defaultProvider);
     }
@@ -688,12 +689,12 @@ class I18nSpringBaseConfigurationTest {
      */
     @Test
     void testAfterPropertiesSet_TargetClass() {
-        final I18nContextProvider previousProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider previousProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(this.provider);
         configurer.setTargetClass(I18nSpringBaseConfigurationTest.class);
         configurer.afterPropertiesSet();
-        final I18nContextProvider defaultProvider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider defaultProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         assertNotSame(previousProvider, defaultProvider);
         assertSame(this.provider, defaultProvider);
     }
@@ -849,7 +850,7 @@ class I18nSpringBaseConfigurationTest {
         public void run() {
             final TestI18nContextProviderByClassLoaderStrategy strategy =
                     new TestI18nContextProviderByClassLoaderStrategy();
-            I18N.setContextProviderStrategy(strategy);
+            I18nContextProviderStrategy.setInstance(strategy);
             final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setContextProvider(this.provider);
             if (this.targetClass != null) {
@@ -863,7 +864,7 @@ class I18nSpringBaseConfigurationTest {
                 }
             }
             configurer.afterPropertiesSet();
-                    I18N.getContextProviderStrategy();
+            I18nContextProviderStrategy.getInstance();
             resultDefaultProvider = strategy.getDefaultContextProvider();
             resultProviders = strategy.getContextProviders();
         }

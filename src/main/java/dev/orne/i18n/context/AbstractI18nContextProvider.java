@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -35,6 +35,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.I18nResources;
 import jakarta.validation.constraints.NotNull;
 
 /**

@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -21,9 +21,14 @@ package dev.orne.i18n;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -84,18 +89,18 @@ class I18nBundleResourcesTest {
 
     @BeforeAll
     static void saveDefaultStrategy() {
-        preTestsStrategy = I18N.getContextProviderStrategy();
+        preTestsStrategy = I18nContextProviderStrategy.getInstance();
     }
 
     @AfterAll
     static void restoreDefaultStrategy() {
-        I18N.setContextProviderStrategy(preTestsStrategy);
+        I18nContextProviderStrategy.setInstance(preTestsStrategy);
     }
 
     @BeforeEach
     void initMocks() {
         mocks = MockitoAnnotations.openMocks(this);
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_DEFAULT_LOCALE).given(mockContext).getLocale();

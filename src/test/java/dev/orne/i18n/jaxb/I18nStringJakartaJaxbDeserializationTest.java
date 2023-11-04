@@ -46,6 +46,8 @@ import dev.orne.i18n.I18nStringContainer;
 import dev.orne.i18n.I18nStringMap;
 import dev.orne.i18n.I18nStringMapAsObjectContainer;
 import dev.orne.i18n.I18nStringMapContainer;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
@@ -69,12 +71,12 @@ class I18nStringJakartaJaxbDeserializationTest {
 
     @AfterEach
     void clearI18nContext() {
-        I18N.clearContext();
+        I18nContextProvider.getInstance().clearContext();
     }
 
     @AfterAll
     static void resetI18N() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     private String randomXmlText() {

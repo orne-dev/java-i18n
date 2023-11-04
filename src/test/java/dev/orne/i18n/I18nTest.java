@@ -35,6 +35,12 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import dev.orne.i18n.context.DefaultI18nContextProvider;
+import dev.orne.i18n.context.DefaultI18nContextProviderStrategy;
+import dev.orne.i18n.context.I18nContext;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
+
 /**
  * Unit tests for {@code I18N}.
  *
@@ -58,7 +64,7 @@ class I18nTest {
 
     @BeforeAll
     static void saveDefaultStrategy() {
-        preTestsStrategy = I18N.getContextProviderStrategy();
+        preTestsStrategy =         I18nContextProviderStrategy.getInstance();
     }
 
     @BeforeEach
@@ -73,15 +79,15 @@ class I18nTest {
 
     @AfterEach
     void restoreDefaultStrategy() {
-        I18N.setContextProviderStrategy(preTestsStrategy);
+        I18nContextProviderStrategy.setInstance(preTestsStrategy);
     }
 
     /**
-     * Test {@link I18N#getContextProviderStrategy()}.
+     * Test {@link I18nContextProviderStrategy#getInstance()}.
      */
     @Test
     void testInitialContextProviderStrategy() {
-        final I18nContextProviderStrategy defaultStrategy = I18N.getContextProviderStrategy();
+        final I18nContextProviderStrategy defaultStrategy = I18nContextProviderStrategy.getInstance();
         assertNotNull(defaultStrategy);
         assertTrue(defaultStrategy instanceof DefaultI18nContextProviderStrategy);
         final DefaultI18nContextProviderStrategy byClStrategy =
@@ -92,36 +98,12 @@ class I18nTest {
     }
 
     /**
-     * Test {@link I18N#setContextProviderStrategy(I18nContextProviderStrategy)}.
+     * Test {@link I18nContextProviderStrategy#setInstance(I18nContextProviderStrategy)}.
      */
     @Test
     void testSetContextProviderStrategy() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        assertSame(mockStrategy, I18N.getContextProviderStrategy());
-    }
-
-    /**
-     * Test {@link I18N#setContextProviderStrategy(I18nContextProviderStrategy)}.
-     */
-    @Test
-    void testSetContextProviderStrategy_Null() {
-        assertThrows(NullPointerException.class, () -> {
-            I18N.setContextProviderStrategy(null);
-        });
-    }
-
-    /**
-     * Test {@link I18N#getContextProvider()}.
-     */
-    @Test
-    void testGetContextProvider() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        final I18nContextProvider result = I18N.getContextProvider();
-        assertSame(mockProvider, result);
-        then(mockStrategy).should().getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).shouldHaveNoInteractions();
+        I18nContextProviderStrategy.setInstance(mockStrategy);
+        assertSame(mockStrategy, I18nContextProviderStrategy.getInstance());
     }
 
     /**
@@ -129,7 +111,7 @@ class I18nTest {
      */
     @Test
     void testGetAvailableLocales() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         final Locale[] locales = new Locale[] {
                 Locale.ENGLISH,
                 Locale.FRENCH
@@ -146,14 +128,14 @@ class I18nTest {
     }
 
     /**
-     * Test {@link I18N#getDefaultI18nResources()}.
+     * Test {@link I18N#getI18nResources()}.
      */
     @Test
     void testGetDefaultI18nResources() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
-        final I18nResources result = I18N.getDefaultI18nResources();
+        final I18nResources result = I18N.getI18nResources();
         assertSame(mockResources, result);
         final InOrder order = inOrder(mockStrategy, mockProvider);
         then(mockStrategy).should(order).getContextProvider();
@@ -167,7 +149,7 @@ class I18nTest {
      */
     @Test
     void testGetI18nResources() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         final String key = "mock resources key";
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockResources).given(mockProvider).getI18nResources(key);
@@ -181,80 +163,11 @@ class I18nTest {
     }
 
     /**
-     * Test {@link I18N#getContext()}.
-     */
-    @Test
-    void testGetContext() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockContext).given(mockProvider).getContext();
-        final I18nContext result = I18N.getContext();
-        assertSame(mockContext, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getContext();
-        then(mockProvider).shouldHaveNoMoreInteractions();
-    }
-
-    /**
-     * Test {@link I18N#isContextAlive(I18nContext)}.
-     */
-    @Test
-    void testIsContextAlive() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(true).given(mockProvider).isContextAlive(mockContext);
-        final boolean result = I18N.isContextAlive(mockContext);
-        assertTrue(result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).isContextAlive(mockContext);
-        then(mockProvider).shouldHaveNoMoreInteractions();
-    }
-
-    /**
-     * Test {@link I18N#isContextAlive(I18nContext)}.
-     */
-    @Test
-    void testIsContextAlive_Null() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        final NullPointerException mockEx = new NullPointerException();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willThrow(mockEx).given(mockProvider).isContextAlive(null);
-        final NullPointerException result = assertThrows(NullPointerException.class, () -> {
-            I18N.isContextAlive(null);
-        });
-        assertSame(mockEx, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).isContextAlive(null);
-        then(mockProvider).shouldHaveNoMoreInteractions();
-    }
-
-    /**
-     * Test {@link I18N#clearContext()}.
-     */
-    @Test
-    void testClearContext() {
-        I18N.setContextProviderStrategy(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        I18N.clearContext();
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).clearContext();
-        then(mockProvider).shouldHaveNoMoreInteractions();
-    }
-
-    /**
      * Test {@link I18N#getLocale()}.
      */
     @Test
     void testGetLocale() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_LOCALE).given(mockContext).getLocale();
@@ -274,7 +187,7 @@ class I18nTest {
      */
     @Test
     void testSetLocale() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         I18N.setLocale(MOCK_LOCALE);
@@ -292,7 +205,7 @@ class I18nTest {
      */
     @Test
     void testSetLocale_Null() {
-        I18N.setContextProviderStrategy(mockStrategy);
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         final NullPointerException mockEx = new NullPointerException();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();

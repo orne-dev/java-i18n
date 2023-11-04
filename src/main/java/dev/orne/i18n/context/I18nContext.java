@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -22,53 +22,55 @@ package dev.orne.i18n;
  * #L%
  */
 
+import java.util.Locale;
+import java.util.UUID;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Strategy of selection of {@code I18nContextProvider}.
- * Provides a method to retrieve the provider for the current
- * {@code Thread}.
+ * Interface for I18N context. Contains the data required to return the I18N
+ * texts in user's language.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
- * @see I18nContextProvider
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
-public interface I18nContextProviderStrategy {
+public interface I18nContext {
 
     /**
-     * Returns the default {@code I18nContextProvider}.
-     * 
-     * @return The default {@code I18nContextProvider}
-     */
-    @NotNull I18nContextProvider getDefaultContextProvider();
-
-    /**
-     * Sets the default {@code I18nContextProvider}.
-     * 
-     * @param provider The default {@code I18nContextProvider}
-     */
-    void setDefaultContextProvider(
-            @NotNull I18nContextProvider provider);
-
-    /**
-     * Returns the {@code I18nContextProvider} to be used for the current
+     * Return the {@code I18nContext} associated with the current
      * {@code Thread}.
      * 
-     * @return The {@code I18nContextProvider} for the current {@code Thread}
+     * @return The I18N context.
      */
-    @NotNull I18nContextProvider getContextProvider();
+    @API(status=Status.STABLE, since="0.1")
+    public static @NotNull I18nContext getInstance() {
+        return I18nContextProvider.getInstance().getContext();
+    }
 
     /**
-     * Invalidates this strategy and all context providers, thus invalidating
-     * any previously created I18N contexts.
-     * <p>
-     * Effects of calling any other method after this one is left to
-     * implementations choice, and thus is discouraged.
+     * Returns the UUID of the provider owner of this context.
+     * 
+     * @return The UUID of the provider owner of this context
      */
-    void invalidate();
+    @NotNull UUID getProviderUUID();
+
+    /**
+     * Returns the user's language.
+     * 
+     * @return The user's language
+     */
+    @NotNull Locale getLocale();
+
+    /**
+     * Sets the user's language. If the argument is {@code null} the JVM
+     * default language is set.
+     * 
+     * @param language The user's language to set
+     */
+    void setLocale(Locale language);
 }

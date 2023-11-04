@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -100,7 +100,7 @@ extends AbstractI18nContextProvider {
      */
     public @NotNull I18nContext getContext() {
         I18nContext context = this.contexts.get();
-        if (context == null || !isContextAlive(context)) {
+        if (context == null || !isContextValid(context)) {
             context = createContext();
             this.contexts.set(context);
         }
@@ -111,7 +111,7 @@ extends AbstractI18nContextProvider {
      * The default contexts don't expire.
      */
     @Override
-    public boolean isContextAlive(
+    public boolean isContextValid(
             final @NotNull I18nContext context) {
         return Validate.notNull(context) == this.contexts.get() &&
                 getSessionUUID().equals(context.getProviderUUID());

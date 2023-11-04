@@ -28,6 +28,7 @@ import java.util.Locale;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.context.I18nContext;
 import jakarta.validation.constraints.NotNull;
 
 /**

@@ -1,4 +1,4 @@
-package dev.orne.i18n;
+package dev.orne.i18n.context;
 
 /*-
  * #%L
@@ -40,15 +40,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import dev.orne.i18n.I18N;
+import dev.orne.i18n.I18nConfigurationException;
+import dev.orne.i18n.context.I18nContextProviderStrategy.I18nContextProviderStrategyLoader;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Unit tests for {@code I18N} runtime configuration.
+ * Unit tests for {@code I18nContextProviderStrategy} runtime configuration.
  *
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
- * @see I18N
+ * @see I18nContextProviderStrategy
  */
 @Tag("ut")
 class I18nConfigurationTest {
@@ -69,14 +72,14 @@ class I18nConfigurationTest {
 
     @AfterEach
     public void resetI18N() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     private ClassLoader createConfigClassLoader(
             final @NotNull Properties config)
     throws IOException {
         this.tmpFolder = Files.createTempDirectory("testTmp");
-        this.cfgFile = tmpFolder.resolve(I18N.CONFIG_FILE);
+        this.cfgFile = tmpFolder.resolve(I18nConfiguration.FILE);
         try (final OutputStream out = Files.newOutputStream(cfgFile)) {
             config.store(out, null);
         }
@@ -87,114 +90,115 @@ class I18nConfigurationTest {
     }
 
     /**
-     * Test {@link I18N#loadConfiguration(ClassLoader)}.
+     * Test {@link I18nContextProviderStrategyLoader#loadConfiguration(ClassLoader)}.
      */
     @Test
     void testLoadConfiguration()
     throws IOException {
         final Properties expected = new Properties();
-        expected.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
+        expected.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
         expected.setProperty("mock.prop", "mock.value");
         final ClassLoader cl = createConfigClassLoader(expected);
-        final Properties result = I18N.loadConfiguration(cl);
+        final Properties result = I18nContextProviderStrategyLoader.loadConfiguration(cl);
         assertEquals(expected, result);
     }
 
     /**
-     * Test {@link I18N#loadConfiguration(ClassLoader)}.
+     * Test {@link I18nContextProviderStrategyLoader#loadConfiguration(ClassLoader)}.
      */
     @Test
     void testLoadConfiguration_NotFound()
     throws Exception {
-        final Properties result = I18N.loadConfiguration(Thread.currentThread().getContextClassLoader());
+        final Properties result = I18nContextProviderStrategyLoader.loadConfiguration(
+                Thread.currentThread().getContextClassLoader());
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     /**
-     * Test {@link I18N#loadConfiguration(ClassLoader)}.
+     * Test {@link I18nContextProviderStrategyLoader#loadConfiguration(ClassLoader)}.
      */
     @Test
     void testLoadConfiguration_IOException()
     throws Exception {
         final ClassLoader cl = mock(ClassLoader.class);
         final InputStream is = mock(InputStream.class);
-        willReturn(is).given(cl).getResourceAsStream(I18N.CONFIG_FILE);
+        willReturn(is).given(cl).getResourceAsStream(I18nConfiguration.FILE);
         willThrow(IOException.class).given(is).read();
         willThrow(IOException.class).given(is).read(any());
         willThrow(IOException.class).given(is).read(any(), anyInt(), anyInt());
-        final Properties result = I18N.loadConfiguration(cl);
+        final Properties result = I18nContextProviderStrategyLoader.loadConfiguration(cl);
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     /**
-     * Test {@link I18N#getCustomStrategyClass(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategyClass(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategyClass()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
-        final Class<? extends I18nContextProviderStrategy> result = I18N.getCustomStrategyClass(
+        config.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
+        final Class<? extends I18nContextProviderStrategy> result = I18nContextProviderStrategyLoader.getCustomStrategyClass(
                 Thread.currentThread().getContextClassLoader(),
                 config);
         assertSame(CustomI18nContextProviderStrategy.class, result);
     }
 
     /**
-     * Test {@link I18N#getCustomStrategyClass(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategyClass(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategyClass_NotFound()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, "dev.orne.i18n.I18nConfigurationTest.MissingClass");
+        config.setProperty(I18nConfiguration.STRATEGY, "dev.orne.i18n.I18nConfigurationTest.MissingClass");
         assertThrows(I18nConfigurationException.class, () -> {
-            I18N.getCustomStrategyClass(
+            I18nContextProviderStrategyLoader.getCustomStrategyClass(
                     Thread.currentThread().getContextClassLoader(),
                     config);
         });
     }
 
     /**
-     * Test {@link I18N#getCustomStrategyClass(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategyClass(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategyClass_NotValid()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, I18nConfigurationTest.class.getName());
+        config.setProperty(I18nConfiguration.STRATEGY, I18nConfigurationTest.class.getName());
         assertThrows(I18nConfigurationException.class, () -> {
-            I18N.getCustomStrategyClass(
+            I18nContextProviderStrategyLoader.getCustomStrategyClass(
                     Thread.currentThread().getContextClassLoader(),
                     config);
         });
     }
 
     /**
-     * Test {@link I18N#getCustomStrategy(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategy(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategy()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
-        final I18nContextProviderStrategy result = I18N.getCustomStrategy(
+        config.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
+        final I18nContextProviderStrategy result = I18nContextProviderStrategyLoader.getCustomStrategy(
                 Thread.currentThread().getContextClassLoader(),
                 config);
         assertTrue(result instanceof CustomI18nContextProviderStrategy);
     }
 
     /**
-     * Test {@link I18N#getCustomStrategy(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategy(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategy_PropertiesConstructor()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomConfigurableI18nContextProviderStrategy.class.getName());
-        final I18nContextProviderStrategy result = I18N.getCustomStrategy(
+        config.setProperty(I18nConfiguration.STRATEGY, CustomConfigurableI18nContextProviderStrategy.class.getName());
+        final I18nContextProviderStrategy result = I18nContextProviderStrategyLoader.getCustomStrategy(
                 Thread.currentThread().getContextClassLoader(),
                 config);
         assertTrue(result instanceof CustomConfigurableI18nContextProviderStrategy);
@@ -202,71 +206,71 @@ class I18nConfigurationTest {
     }
 
     /**
-     * Test {@link I18N#getCustomStrategy(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategy(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategy_NonAccesibleConstructor()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomNonAccesibleI18nContextProviderStrategy.class.getName());
+        config.setProperty(I18nConfiguration.STRATEGY, CustomNonAccesibleI18nContextProviderStrategy.class.getName());
         assertThrows(I18nConfigurationException.class, () -> {
-            I18N.getCustomStrategy(
+            I18nContextProviderStrategyLoader.getCustomStrategy(
                     Thread.currentThread().getContextClassLoader(),
                     config);
         });
     }
 
     /**
-     * Test {@link I18N#getCustomStrategy(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategy(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategy_ConstructorError()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomFlawedI18nContextProviderStrategy.class.getName());
+        config.setProperty(I18nConfiguration.STRATEGY, CustomFlawedI18nContextProviderStrategy.class.getName());
         assertThrows(I18nConfigurationException.class, () -> {
-            I18N.getCustomStrategy(
+            I18nContextProviderStrategyLoader.getCustomStrategy(
                     Thread.currentThread().getContextClassLoader(),
                     config);
         });
     }
 
     /**
-     * Test {@link I18N#getCustomStrategy(ClassLoader, Properties)}.
+     * Test {@link I18nContextProviderStrategyLoader#getCustomStrategy(ClassLoader, Properties)}.
      */
     @Test
     void testGetCustomStrategy_PropertiesConstructorError()
     throws Exception {
         final Properties config = new Properties();
-        config.setProperty(I18N.STRATEGY_PROP, CustomFlawedConfigurableI18nContextProviderStrategy.class.getName());
+        config.setProperty(I18nConfiguration.STRATEGY, CustomFlawedConfigurableI18nContextProviderStrategy.class.getName());
         assertThrows(I18nConfigurationException.class, () -> {
-            I18N.getCustomStrategy(
+            I18nContextProviderStrategyLoader.getCustomStrategy(
                     Thread.currentThread().getContextClassLoader(),
                     config);
         });
     }
 
     /**
-     * Test {@link I18N#createStrategy(ClassLoader)}.
+     * Test {@link I18nContextProviderStrategyLoader#createStrategy(ClassLoader)}.
      */
     @Test
     void testCreateStrategy_ClassLoader()
     throws IOException {
         final Properties expected = new Properties();
-        expected.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
+        expected.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
         final ClassLoader cl = createConfigClassLoader(expected);
-        final I18nContextProviderStrategy result = I18N.createStrategy(cl);
+        final I18nContextProviderStrategy result = I18nContextProviderStrategyLoader.createStrategy(cl);
         assertTrue(result instanceof CustomI18nContextProviderStrategy);
     }
 
     /**
-     * Test {@link I18N#createStrategy()}.
+     * Test {@link I18nContextProviderStrategyLoader#createStrategy()}.
      */
     @Test
     void testCreateStrategy()
     throws IOException, InterruptedException {
         final Properties expected = new Properties();
-        expected.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
+        expected.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
         final ClassLoader cl = createConfigClassLoader(expected);
         final CreateStrategyTestRunnable childTest = new CreateStrategyTestRunnable();
         final Thread child = new Thread(childTest);
@@ -277,13 +281,13 @@ class I18nConfigurationTest {
     }
 
     /**
-     * Test {@link I18N#getContextProviderStrategy()}.
+     * Test {@link I18nContextProviderStrategy#getInstance()}.
      */
     @Test
     void testGetContextProviderStrategy()
     throws IOException, InterruptedException {
         final Properties expected = new Properties();
-        expected.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
+        expected.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
         final ClassLoader cl = createConfigClassLoader(expected);
         final GetContextProviderStrategyRunnable childTest = new GetContextProviderStrategyRunnable();
         final Thread child = new Thread(childTest);
@@ -291,7 +295,7 @@ class I18nConfigurationTest {
         child.start();
         child.join();
         assertTrue(childTest.result instanceof CustomI18nContextProviderStrategy);
-        assertSame(childTest.result, I18N.getContextProviderStrategy());
+        assertSame(childTest.result, I18nContextProviderStrategy.getInstance());
     }
 
     /**
@@ -300,10 +304,10 @@ class I18nConfigurationTest {
     @Test
     void testReconfigure()
     throws IOException, InterruptedException {
-        final I18nContextProviderStrategy defaultStrategy = I18N.getContextProviderStrategy();
+        final I18nContextProviderStrategy defaultStrategy = I18nContextProviderStrategy.getInstance();
         assertTrue(defaultStrategy instanceof DefaultI18nContextProviderStrategy);
         final Properties expected = new Properties();
-        expected.setProperty(I18N.STRATEGY_PROP, CustomI18nContextProviderStrategy.class.getName());
+        expected.setProperty(I18nConfiguration.STRATEGY, CustomI18nContextProviderStrategy.class.getName());
         final ClassLoader cl = createConfigClassLoader(expected);
         final GetContextProviderStrategyRunnable childTest = new GetContextProviderStrategyRunnable();
         Thread child = new Thread(childTest);
@@ -311,14 +315,14 @@ class I18nConfigurationTest {
         child.start();
         child.join();
         assertSame(defaultStrategy, childTest.result);
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
         child = new Thread(childTest);
         child.setContextClassLoader(cl);
         child.start();
         child.join();
         assertTrue(childTest.result instanceof CustomI18nContextProviderStrategy);
-        assertSame(childTest.result, I18N.getContextProviderStrategy());
-        I18N.reconfigure();
+        assertSame(childTest.result, I18nContextProviderStrategy.getInstance());
+        I18nContextProviderStrategy.setInstance(null);
         child = new Thread(childTest);
         child.start();
         child.join();
@@ -472,7 +476,7 @@ class I18nConfigurationTest {
         private I18nContextProviderStrategy result;
         @Override
         public void run() {
-            this.result = I18N.createStrategy();
+            this.result = I18nContextProviderStrategyLoader.createStrategy();
         }
     }
 
@@ -481,7 +485,7 @@ class I18nConfigurationTest {
         private I18nContextProviderStrategy result;
         @Override
         public void run() {
-            this.result = I18N.getContextProviderStrategy();
+            this.result = I18nContextProviderStrategy.getInstance();
         }
     }
 }
