@@ -22,6 +22,8 @@ package dev.orne.i18n.context;
  * #L%
  */
 
+import java.util.Properties;
+
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -40,6 +42,9 @@ import jakarta.validation.constraints.NotNull;
 @API(status=Status.STABLE, since="0.1")
 public class DefaultI18nContextProviderStrategy
 implements I18nContextProviderStrategy {
+
+    /** The I18N context provider strategy type. */
+    public static final String TYPE = "DEFAULT";
 
     /** The default {@code I18nContextProvider}. */
     private @NotNull I18nContextProvider defaultContextProvider;
@@ -95,5 +100,34 @@ implements I18nContextProviderStrategy {
     @Override
     public void invalidate() {
         this.defaultContextProvider.invalidate();
+    }
+
+    /**
+     * Default I18N context provider strategy configuration
+     * service provider.
+     * 
+     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @version 1.0, 2023-12
+     * @since 0.1
+     */
+    public static class Configurer
+    implements I18nContextProviderStrategyConfigurer {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull String getType() {
+            return TYPE;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull I18nContextProviderStrategy create(
+                @NotNull Properties config) {
+            return new DefaultI18nContextProviderStrategy();
+        }
     }
 }

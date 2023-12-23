@@ -4,7 +4,7 @@ package dev.orne.i18n.context;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2021 - 2023 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,6 +24,8 @@ package dev.orne.i18n.context;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+
+import java.util.Properties;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -131,5 +133,25 @@ class DefaultI18nContextProviderStrategyTest {
                 new DefaultI18nContextProviderStrategy(mockDefaultProvider);
         strategy.invalidate();
         then(mockDefaultProvider).should().invalidate();
+    }
+
+    /**
+     * Test {@link DefaultI18nContextProviderStrategy.Configurer#create(Properties)}.
+     */
+    @Test
+    void testConfigurer() {
+        final DefaultI18nContextProviderStrategy.Configurer configurer =
+                new DefaultI18nContextProviderStrategy.Configurer();
+        assertEquals(DefaultI18nContextProviderStrategy.TYPE, configurer.getType());
+        final Properties config = mock(Properties.class);
+        I18nContextProviderStrategy result = configurer.create(config);
+        assertInstanceOf(DefaultI18nContextProviderStrategy.class, result);
+        then(config).shouldHaveNoInteractions();
+        
+        given(config.getProperty(I18nConfiguration.STRATEGY)).willReturn(DefaultI18nContextProviderStrategy.TYPE);
+        result = I18nContextProviderStrategyConfigurer.configure(config);
+        assertInstanceOf(DefaultI18nContextProviderStrategy.class, result);
+        then(config).should().getProperty(I18nConfiguration.STRATEGY);
+        then(config).shouldHaveNoMoreInteractions();
     }
 }

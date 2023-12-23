@@ -23,6 +23,7 @@ package dev.orne.i18n.context;
  */
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.WeakHashMap;
 
 import org.apache.commons.lang3.Validate;
@@ -44,6 +45,9 @@ import jakarta.validation.constraints.NotNull;
 public class I18nContextProviderByClassLoaderStrategy
 extends DefaultI18nContextProviderStrategy
 implements I18nContextProviderConfigurableStrategy {
+
+    /** The I18N context provider strategy type. */
+    public static final String TYPE = "CLASSLOADER";
 
     /** The {@code I18nContextProvider} mapping per {@code ClassLoader}. */
     private final @NotNull Map<@NotNull ClassLoader, dev.orne.i18n.context.I18nContextProvider> contextProviders;
@@ -185,5 +189,34 @@ implements I18nContextProviderConfigurableStrategy {
             provider.invalidate();
         }
         super.invalidate();
+    }
+
+    /**
+     * Class loader based I18N context provider strategy configuration
+     * service provider.
+     * 
+     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @version 1.0, 2023-12
+     * @since 0.1
+     */
+    public static class Configurer
+    implements I18nContextProviderStrategyConfigurer {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull String getType() {
+            return TYPE;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull I18nContextProviderStrategy create(
+                @NotNull Properties config) {
+            return new I18nContextProviderByClassLoaderStrategy();
+        }
     }
 }

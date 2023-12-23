@@ -4,7 +4,7 @@ package dev.orne.i18n.context;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2021 - 2023 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,10 +24,12 @@ package dev.orne.i18n.context;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.mock;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -422,6 +424,26 @@ class I18nContextProviderByClassLoaderStrategyTest {
         strategy.invalidate();
         then(mockDefaultProvider).should().invalidate();
         then(mockProvider).should().invalidate();
+    }
+
+    /**
+     * Test {@link I18nContextProviderByClassLoaderStrategy.Configurer#create(Properties)}.
+     */
+    @Test
+    void testConfigurer() {
+        final I18nContextProviderByClassLoaderStrategy.Configurer configurer =
+                new I18nContextProviderByClassLoaderStrategy.Configurer();
+        assertEquals(I18nContextProviderByClassLoaderStrategy.TYPE, configurer.getType());
+        final Properties config = mock(Properties.class);
+        I18nContextProviderStrategy result = configurer.create(config);
+        assertInstanceOf(I18nContextProviderByClassLoaderStrategy.class, result);
+        then(config).shouldHaveNoInteractions();
+        
+        given(config.getProperty(I18nConfiguration.STRATEGY)).willReturn(I18nContextProviderByClassLoaderStrategy.TYPE);
+        result = I18nContextProviderStrategyConfigurer.configure(config);
+        assertInstanceOf(I18nContextProviderByClassLoaderStrategy.class, result);
+        then(config).should().getProperty(I18nConfiguration.STRATEGY);
+        then(config).shouldHaveNoMoreInteractions();
     }
 
     static class MockClassLoader
