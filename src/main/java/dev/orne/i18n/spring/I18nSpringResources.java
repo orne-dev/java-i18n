@@ -45,7 +45,7 @@ import jakarta.validation.constraints.NotNull;
  * @see MessageSource
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.STABLE, since="0.1")
 public class I18nSpringResources
 implements I18nResources {
 

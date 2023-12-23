@@ -57,10 +57,17 @@ implements I18nContextProvider {
             Locale.getAvailableLocales();
     /** The default I18N resources. */
     private @NotNull I18nResources defaultI18nResources =
-            DummyI18nResources.INSTANCE;
+            DummyI18nResources.getInstance();
     /** The alternative I18N resources by key. */
     private final @NotNull Map<@NotNull String, @NotNull I18nResources> i18nResources =
             new HashMap<>();
+
+    /**
+     * Creates a new instance.
+     */
+    protected AbstractI18nContextProvider() {
+        super();
+    }
 
     /**
      * Returns the UUID of this provider instance and session.
@@ -195,7 +202,7 @@ implements I18nContextProvider {
     public synchronized void invalidate() {
         this.sessionUUID = UUID.randomUUID();
         this.availableLocales = Locale.getAvailableLocales();
-        this.defaultI18nResources = DummyI18nResources.INSTANCE;
+        this.defaultI18nResources = DummyI18nResources.getInstance();
         this.i18nResources.clear();
     }
 

@@ -42,11 +42,19 @@ import dev.orne.i18n.I18nString;
  * @see I18nString
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.INTERNAL, since="0.1")
 public class PatternValidatorForI18nString
 extends AbstractValidatorForI18nString<Pattern> {
 
+    /** The regular expression to match. */
     private java.util.regex.Pattern pattern;
+
+    /**
+     * Creates a new instance.
+     */
+    public PatternValidatorForI18nString() {
+        super();
+    }
 
     /**
      * {@inheritDoc}

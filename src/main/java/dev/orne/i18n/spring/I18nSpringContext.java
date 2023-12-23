@@ -49,7 +49,7 @@ import jakarta.validation.constraints.NotNull;
  * @see LocaleContextHolder
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.STABLE, since="0.1")
 public class I18nSpringContext
 implements I18nContext, Serializable {
 

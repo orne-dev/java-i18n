@@ -42,6 +42,13 @@ public class I18nFixedStringAdapter
 extends XmlAdapter<XmlI18nString, I18nFixedString> {
 
     /**
+     * Creates a new instance.
+     */
+    public I18nFixedStringAdapter() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

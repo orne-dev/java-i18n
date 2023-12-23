@@ -40,6 +40,13 @@ public class I18nStringMapEditor
 extends PropertyEditorSupport {
 
     /**
+     * Creates a new instance.
+     */
+    public I18nStringMapEditor() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

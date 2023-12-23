@@ -44,7 +44,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nContext
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.STABLE, since="0.1")
 public class DefaultI18nContext
 implements I18nContext, Serializable {
 

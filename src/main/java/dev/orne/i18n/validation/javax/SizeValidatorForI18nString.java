@@ -40,12 +40,21 @@ import dev.orne.i18n.I18nString;
  * @see I18nString
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.INTERNAL, since="0.1")
 public class SizeValidatorForI18nString
 extends AbstractValidatorForI18nString<Size> {
 
+    /** The size the strings must be higher or equal to. */
     private int min;
+    /** The size the strings must be lower or equal to. */
     private int max;
+
+    /**
+     * Creates a new instance.
+     */
+    public SizeValidatorForI18nString() {
+        super();
+    }
 
     /**
      * {@inheritDoc}

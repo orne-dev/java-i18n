@@ -48,7 +48,7 @@ import dev.orne.i18n.context.I18nContextProvider;
  * @see I18nSpringContextProvider
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.STABLE, since="0.1")
 @Configuration
 @Import(I18nSpringConfiguration.Selector.class)
 public class I18nSpringConfiguration {
@@ -77,6 +77,13 @@ public class I18nSpringConfiguration {
         private static final String WEB_CONFIGURATION = "dev.orne.i18n.spring.I18nSpringWebConfiguration";
         /** Class of default configuration. */
         private static final String BASE_CONFIGURATION = "dev.orne.i18n.spring.I18nSpringBaseConfiguration";
+
+        /**
+         * Creates a new instance.
+         */
+        public Selector() {
+            super();
+        }
 
         /**
          * {@inheritDoc}

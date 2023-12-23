@@ -30,7 +30,7 @@ package dev.orne.i18n;
  * @see I18nString
  * @since 0.1
  */
-public class I18nXmlSchema {
+public final class I18nXmlSchema {
 
     /** The package name space. */
     public static final String NS = "http://orne.dev/i18n/";

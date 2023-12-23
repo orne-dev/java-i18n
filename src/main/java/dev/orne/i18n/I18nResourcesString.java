@@ -328,6 +328,7 @@ implements I18nString {
         }
 
         /**
+         * Adds the specified argument to the text arguments of this builder.
          * 
          * @param arg The text argument, applied to resolved or
          * default text
@@ -339,6 +340,7 @@ implements I18nString {
         }
 
         /**
+         * Adds the specified arguments to the text arguments of this builder.
          * 
          * @param args The text arguments, applied to resolved text or
          * default text

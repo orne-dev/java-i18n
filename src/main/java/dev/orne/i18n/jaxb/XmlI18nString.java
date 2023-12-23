@@ -90,6 +90,13 @@ implements Serializable {
     private List<Serializable> content;
 
     /**
+     * Creates a new instance.
+     */
+    public XmlI18nString() {
+        super();
+    }
+
+    /**
      * Gets the contents of the I18N string.
      * <p>
      * This accessor method returns a reference to the live list, not a

@@ -47,7 +47,7 @@ public interface I18nContext {
      * 
      * @return The I18N context.
      */
-    @API(status=Status.STABLE, since="0.1")
+    @API(status=Status.EXPERIMENTAL, since="0.1")
     public static @NotNull I18nContext getInstance() {
         return I18nContextProvider.getInstance().getContext();
     }

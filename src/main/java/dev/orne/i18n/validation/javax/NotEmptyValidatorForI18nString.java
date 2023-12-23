@@ -41,9 +41,16 @@ import dev.orne.i18n.I18nString;
  * @see I18nString
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.INTERNAL, since="0.1")
 public class NotEmptyValidatorForI18nString
 extends AbstractValidatorForI18nString<NotEmpty> {
+
+    /**
+     * Creates a new instance.
+     */
+    public NotEmptyValidatorForI18nString() {
+        super();
+    }
 
     /**
      * {@inheritDoc}

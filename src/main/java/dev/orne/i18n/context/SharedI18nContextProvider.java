@@ -46,6 +46,13 @@ extends AbstractI18nContextProvider {
     private I18nContext context;
 
     /**
+     * Creates a new instance.
+     */
+    public SharedI18nContextProvider() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

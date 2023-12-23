@@ -47,7 +47,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nSpringResources
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.STABLE, since="0.1")
 public class I18nSpringContextProvider
 extends DefaultI18nContextProvider {
 

@@ -64,7 +64,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG,
                 MOCK_MSG_CODE,
                 ARGS);
@@ -76,7 +76,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Formatted() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_TMPL,
                 MOCK_MSG_CODE,
                 ARGS);
@@ -88,7 +88,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_InvalidTemplate() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_INV_TMPL,
                 MOCK_MSG_CODE,
                 ARGS);
@@ -100,7 +100,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Codes() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG,
                 CODES,
                 ARGS);
@@ -112,7 +112,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Codes_Formatted() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_TMPL,
                 CODES,
                 ARGS);
@@ -124,7 +124,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Codes_InvalidTemplate() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_INV_TMPL,
                 CODES,
                 ARGS);
@@ -136,7 +136,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Locale() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG,
                 MOCK_MSG_CODE,
                 MOCK_DEFAULT_LOCALE,
@@ -149,7 +149,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Locale_Formatted() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_TMPL,
                 MOCK_MSG_CODE,
                 MOCK_DEFAULT_LOCALE,
@@ -162,7 +162,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Locale_InvalidTemplate() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_INV_TMPL,
                 MOCK_MSG_CODE,
                 MOCK_DEFAULT_LOCALE,
@@ -175,7 +175,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Locale_Codes() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG,
                 CODES,
                 MOCK_DEFAULT_LOCALE,
@@ -188,7 +188,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Locale_Codes_Formatted() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_TMPL,
                 CODES,
                 MOCK_DEFAULT_LOCALE,
@@ -201,7 +201,7 @@ class DummyI18nResourcesTest {
      */
     @Test
     void testGetMessage_Locale_Codes_InvalidTemplate() {
-        final String result = DummyI18nResources.INSTANCE.getMessage(
+        final String result = DummyI18nResources.getInstance().getMessage(
                 MOCK_DEF_MSG_INV_TMPL,
                 CODES,
                 MOCK_DEFAULT_LOCALE,

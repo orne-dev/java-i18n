@@ -41,6 +41,13 @@ public class I18nResourcesStringAdapter
 extends XmlAdapter<XmlI18nString, I18nResourcesString> {
 
     /**
+     * Creates a new instance.
+     */
+    public I18nResourcesStringAdapter() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -69,6 +76,13 @@ extends XmlAdapter<XmlI18nString, I18nResourcesString> {
     @API(status=Status.STABLE, since="0.1")
     public static class Full
     extends I18nResourcesStringAdapter {
+
+        /**
+         * Creates a new instance.
+         */
+        public Full() {
+            super();
+        }
 
         /**
          * {@inheritDoc}

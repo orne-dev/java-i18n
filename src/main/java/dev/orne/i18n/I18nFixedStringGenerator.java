@@ -39,10 +39,17 @@ import dev.orne.test.rnd.params.StringGenerationParameters;
  * @version 1.0, 2023-10
  * @since 0.1
  */
-@API(status=Status.STABLE, since="0.1")
+@API(status=Status.INTERNAL, since="0.1")
 @Priority(Priority.NATIVE_GENERATORS)
 public class I18nFixedStringGenerator
 extends AbstractTypedParameterizableGenerator<I18nFixedString, StringGenerationParameters> {
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nFixedStringGenerator() {
+        super();
+    }
 
     /**
      * {@inheritDoc}

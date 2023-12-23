@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,7 @@ import jakarta.validation.constraints.NotNull;
  * @version 1.0, 2023-11
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public final class I18nConfiguration {
 
     /** The class logger. */
@@ -67,6 +70,7 @@ public final class I18nConfiguration {
      * @return The configuration properties
      * @see #FILE
      */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
     public static @NotNull Properties load() {
         return load(Thread.currentThread().getContextClassLoader());
     }
@@ -80,6 +84,7 @@ public final class I18nConfiguration {
      * @return The configuration properties.
      * @see #FILE
      */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
     public static @NotNull Properties load(
             final @NotNull ClassLoader cl) {
         Validate.notNull(cl);

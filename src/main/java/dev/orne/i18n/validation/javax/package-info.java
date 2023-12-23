@@ -2,7 +2,6 @@
  * Javax Validation integration for I18N support.
  * 
  * @since 0.1, 2021-02
- * @deprecated Use Jakarta Bean Validation 3.0 if possible.
  */
 package dev.orne.i18n.validation.javax;
 

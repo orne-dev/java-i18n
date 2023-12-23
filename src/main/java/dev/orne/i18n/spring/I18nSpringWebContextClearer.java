@@ -22,6 +22,9 @@ package dev.orne.i18n.spring;
  * #L%
  */
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -37,11 +40,19 @@ import dev.orne.i18n.context.I18nContextProvider;
  * @version 1.0, 2023-05
  * @since 0.1
  */
+@API(status=Status.STABLE, since="0.1")
 public class I18nSpringWebContextClearer
 implements ApplicationListener<RequestHandledEvent> {
 
     /** El logger de la clase.*/
     private static final Logger LOG = LoggerFactory.getLogger(I18nSpringWebContextClearer.class);
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nSpringWebContextClearer() {
+        super();
+    }
 
     /**
      * {@inheritDoc}

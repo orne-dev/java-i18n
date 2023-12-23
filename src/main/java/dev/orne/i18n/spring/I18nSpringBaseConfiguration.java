@@ -52,10 +52,12 @@ import jakarta.validation.constraints.NotNull;
  * {@code I18nSpringContextProvider} by default).
  * <p>
  * By default configures the provider for all {@code ClassLoader}s.
- * In J2EE environments supports selecting a target class that will configure
+ * Supports selecting a target class that will configure
  * the provider for the {@code ClassLoader} of the given class and all its
  * children {@code ClassLoader}, allowing different configurations for each
- * application even when the library is deployed as a shared library.
+ * application even when the library is deployed as a shared library or
+ * different configurations for each sub-module when the library is deployed
+ * at EAR level in JavaEE environments.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 1.0, 2023-05
@@ -63,7 +65,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nSpringContextProvider
  * @since 0.1
  */
-@API(status=Status.MAINTAINED, since="0.1")
+@API(status=Status.STABLE, since="0.1")
 @Configuration
 public class I18nSpringBaseConfiguration
 implements InitializingBean, ImportAware {
@@ -95,6 +97,13 @@ implements InitializingBean, ImportAware {
     private Map<String, I18nResources> namedI18nResources;
     /** The custom I18N context provider to use. */
     private I18nContextProvider contextProvider;
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nSpringBaseConfiguration() {
+        super();
+    }
 
     /**
      * Returns the Spring context.
@@ -133,6 +142,12 @@ implements InitializingBean, ImportAware {
      * will be applied to.
      * <p>
      * If {@code null} the configuration will be applied as default provider.
+     * <p>
+     * The following values have special meaning:
+     * <ul>
+     * <li>java.lang.Thread - Current thread class loader</li>
+     * <li>java.lang.System - System class loader</li>
+     * </ul>
      * 
      * @param targetClass The target class
      */

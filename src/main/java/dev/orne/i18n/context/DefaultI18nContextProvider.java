@@ -31,7 +31,8 @@ import org.apiguardian.api.API.Status;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Default implementation of {@code I18nContextProvider}.
+ * Default implementation of {@code I18nContextProvider} that provides a
+ * different {@code I18nContext} for each thread.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
  * @version 2.0, 2022-12

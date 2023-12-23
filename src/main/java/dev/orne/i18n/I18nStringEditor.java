@@ -40,6 +40,13 @@ public class I18nStringEditor
 extends PropertyEditorSupport {
 
     /**
+     * Creates a new instance.
+     */
+    public I18nStringEditor() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

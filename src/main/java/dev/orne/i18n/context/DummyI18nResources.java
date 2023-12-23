@@ -45,16 +45,22 @@ import jakarta.validation.constraints.NotNull;
 public class DummyI18nResources
 implements I18nResources {
 
-    /** The invariant shared instance. */
-    public static final DummyI18nResources INSTANCE = new DummyI18nResources();
-
     /**
      * Private constructor. Use shared instance.
      * 
-     * @see DummyI18nResources#INSTANCE
+     * @see DummyI18nResources#getInstance()
      */
     private DummyI18nResources() {
         super();
+    }
+
+    /**
+     * Returns the shared instance.
+     * 
+     * @return The shared instance.
+     */
+    public static @NotNull DummyI18nResources getInstance() {
+        return InstanceHolder.INSTANCE;
     }
 
     /**
@@ -106,5 +112,25 @@ implements I18nResources {
             final Locale locale,
             final Object... params) {
         return getMessage(defaultMessage, (String) null, params);
+    }
+
+    /**
+     * Shared instance lazy initialization class.
+     * 
+     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @version 1.0, 2021-01
+     * @since 0.1
+     */
+    private static final class InstanceHolder {
+
+        /** The invariant shared instance. */
+        private static final DummyI18nResources INSTANCE = new DummyI18nResources();
+
+        /**
+         * Private constructor.
+         */
+        private InstanceHolder() {
+            // Utility class
+        }
     }
 }

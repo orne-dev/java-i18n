@@ -27,6 +27,9 @@ import java.util.ServiceLoader;
 
 import javax.validation.constraints.NotNull;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import dev.orne.i18n.I18nConfigurationException;
 
 /**
@@ -37,6 +40,7 @@ import dev.orne.i18n.I18nConfigurationException;
  * @see I18nContextProviderStrategy
  * @since 0.1
  */
+@API(status=Status.EXPERIMENTAL, since="0.1")
 public interface I18nContextProviderStrategyConfigurer {
 
     /**

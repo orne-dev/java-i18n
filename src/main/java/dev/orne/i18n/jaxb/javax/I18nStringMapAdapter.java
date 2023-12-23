@@ -42,6 +42,13 @@ public class I18nStringMapAdapter
 extends XmlAdapter<XmlI18nString, I18nStringMap> {
 
     /**
+     * Creates a new instance.
+     */
+    public I18nStringMapAdapter() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -69,6 +76,13 @@ extends XmlAdapter<XmlI18nString, I18nStringMap> {
     @API(status=Status.STABLE, since="0.1")
     public static class Full
     extends I18nStringMapAdapter {
+
+        /**
+         * Creates a new instance.
+         */
+        public Full() {
+            super();
+        }
 
         /**
          * {@inheritDoc}

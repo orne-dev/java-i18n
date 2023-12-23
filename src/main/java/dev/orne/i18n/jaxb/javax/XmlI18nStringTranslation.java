@@ -85,6 +85,13 @@ implements Serializable {
     protected String value;
 
     /**
+     * Creates a new instance.
+     */
+    public XmlI18nStringTranslation() {
+        super();
+    }
+
+    /**
      * Gets the translation language.
      * 
      * @return The translation language

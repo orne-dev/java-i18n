@@ -199,8 +199,16 @@ implements I18nContextProviderConfigurableStrategy {
      * @version 1.0, 2023-12
      * @since 0.1
      */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
     public static class Configurer
     implements I18nContextProviderStrategyConfigurer {
+
+        /**
+         * Creates a new instance.
+         */
+        public Configurer() {
+            super();
+        }
 
         /**
          * {@inheritDoc}

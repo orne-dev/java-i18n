@@ -40,7 +40,7 @@ import dev.orne.test.rnd.params.StringGenerationParameters;
  * @version 1.0, 2023-10
  * @since 0.1
  */
-@API(status=Status.STABLE, since="0.1")
+@API(status=Status.INTERNAL, since="0.1")
 @Priority(Priority.NATIVE_GENERATORS)
 public class I18nResourcesStringGenerator
 extends AbstractTypedParameterizableGenerator<I18nResourcesString, StringGenerationParameters> {
@@ -53,6 +53,13 @@ extends AbstractTypedParameterizableGenerator<I18nResourcesString, StringGenerat
     protected static final int MIN_ARGS = 0;
     /** The maximum random message arguments. */
     protected static final int MAX_ARGS = 3;
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nResourcesStringGenerator() {
+        super();
+    }
 
     /**
      * {@inheritDoc}
