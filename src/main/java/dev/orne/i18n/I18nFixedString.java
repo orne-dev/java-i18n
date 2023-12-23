@@ -26,6 +26,9 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 import java.util.WeakHashMap;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -33,8 +36,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.jaxb.I18nFixedStringAdapter;
-import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} that doesn't contain translations.
@@ -49,8 +50,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @API(status=Status.STABLE, since="0.1")
 @XmlJavaTypeAdapter(I18nFixedStringAdapter.class)
-@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
-        dev.orne.i18n.jaxb.javax.I18nFixedStringAdapter.class)
 public final class I18nFixedString
 implements I18nString {
 

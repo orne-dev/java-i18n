@@ -1,5 +1,5 @@
 /**
- * Jakarta Validation integration for I18N support.
+ * Javax Validation integration for I18N support.
  * 
  * @since 0.1, 2021-02
  */

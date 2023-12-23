@@ -26,11 +26,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.WeakHashMap;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nContextProviderStrategy} that determines

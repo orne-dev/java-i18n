@@ -24,12 +24,13 @@ package dev.orne.i18n;
 
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Main entry point to I18N framework. Provides methods for configuration and

@@ -24,15 +24,16 @@ package dev.orne.i18n.validation;
 
 import java.util.regex.PatternSyntaxException;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nString;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 /**
- * Implementation of Jakarta Bean Validation {@code ConstraintValidator} for
+ * Implementation of Javax Bean Validation {@code ConstraintValidator} for
  * {@code Pattern} constraint on {@code I18nString} instances.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>

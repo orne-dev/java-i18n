@@ -25,12 +25,13 @@ package dev.orne.i18n.context;
 import java.text.MessageFormat;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nResources;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Dummy implementation of {@code I18nResources} that always returns the

@@ -27,12 +27,13 @@ import static org.mockito.BDDMockito.*;
 
 import java.lang.annotation.Annotation;
 
+import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18nString;
-import jakarta.validation.constraints.Pattern;
 
 /**
  * Unit tests for {@code PatternValidatorForI18nString}.

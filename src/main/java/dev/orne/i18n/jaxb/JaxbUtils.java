@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.text.StringEscapeUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -34,7 +36,6 @@ import org.apiguardian.api.API.Status;
 import dev.orne.i18n.I18nFixedString;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Utility class for Jakarta XML Binding (JAXB)

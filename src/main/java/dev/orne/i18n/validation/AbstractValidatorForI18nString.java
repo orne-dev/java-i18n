@@ -24,17 +24,18 @@ package dev.orne.i18n.validation;
 
 import java.lang.annotation.Annotation;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.constraints.NotNull;
 
 /**
- * Abstract implementation of Jakarta Bean Validation
+ * Abstract implementation of Javax Bean Validation
  * {@code ConstraintValidator} for {@code I18nString} instances.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>

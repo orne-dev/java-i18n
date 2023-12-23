@@ -1,8 +1,5 @@
 package dev.orne.i18n.validation;
 
-import org.apiguardian.api.API;
-import org.apiguardian.api.API.Status;
-
 /*-
  * #%L
  * Orne I18N
@@ -25,12 +22,16 @@ import org.apiguardian.api.API.Status;
  * #L%
  */
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import dev.orne.i18n.I18nString;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 /**
- * Implementation of Jakarta Bean Validation {@code ConstraintValidator} for
+ * Implementation of Javax Bean Validation {@code ConstraintValidator} for
  * {@code Size} constraint on {@code I18nString} instances.
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>

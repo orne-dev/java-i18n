@@ -29,6 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -36,7 +38,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nResources;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Abstract implementation of {@code I18nContextProvider}.

@@ -29,6 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -44,7 +46,6 @@ import dev.orne.i18n.I18nResources;
 import dev.orne.i18n.context.I18nContextProvider;
 import dev.orne.i18n.context.I18nContextProviderConfigurableStrategy;
 import dev.orne.i18n.context.I18nContextProviderStrategy;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * I18N context provider configuration for Spring. Configures a

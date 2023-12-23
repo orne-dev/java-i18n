@@ -23,18 +23,18 @@ package dev.orne.i18n.jaxb;
  */
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nXmlSchema;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.XmlValue;
 
 /**
  * XML representation of I18N string translation.
@@ -55,7 +55,7 @@ import jakarta.xml.bind.annotation.XmlValue;
  * </pre>
  * 
  * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
- * @version 1.0, 2021-10
+ * @version 1.0, 2021-02
  * @see I18nString
  * @see <a href="https://github.com/eclipse-ee4j/jaxb-ri/issues/1108">JAXB RI Issue 1108</a>
  * @since 0.1

@@ -27,13 +27,14 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nResources} based on {@code ResourceBundle}.

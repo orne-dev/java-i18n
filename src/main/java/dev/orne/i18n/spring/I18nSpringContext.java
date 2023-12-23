@@ -26,6 +26,8 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -37,7 +39,6 @@ import org.apiguardian.api.API.Status;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import dev.orne.i18n.context.I18nContext;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nContext} that delegates {@code Locale}

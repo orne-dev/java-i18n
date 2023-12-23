@@ -24,11 +24,12 @@ package dev.orne.i18n.context;
 
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nResources;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Provider of {@code I18nContext} instances. Provides methods to create new

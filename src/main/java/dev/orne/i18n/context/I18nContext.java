@@ -25,10 +25,10 @@ package dev.orne.i18n.context;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface for I18N context. Contains the data required to return the I18N

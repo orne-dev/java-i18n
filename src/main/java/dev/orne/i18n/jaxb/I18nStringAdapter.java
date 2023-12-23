@@ -22,11 +22,12 @@ package dev.orne.i18n.jaxb;
  * #L%
  */
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.I18nString;
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * JAXB adapter for {@code I18nString} instances.

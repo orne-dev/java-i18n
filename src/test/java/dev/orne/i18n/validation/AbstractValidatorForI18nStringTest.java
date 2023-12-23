@@ -24,11 +24,13 @@ package dev.orne.i18n.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -42,8 +44,6 @@ import org.mockito.MockitoAnnotations;
 
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
-import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code AbstractValidatorForI18nString}.
@@ -61,7 +61,7 @@ class AbstractValidatorForI18nStringTest {
     private @Mock I18nString mockI18nString;
     private @Mock I18nStringMap mockI18nStringMap;
     private @Mock ConstraintValidatorContext mockContext;
-    protected AutoCloseable mocks;
+    private AutoCloseable mocks;
 
     @BeforeEach
     void initMocks() {

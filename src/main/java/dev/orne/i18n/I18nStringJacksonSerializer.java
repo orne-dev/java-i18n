@@ -24,6 +24,8 @@ package dev.orne.i18n;
 
 import java.io.IOException;
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
@@ -36,8 +38,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Jackson JSON serializer for {@code I18nString} instances.

@@ -29,6 +29,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -39,8 +42,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import dev.orne.i18n.jaxb.I18nResourcesStringAdapter;
-import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} based on {@code I18nResources}.
@@ -59,8 +60,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @API(status=Status.STABLE, since="0.1")
 @JsonDeserialize(using=JsonDeserializer.None.class)
 @XmlJavaTypeAdapter(I18nResourcesStringAdapter.class)
-@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
-        dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter.class)
 public class I18nResourcesString
 implements I18nString {
 

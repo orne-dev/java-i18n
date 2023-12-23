@@ -25,6 +25,9 @@ package dev.orne.i18n;
 import java.io.Serializable;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
@@ -32,8 +35,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import dev.orne.i18n.jaxb.I18nStringAdapter;
-import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Interface for I18N texts.
@@ -44,8 +45,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @API(status=Status.STABLE, since="0.1")
 @XmlJavaTypeAdapter(I18nStringAdapter.class)
-@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
-        dev.orne.i18n.jaxb.javax.I18nStringAdapter.class)
 @JsonSerialize(using=I18nStringJacksonSerializer.class)
 @JsonDeserialize(using=I18nStringJacksonDeserializer.class)
 public interface I18nString
@@ -61,7 +60,7 @@ extends Serializable {
      * {@code text} is {@code null}
      * @see I18nFixedString#from(String)
      */
-    public static I18nFixedString fixed(
+    public static @NotNull I18nFixedString fixed(
             final String text) {
         return I18nFixedString.from(text);
     }
@@ -73,7 +72,7 @@ extends Serializable {
      * @param defaultText The default text
      * @return The created instance
      */
-    public static I18nStringMap mapped(
+    public static @NotNull I18nStringMap mapped(
             final @NotNull String defaultText) {
         return new I18nStringMap(defaultText);
     }
@@ -86,7 +85,7 @@ extends Serializable {
      * @return The new {@code I18nResourcesString} builder
      * @see I18nResourcesString#forDefault(String)
      */
-    public static I18nResourcesString.Builder fromResources(
+    public static @NotNull I18nResourcesString.Builder fromResources(
             final @NotNull String defaultMessage) {
         return I18nResourcesString.forDefault(defaultMessage);
     }

@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
@@ -38,8 +40,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Jackson JSON deserializer for {@code I18nString} instances.

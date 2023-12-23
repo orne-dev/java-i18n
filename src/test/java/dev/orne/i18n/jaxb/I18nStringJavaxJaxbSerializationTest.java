@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -63,8 +65,6 @@ import dev.orne.i18n.I18nXmlSchema;
 import dev.orne.i18n.context.I18nContextProvider;
 import dev.orne.i18n.context.I18nContextProviderStrategy;
 import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Marshaller;
 
 /**
  * Unit test for {@code I18nString} JAXB marshalling.
@@ -76,7 +76,7 @@ import jakarta.xml.bind.Marshaller;
  * @see I18nString.FullJaxbAdapter
  */
 @Tag("ut")
-class I18nStringJakartaJaxbSerializationTest {
+class I18nStringJavaxJaxbSerializationTest {
 
     private static final int RND_STR_LENGTH = 20;
     private static final String MOCK_LANG = "xx";

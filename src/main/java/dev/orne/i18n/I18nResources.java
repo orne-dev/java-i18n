@@ -25,11 +25,12 @@ package dev.orne.i18n;
 import java.text.MessageFormat;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.context.I18nContext;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface for I18N messages source. Provides an implementation agnostic way

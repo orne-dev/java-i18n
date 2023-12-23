@@ -24,13 +24,14 @@ package dev.orne.i18n.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.validation.constraints.NotBlank;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18nString;
-import jakarta.validation.constraints.NotBlank;
 
 /**
  * Unit tests for {@code NotBlankValidatorForI18nString}.

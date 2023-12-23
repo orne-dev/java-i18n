@@ -1,7 +1,7 @@
 /**
- * Jakarta JAXB integration for I18N support.
+ * Javax JAXB integration for I18N support.
  * 
- * @since 0.1
+ * @since 0.1, 2021-10
  */
 package dev.orne.i18n.jaxb;
 

@@ -22,12 +22,12 @@ package dev.orne.i18n.context;
  * #L%
  */
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Implementation of {@code I18nContextProvider} that shares a single

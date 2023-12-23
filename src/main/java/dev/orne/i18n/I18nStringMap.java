@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -33,8 +36,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.jaxb.I18nStringMapAdapter;
-import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Implementation of {@code I18nString} populated with translations.
@@ -48,7 +49,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @API(status=Status.STABLE, since="0.1")
 @XmlJavaTypeAdapter(I18nStringMapAdapter.class)
-@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(dev.orne.i18n.jaxb.javax.I18nStringMapAdapter.class)
 public class I18nStringMap
 implements I18nString {
 

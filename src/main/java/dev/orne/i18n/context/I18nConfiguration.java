@@ -26,13 +26,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Utility class with I18N configuration constants.

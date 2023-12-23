@@ -24,11 +24,16 @@ package dev.orne.i18n.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,9 +47,6 @@ import org.mockito.MockitoAnnotations;
 
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Abstract unit tests for {@code I18nString} {@code ConstraintValidator}.

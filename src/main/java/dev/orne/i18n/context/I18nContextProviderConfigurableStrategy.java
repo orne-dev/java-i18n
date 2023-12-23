@@ -22,10 +22,10 @@ package dev.orne.i18n.context;
  * #L%
  */
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Configurable strategy of selection of {@code I18nContextProvider}.

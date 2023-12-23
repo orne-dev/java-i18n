@@ -1,4 +1,4 @@
-package dev.orne.i18n.jaxb.javax;
+package dev.orne.i18n.jaxb;
 
 /*-
  * #%L

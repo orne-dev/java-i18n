@@ -22,10 +22,10 @@ package dev.orne.i18n;
  * #L%
  */
 
+import javax.validation.constraints.NotNull;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Functional interface for methods able to convert from any {@code I18nString}
