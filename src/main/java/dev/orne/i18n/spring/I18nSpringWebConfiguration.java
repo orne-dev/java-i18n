@@ -43,7 +43,7 @@ public class I18nSpringWebConfiguration {
 
     /** The I18N context clearer  */
     public static final String CLEARER_BEAN_NAME =
-            "dev.orne.i18n.spring.I18nSpringWebContextCleaner";
+            "i18nSpringWebContextCleaner";
 
     /**
      * Creates the Spring listener for clearing the I18N context after
