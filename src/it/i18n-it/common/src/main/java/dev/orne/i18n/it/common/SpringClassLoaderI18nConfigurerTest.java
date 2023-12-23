@@ -36,10 +36,11 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.SpringVersion;
 
-import dev.orne.i18n.DefaultI18nContextProvider;
 import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nContextProvider;
-import dev.orne.i18n.I18nContextProviderByClassLoaderStrategy;
+import dev.orne.i18n.context.DefaultI18nContextProvider;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderByClassLoaderStrategy;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
 
 /**
@@ -97,7 +98,7 @@ public class SpringClassLoaderI18nConfigurerTest {
 
     @AfterEach
     void resetI18N() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     /**
@@ -247,7 +248,7 @@ public class SpringClassLoaderI18nConfigurerTest {
         public void run() {
             final TestI18nContextProviderByClassLoaderStrategy strategy =
                     new TestI18nContextProviderByClassLoaderStrategy();
-            I18N.setContextProviderStrategy(strategy);
+            I18nContextProviderStrategy.setInstance(strategy);
             final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setContextProvider(this.provider);
             if (this.targetClass != null) {
@@ -261,7 +262,7 @@ public class SpringClassLoaderI18nConfigurerTest {
                 }
             }
             configurer.afterPropertiesSet();
-                    I18N.getContextProviderStrategy();
+            I18nContextProviderStrategy.getInstance();
             resultDefaultProvider = strategy.getDefaultContextProvider();
             resultProviders = strategy.getContextProviders();
         }

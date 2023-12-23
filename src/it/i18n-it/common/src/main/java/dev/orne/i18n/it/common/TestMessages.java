@@ -25,10 +25,10 @@ package dev.orne.i18n.it.common;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import dev.orne.i18n.DefaultI18nContextProvider;
-import dev.orne.i18n.DefaultI18nContextProviderStrategy;
-import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nBundleResources;
+import dev.orne.i18n.context.DefaultI18nContextProvider;
+import dev.orne.i18n.context.DefaultI18nContextProviderStrategy;
+import dev.orne.i18n.context.I18nBundleResources;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 public final class TestMessages {
 
@@ -81,7 +81,7 @@ public final class TestMessages {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider();
         provider.setDefaultI18nResources(resources);
         final DefaultI18nContextProviderStrategy strategy = new DefaultI18nContextProviderStrategy(provider);
-        I18N.setContextProviderStrategy(strategy);
+        I18nContextProviderStrategy.setInstance(strategy);
     }
 
     public final static class Entries {

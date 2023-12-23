@@ -36,7 +36,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import dev.orne.i18n.I18nStringMap;
-import dev.orne.i18n.jaxb.javax.I18nStringMapAdapter;
+import dev.orne.i18n.jaxb.I18nStringMapAdapter;
 
 /**
  * {@code I18nStringMap} Jackson serialization test container.
@@ -46,15 +46,11 @@ import dev.orne.i18n.jaxb.javax.I18nStringMapAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
-@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
-@jakarta.xml.bind.annotation.XmlRootElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.ROOT_ELEMENT)
 public class I18nStringMapAsObjectContainer {
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @XmlJavaTypeAdapter(I18nStringMapAdapter.Full.class)
     @XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
-    @jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter(dev.orne.i18n.jaxb.I18nStringMapAdapter.Full.class)
-    @jakarta.xml.bind.annotation.XmlElement(namespace=I18nStringContainer.TEST_NS, name=I18nStringContainer.BEAN_ELEMENT)
     private I18nStringMap bean;
 
     public I18nStringMap getBean() {

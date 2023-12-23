@@ -40,6 +40,7 @@ import java.util.Properties;
 import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -57,6 +58,11 @@ import dev.orne.i18n.I18nConfigurationException;
 class I18nContextProviderStrategyConfigurerTest {
 
     private Path tmpFolder;
+
+    @BeforeAll
+    public static void resetPreviousConfiguration() {
+        I18nContextProviderStrategy.setInstance(null);
+    }
 
     @AfterEach
     public void removeTmpFolder()

@@ -25,7 +25,7 @@
   <parent>
     <groupId>dev.orne</groupId>
     <artifactId>java-root-pom</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.7.0</version>
     <relativePath />
   </parent>
 
@@ -50,7 +50,6 @@
     <java.module.name>dev.orne.i18n.it.java8</java.module.name>
     <license.licenseName>lgpl_v3</license.licenseName>
 
-    <javax.validation.version>2.0.1.Final</javax.validation.version>
     <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
     <hibernate.validation.version>6.1.5.Final</hibernate.validation.version>
     <glassfish.jakarta.el.version>3.0.3</glassfish.jakarta.el.version>
@@ -130,7 +129,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <configuration>
-            <groups>it</groups>
+            <groups>it,javax-jaxb,javax-validation</groups>
           </configuration>
         </plugin>
       </plugins>

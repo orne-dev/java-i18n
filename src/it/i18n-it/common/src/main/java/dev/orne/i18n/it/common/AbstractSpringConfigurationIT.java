@@ -34,9 +34,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nContext;
-import dev.orne.i18n.I18nContextProvider;
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.I18nContext;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.i18n.spring.I18nSpringContext;
 import dev.orne.i18n.spring.I18nSpringContextProvider;
 import dev.orne.i18n.spring.I18nSpringResources;
@@ -58,7 +59,7 @@ abstract class AbstractSpringConfigurationIT {
 
     @AfterEach
     void clearContext() {
-        I18N.clearContext();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     /**
@@ -91,11 +92,11 @@ abstract class AbstractSpringConfigurationIT {
      */
     @Test
     void testDefaultProvider() {
-        final I18nContextProvider provider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider provider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         assertNotNull(provider);
         assertTrue(provider instanceof I18nSpringContextProvider);
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
-        assertSame(provider, I18N.getContextProvider());
+        assertSame(provider, I18nContextProvider.getInstance());
     }
 
     /**
@@ -111,7 +112,7 @@ abstract class AbstractSpringConfigurationIT {
      */
     @Test
     void testDefaultI18nResources() {
-        final I18nResources resources = I18N.getDefaultI18nResources();
+        final I18nResources resources = I18N.getI18nResources();
         assertNotNull(resources);
         assertTrue(resources instanceof I18nSpringResources);
         assertEquals(TestMessages.BUNDLE_ID_DEFAULT_VALUE, resources.getMessage(
@@ -139,7 +140,7 @@ abstract class AbstractSpringConfigurationIT {
     void testAlternativeI18nResources() {
         final I18nResources resources = I18N.getI18nResources(ALT_I18N_RESOURCES_KEY);
         assertNotNull(resources);
-        assertSame(I18N.getDefaultI18nResources(), resources);
+        assertSame(I18N.getI18nResources(), resources);
     }
 
     /**
@@ -147,12 +148,12 @@ abstract class AbstractSpringConfigurationIT {
      */
     @Test
     void testI18NContext() {
-        final I18nContext context = I18N.getContext();
+        final I18nContext context = I18nContext.getInstance();
         assertNotNull(context);
         assertTrue(context instanceof I18nSpringContext);
         assertEquals(Locale.getDefault(), context.getLocale());
         assertEquals(LocaleContextHolder.getLocale(), context.getLocale());
-        assertEquals(TestMessages.BUNDLE_ID_DEFAULT_VALUE, I18N.getDefaultI18nResources().getMessage(
+        assertEquals(TestMessages.BUNDLE_ID_DEFAULT_VALUE, I18N.getI18nResources().getMessage(
                 FAIL_VALUE,
                 TestMessages.Entries.BUNDLE_ID));
     }
@@ -165,7 +166,7 @@ abstract class AbstractSpringConfigurationIT {
         I18N.setLocale(TestMessages.ZZ_LOCALE);
         assertEquals(TestMessages.ZZ_LOCALE, I18N.getLocale());
         assertEquals(TestMessages.ZZ_LOCALE, LocaleContextHolder.getLocale());
-        assertEquals(TestMessages.BUNDLE_ID_ZZ_VALUE, I18N.getDefaultI18nResources().getMessage(
+        assertEquals(TestMessages.BUNDLE_ID_ZZ_VALUE, I18N.getI18nResources().getMessage(
                 FAIL_VALUE,
                 TestMessages.Entries.BUNDLE_ID));
     }

@@ -29,8 +29,9 @@ import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 import dev.orne.i18n.I18N;
-import dev.orne.i18n.I18nContextProvider;
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.i18n.spring.I18nSpringContextProvider;
 
 /**
@@ -50,7 +51,7 @@ extends AbstractSpringConfigurationIT {
      */
     @Test
     void testDefaultProvider() {
-        final I18nContextProvider provider = I18N.getContextProviderStrategy().getDefaultContextProvider();
+        final I18nContextProvider provider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
         assertNotNull(provider);
         assertTrue(provider instanceof I18nSpringContextProvider);
         assertArrayEquals(new Locale[] {
@@ -58,7 +59,7 @@ extends AbstractSpringConfigurationIT {
                 TestMessages.YY_LOCALE,
                 TestMessages.ZZ_LOCALE
         }, provider.getAvailableLocales());
-        assertSame(provider, I18N.getContextProvider());
+        assertSame(provider, I18nContextProvider.getInstance());
     }
 
     /**
@@ -80,7 +81,7 @@ extends AbstractSpringConfigurationIT {
     void testAlternativeI18nResources() {
         final I18nResources resources = I18N.getI18nResources(ALT_I18N_RESOURCES_KEY);
         assertNotNull(resources);
-        assertNotSame(I18N.getDefaultI18nResources(), resources);
+        assertNotSame(I18N.getI18nResources(), resources);
         assertEquals(TestMessages.BUNDLE_ID_ALT_DEFAULT_VALUE, resources.getMessage(
                 FAIL_VALUE,
                 TestMessages.Entries.BUNDLE_ID,

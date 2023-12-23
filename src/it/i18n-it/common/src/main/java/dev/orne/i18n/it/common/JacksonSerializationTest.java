@@ -43,6 +43,8 @@ import dev.orne.i18n.I18nResourcesString;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringJacksonSerializer;
 import dev.orne.i18n.I18nStringMap;
+import dev.orne.i18n.context.I18nContextProvider;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * Tests for {@code I18nString} Jackson serialization support.
@@ -80,12 +82,12 @@ public class JacksonSerializationTest {
 
     @AfterEach
     void clearI18nContext() {
-        I18N.clearContext();
+        I18nContextProvider.getInstance().clearContext();
     }
 
     @AfterAll
     static void resetI18N() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     /**

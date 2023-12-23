@@ -34,10 +34,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.validation.DataBinder;
 
-import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nFixedString;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * Spring Web binding test for {@code I18nString}.
@@ -56,7 +56,7 @@ public class SpringWebBindingIT {
 
     @AfterEach
     void resetI18N() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     @Test

@@ -40,6 +40,7 @@ import java.util.Comparator;
 import java.util.Properties;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -59,6 +60,11 @@ class I18nConfigurationTest {
 
     private Path tmpFolder;
     private Path cfgFile;
+
+    @BeforeAll
+    public static void resetPreviousConfiguration() {
+        I18nContextProviderStrategy.setInstance(null);
+    }
 
     @AfterEach
     public void removeTmpFolder()

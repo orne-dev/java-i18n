@@ -32,11 +32,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nFixedString;
 import dev.orne.i18n.I18nResourcesString;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
+import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -75,7 +75,7 @@ public class JavaxValidationTest {
 
     @AfterAll
     static void restoreDefaultStrategy() {
-        I18N.reconfigure();
+        I18nContextProviderStrategy.setInstance(null);
     }
 
     @Test
