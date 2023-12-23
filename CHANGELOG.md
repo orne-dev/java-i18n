@@ -37,13 +37,7 @@
     01. Added `dev.orne.i18n.spring.I18nSpringWebConfiguration`
     01. Added `dev.orne.i18n.spring.I18nSpringConfiguration`
     01. Added `dev.orne.i18n.spring.EnableI18N`
-01. :gift: Added Javax Bean Validation 2.0 support
-    01. Added `dev.orne.i18n.validation.javax.AbstractValidatorForI18nString`
-    01. Added `dev.orne.i18n.validation.javax.NotEmptyValidatorForI18nString`
-    01. Added `dev.orne.i18n.validation.javax.NotBlankValidatorForI18nString`
-    01. Added `dev.orne.i18n.validation.javax.SizeValidatorForI18nString`
-    01. Added `dev.orne.i18n.validation.javax.PatternValidatorForI18nString`
-01. :gift: Added Jakarta Bean Validation 3.0 support
+01. :gift: Added Java Bean Validation 2.0 support
     01. Added `dev.orne.i18n.validation.AbstractValidatorForI18nString`
     01. Added `dev.orne.i18n.validation.NotEmptyValidatorForI18nString`
     01. Added `dev.orne.i18n.validation.NotBlankValidatorForI18nString`
@@ -53,19 +47,7 @@
     01. Added `dev.orne.i18n.I18nStringJacksonSerializer`
     01. Added `dev.orne.i18n.I18nStringJacksonDeserializer`
 01. :gift: Added `dev.orne.i18n.I18nXmlSchema`
-01. :gift: Added Javax XML Binding (JAXB) 2.2.8 support
-    01. Added `dev.orne.i18n.jaxb.javax.XmlI18nString`
-    01. Added `dev.orne.i18n.jaxb.javax.XmlI18nStringTranslation`
-    01. Added `dev.orne.i18n.jaxb.javax.ObjectFactory`
-    01. Added `dev.orne.i18n.jaxb.JaxbUtils`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter.Full`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nFixedStringAdapter`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nResourcesStringAdapter.Full`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter`
-    01. Added `dev.orne.i18n.jaxb.javax.I18nStringAdapter.Full`
-01. :gift: Added Jakarta XML Binding (JAXB) 3.0 support
+01. :gift: Added Java XML Binding (JAXB) 2.2.8 support
     01. Added `dev.orne.i18n.jaxb.XmlI18nString`
     01. Added `dev.orne.i18n.jaxb.XmlI18nStringTranslation`
     01. Added `dev.orne.i18n.jaxb.ObjectFactory`
@@ -77,7 +59,7 @@
     01. Added `dev.orne.i18n.jaxb.I18nResourcesStringAdapter.Full`
     01. Added `dev.orne.i18n.jaxb.I18nStringAdapter`
     01. Added `dev.orne.i18n.jaxb.I18nStringAdapter.Full`
-01. :gift: Added Orne Test Generators 0.1.3 support
+01. :gift: Added Orne Test Generators 0.2.0 support
     01. :gift: Added `dev.orne.i18n.I18nStringGenerator`
     01. :gift: Added `dev.orne.i18n.I18nFixedStringGenerator`
     01. :gift: Added `dev.orne.i18n.I18nStringMapGenerator`
