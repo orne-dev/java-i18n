@@ -79,9 +79,9 @@ extends AbstractSpringConfigurationIT {
      */
     @Test
     void testAlternativeI18nResources() {
-        final I18nResources resources = I18N.getI18nResources(ALT_I18N_RESOURCES_KEY);
+        final I18nResources resources = I18N.getResources(ALT_I18N_RESOURCES_KEY);
         assertNotNull(resources);
-        assertNotSame(I18N.getI18nResources(), resources);
+        assertNotSame(I18N.getResources(), resources);
         assertEquals(TestMessages.BUNDLE_ID_ALT_DEFAULT_VALUE, resources.getMessage(
                 FAIL_VALUE,
                 TestMessages.Entries.BUNDLE_ID,

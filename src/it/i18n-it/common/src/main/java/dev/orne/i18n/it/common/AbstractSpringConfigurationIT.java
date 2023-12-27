@@ -112,7 +112,7 @@ abstract class AbstractSpringConfigurationIT {
      */
     @Test
     void testDefaultI18nResources() {
-        final I18nResources resources = I18N.getI18nResources();
+        final I18nResources resources = I18N.getResources();
         assertNotNull(resources);
         assertTrue(resources instanceof I18nSpringResources);
         assertEquals(TestMessages.BUNDLE_ID_DEFAULT_VALUE, resources.getMessage(
@@ -138,9 +138,9 @@ abstract class AbstractSpringConfigurationIT {
      */
     @Test
     void testAlternativeI18nResources() {
-        final I18nResources resources = I18N.getI18nResources(ALT_I18N_RESOURCES_KEY);
+        final I18nResources resources = I18N.getResources(ALT_I18N_RESOURCES_KEY);
         assertNotNull(resources);
-        assertSame(I18N.getI18nResources(), resources);
+        assertSame(I18N.getResources(), resources);
     }
 
     /**
@@ -153,7 +153,7 @@ abstract class AbstractSpringConfigurationIT {
         assertTrue(context instanceof I18nSpringContext);
         assertEquals(Locale.getDefault(), context.getLocale());
         assertEquals(LocaleContextHolder.getLocale(), context.getLocale());
-        assertEquals(TestMessages.BUNDLE_ID_DEFAULT_VALUE, I18N.getI18nResources().getMessage(
+        assertEquals(TestMessages.BUNDLE_ID_DEFAULT_VALUE, I18N.getResources().getMessage(
                 FAIL_VALUE,
                 TestMessages.Entries.BUNDLE_ID));
     }
@@ -166,7 +166,7 @@ abstract class AbstractSpringConfigurationIT {
         I18N.setLocale(TestMessages.ZZ_LOCALE);
         assertEquals(TestMessages.ZZ_LOCALE, I18N.getLocale());
         assertEquals(TestMessages.ZZ_LOCALE, LocaleContextHolder.getLocale());
-        assertEquals(TestMessages.BUNDLE_ID_ZZ_VALUE, I18N.getI18nResources().getMessage(
+        assertEquals(TestMessages.BUNDLE_ID_ZZ_VALUE, I18N.getResources().getMessage(
                 FAIL_VALUE,
                 TestMessages.Entries.BUNDLE_ID));
     }
