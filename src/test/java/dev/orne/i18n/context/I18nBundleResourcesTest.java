@@ -21,27 +21,21 @@ package dev.orne.i18n.context;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for {@code I18nBundleResources}.
@@ -52,6 +46,7 @@ import org.mockito.MockitoAnnotations;
  * @see I18nBundleResources
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nBundleResourcesTest {
 
     private static final String MOCK_DEF_MSG = "mock default message";
@@ -85,7 +80,6 @@ class I18nBundleResourcesTest {
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nContext mockContext;
     private @Mock MockResourceBundle bundle;
-    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
@@ -97,18 +91,11 @@ class I18nBundleResourcesTest {
         I18nContextProviderStrategy.setInstance(preTestsStrategy);
     }
 
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
+    void mockStrategy() {
         I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_DEFAULT_LOCALE).given(mockContext).getLocale();
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     /**
@@ -136,6 +123,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Code() {
+        mockStrategy();
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE);
         final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, MOCK_MSG_CODE, ARGS);
@@ -149,6 +137,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Code_NotFound() {
+        mockStrategy();
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_TMPL, MOCK_MSG_CODE, ARGS);
@@ -162,6 +151,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Code_InvalidTemplate() {
+        mockStrategy();
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_INV_TMPL, MOCK_MSG_CODE, ARGS);
@@ -214,6 +204,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes() {
+        mockStrategy();
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE);
         final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, CODES, ARGS);
@@ -230,6 +221,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_FoundFallback() {
+        mockStrategy();
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         final I18nBundleResources resources = new I18nBundleResources(bundle);
@@ -247,6 +239,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_NotFound() {
+        mockStrategy();
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_3);
@@ -265,6 +258,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_InvalidTemplate() {
+        mockStrategy();
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_3);

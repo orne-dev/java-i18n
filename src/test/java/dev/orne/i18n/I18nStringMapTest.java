@@ -38,11 +38,11 @@ import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
@@ -59,6 +59,7 @@ import dev.orne.test.rnd.params.GenerationParameters;
  * @see I18nStringMap
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nStringMapTest {
 
     private static final String MOCK_DEF_MSG = "mock default message";
@@ -82,27 +83,19 @@ class I18nStringMapTest {
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
-    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
         preTestsStrategy = I18nContextProviderStrategy.getInstance();
     }
 
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
+    void mockStrategy() {
         I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
         willReturn(mockResources).given(mockProvider).getI18nResources(any());
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     @AfterEach
@@ -170,6 +163,10 @@ class I18nStringMapTest {
      */
     @Test
     void testCopyConstructor_Resources() {
+        I18nContextProviderStrategy.setInstance(mockStrategy);
+        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
         final I18nResourcesString copy = spy(I18nResourcesString
                 .forDefault(MOCK_DEF_MSG)
                 .withCode("some code")
@@ -404,6 +401,10 @@ class I18nStringMapTest {
      */
     @Test
     void testGet() {
+        I18nContextProviderStrategy.setInstance(mockStrategy);
+        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
         final I18nStringMap bean = spy(new I18nStringMap(MOCK_DEF_MSG));
         willReturn(MOCK_CONTEXT_MSG).given(bean).get(CONTEXT_LOCALE);
         final String result = bean.get();
@@ -596,6 +597,7 @@ class I18nStringMapTest {
      */
     @Test
     void testEqualsHash() {
+        I18nContextProviderStrategy.setInstance(mockStrategy);
         final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
         assertNotEquals(bean, (Object) null);
         assertEquals(bean, bean);
@@ -603,7 +605,6 @@ class I18nStringMapTest {
         assertNotEquals(bean, new Object());
         assertNotEquals(bean, I18nFixedString.from(MOCK_DEF_MSG));
         final I18nString mockI18nString = mock(I18nString.class);
-        willReturn(MOCK_DEF_MSG).given(mockI18nString).get();
         assertNotEquals(bean, mockI18nString);
         then(mockI18nString).shouldHaveNoInteractions();
         final I18nStringMap other = new I18nStringMap(bean);
@@ -640,6 +641,10 @@ class I18nStringMapTest {
      */
     @Test
     void testIsEquivalent_I18nString_Other() {
+        I18nContextProviderStrategy.setInstance(mockStrategy);
+        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
         final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG)
                 .set(CONTEXT_LANG, MOCK_CONTEXT_MSG)
                 .set(XX_LANG, MOCK_XX_MSG)

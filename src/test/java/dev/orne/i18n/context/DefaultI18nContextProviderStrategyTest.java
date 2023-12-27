@@ -27,12 +27,11 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Properties;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for {@code DefaultI18nContextProviderStrategy}.
@@ -43,21 +42,11 @@ import org.mockito.MockitoAnnotations;
  * @see DefaultI18nContextProviderStrategy
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class DefaultI18nContextProviderStrategyTest {
 
     private @Mock I18nContextProvider mockDefaultProvider;
     private @Mock I18nContextProvider mockProvider;
-    protected AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link DefaultI18nContextProviderStrategy#DefaultI18nContextProviderStrategy()}.

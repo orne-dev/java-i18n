@@ -28,15 +28,14 @@ import static org.mockito.BDDMockito.*;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.type.AnnotationMetadata;
 
 import dev.orne.i18n.I18N;
@@ -50,10 +49,10 @@ import dev.orne.i18n.I18N;
  * @see I18nSpringConfiguration
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nSpringConfigurationTest {
 
     private @Mock AnnotationMetadata metadata;
-    protected AutoCloseable mocks;
 
     private static ClassLoader bootCL;
     private static ClassLoader simpleCL;
@@ -83,16 +82,6 @@ class I18nSpringConfigurationTest {
                     org.springframework.web.context.support.RequestHandledEvent.class.getProtectionDomain().getCodeSource().getLocation(),
                 },
                 simpleCL);
-    }
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     /**

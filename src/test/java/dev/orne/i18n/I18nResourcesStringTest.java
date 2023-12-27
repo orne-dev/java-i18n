@@ -39,8 +39,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
@@ -57,6 +58,7 @@ import dev.orne.test.rnd.params.GenerationParameters;
  * @see I18nResourcesString
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nResourcesStringTest {
 
     private static final String MOCK_RESOURCES_KEY = "mock i18n resources key";
@@ -89,17 +91,10 @@ class I18nResourcesStringTest {
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
     private @Mock I18nString mockI18nString;
-    protected AutoCloseable mocks;
 
     @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
+    void mockStrategy() {
         I18nContextProviderStrategy.setInstance(mockStrategy);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     @AfterEach

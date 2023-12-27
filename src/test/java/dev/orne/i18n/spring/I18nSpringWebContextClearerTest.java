@@ -26,12 +26,12 @@ import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.context.support.RequestHandledEvent;
 
 import dev.orne.i18n.I18nResources;
@@ -48,6 +48,7 @@ import dev.orne.i18n.context.I18nContextProviderStrategy;
  * @see I18nSpringWebContextClearer
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nSpringWebContextClearerTest {
 
     private static I18nContextProviderStrategy preTestsStrategy;
@@ -57,21 +58,10 @@ class I18nSpringWebContextClearerTest {
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
     private @Mock RequestHandledEvent event;
-    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
         preTestsStrategy = I18nContextProviderStrategy.getInstance();
-    }
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     @AfterEach

@@ -26,12 +26,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for {@code I18nStringEditor}.
@@ -42,22 +41,12 @@ import org.mockito.MockitoAnnotations;
  * @see I18nStringEditor
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nStringEditorTest {
 
     private static final int RND_STR_LENGTH = 20;
 
     private @Mock I18nString mockI18nString;
-    protected AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link I18nStringEditor#setAsText(String)}.

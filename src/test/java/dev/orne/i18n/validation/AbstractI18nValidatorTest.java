@@ -24,7 +24,6 @@ package dev.orne.i18n.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -38,12 +37,12 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
@@ -58,6 +57,7 @@ import dev.orne.i18n.I18nStringMap;
  * @since 0.1
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 abstract class AbstractI18nValidatorTest<T extends Annotation> {
 
     private final @NotNull Class<T> annotationType;
@@ -69,17 +69,10 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
     protected @Mock I18nStringMap mockI18nStringMap;
     protected @Mock ConstraintValidatorContext mockContext;
     protected T mockAnnotation;
-    protected AutoCloseable mocks;
 
     @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
+    void mockAnnotation() {
         mockAnnotation = mock(annotationType);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     protected AbstractI18nValidatorTest(
@@ -210,7 +203,6 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
         final Map<String, String> originalTranslations = generateRandomTranslations();
         final Map<String, String> translations = new HashMap<>(originalTranslations);
         willReturn("").given(mockI18nStringMap).getDefaultText();
-        willReturn(translations).given(mockI18nStringMap).getI18n();
         final boolean result = validator.isValid(mockI18nStringMap, mockContext);
         assertEquals(valid, result);
         then(mockI18nStringMap).should(never()).setDefaultText(any());
@@ -235,7 +227,6 @@ abstract class AbstractI18nValidatorTest<T extends Annotation> {
         final Map<String, String> originalTranslations = generateRandomTranslations();
         final Map<String, String> translations = new HashMap<>(originalTranslations);
         willReturn(text).given(mockI18nStringMap).getDefaultText();
-        willReturn(translations).given(mockI18nStringMap).getI18n();
         final boolean result = validator.isValid(mockI18nStringMap, mockContext);
         assertEquals(valid, result);
         then(mockI18nStringMap).should(never()).setDefaultText(any());

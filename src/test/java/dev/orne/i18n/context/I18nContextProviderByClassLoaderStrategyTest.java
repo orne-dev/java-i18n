@@ -24,19 +24,17 @@ package dev.orne.i18n.context;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.mock;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for {@code I18nContextProviderByClassLoaderStrategy}.
@@ -47,6 +45,7 @@ import org.mockito.MockitoAnnotations;
  * @see I18nContextProviderByClassLoaderStrategy
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nContextProviderByClassLoaderStrategyTest {
 
     private @Mock I18nContextProvider mockDefaultProvider;
@@ -55,17 +54,6 @@ class I18nContextProviderByClassLoaderStrategyTest {
     private @Mock Map<ClassLoader, I18nContextProvider> mockProviderMap;
     private @Mock ClassLoader mockClassLoader;
     private @Mock Thread mockThread;
-    protected AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link I18nContextProviderByClassLoaderStrategy#I18nContextProviderByClassLoaderStrategy()}.

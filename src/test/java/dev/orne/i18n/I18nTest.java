@@ -28,12 +28,12 @@ import static org.mockito.BDDMockito.*;
 import java.util.Locale;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.context.DefaultI18nContextProvider;
 import dev.orne.i18n.context.DefaultI18nContextProviderStrategy;
@@ -50,6 +50,7 @@ import dev.orne.i18n.context.I18nContextProviderStrategy;
  * @see I18N
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nTest {
 
     private static I18nContextProviderStrategy preTestsStrategy;
@@ -60,21 +61,10 @@ class I18nTest {
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
-    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
-        preTestsStrategy =         I18nContextProviderStrategy.getInstance();
-    }
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
+        preTestsStrategy = I18nContextProviderStrategy.getInstance();
     }
 
     @AfterEach

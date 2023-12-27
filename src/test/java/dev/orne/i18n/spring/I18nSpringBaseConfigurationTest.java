@@ -33,11 +33,11 @@ import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.core.SpringVersion;
@@ -61,6 +61,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nSpringBaseConfiguration
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nSpringBaseConfigurationTest {
 
     private @Mock ClassLoader classLoader;
@@ -70,7 +71,6 @@ class I18nSpringBaseConfigurationTest {
     private @Mock MessageSource altMessageSource;
     private @Mock I18nResources resources;
     private @Mock I18nResources altResources;
-    protected AutoCloseable mocks;
 
     private static ClassLoader bootCL;
     private static ClassLoader springCL;
@@ -110,16 +110,6 @@ class I18nSpringBaseConfigurationTest {
                 new URL[] {
                 },
                 testCL);
-    }
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     @AfterEach

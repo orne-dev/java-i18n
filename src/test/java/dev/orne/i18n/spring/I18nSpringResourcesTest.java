@@ -28,14 +28,13 @@ import static org.mockito.BDDMockito.*;
 import java.util.Locale;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
@@ -52,6 +51,7 @@ import dev.orne.i18n.context.I18nContextProviderStrategy;
  * @see I18nSpringResources
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nSpringResourcesTest {
 
     private static final String MOCK_DEF_MSG = "mock default message";
@@ -85,7 +85,6 @@ class I18nSpringResourcesTest {
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nContext mockContext;
     private @Mock MessageSource source;
-    protected AutoCloseable mocks;
 
     @BeforeAll
     static void saveDefaultStrategy() {
@@ -97,18 +96,11 @@ class I18nSpringResourcesTest {
         I18nContextProviderStrategy.setInstance(preTestsStrategy);
     }
 
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
+    void mockStrategy() {
         I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_DEFAULT_LOCALE).given(mockContext).getLocale();
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
     }
 
     /**
@@ -136,6 +128,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Code() {
+        mockStrategy();
         willReturn(MOCK_MSG).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         final I18nSpringResources resources = new I18nSpringResources(source);
         final String result = resources.getMessage(MOCK_DEF_MSG, MOCK_MSG_CODE, ARGS);
@@ -149,6 +142,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Code_NotFound() {
+        mockStrategy();
         final NoSuchMessageException mockEx = new NoSuchMessageException(MOCK_MSG_CODE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         final I18nSpringResources resources = new I18nSpringResources(source);
@@ -163,6 +157,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Code_InvalidTemplate() {
+        mockStrategy();
         final NoSuchMessageException mockEx = new NoSuchMessageException(MOCK_MSG_CODE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         final I18nSpringResources resources = new I18nSpringResources(source);
@@ -218,6 +213,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Codes() {
+        mockStrategy();
         willReturn(MOCK_MSG).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         final I18nSpringResources resources = new I18nSpringResources(source);
         final String result = resources.getMessage(MOCK_DEF_MSG, CODES, ARGS);
@@ -234,6 +230,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Codes_FoundFallback() {
+        mockStrategy();
         final NoSuchMessageException mockEx = new NoSuchMessageException(MOCK_MSG_CODE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         willReturn(MOCK_MSG).given(source).getMessage(MOCK_MSG_CODE_2, ARGS, MOCK_DEFAULT_LOCALE);
@@ -252,6 +249,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Codes_NotFound() {
+        mockStrategy();
         final NoSuchMessageException mockEx = new NoSuchMessageException(MOCK_MSG_CODE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE_2, ARGS, MOCK_DEFAULT_LOCALE);
@@ -271,6 +269,7 @@ class I18nSpringResourcesTest {
      */
     @Test
     void testGetMessage_Codes_InvalidTemplate() {
+        mockStrategy();
         final NoSuchMessageException mockEx = new NoSuchMessageException(MOCK_MSG_CODE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE, ARGS, MOCK_DEFAULT_LOCALE);
         willThrow(mockEx).given(source).getMessage(MOCK_MSG_CODE_2, ARGS, MOCK_DEFAULT_LOCALE);

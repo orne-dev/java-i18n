@@ -27,12 +27,11 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContext;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -49,21 +48,11 @@ import dev.orne.i18n.context.I18nContext;
  * @see I18nSpringContextProvider
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nSpringContextProviderTest {
 
     private @Mock MessageSource source;
     private @Mock I18nContext mockContext;
-    protected AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link I18nSpringContextProvider#I18nSpringContextProvider()}.

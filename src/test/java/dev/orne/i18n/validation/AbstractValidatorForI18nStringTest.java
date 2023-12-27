@@ -33,14 +33,13 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
@@ -54,6 +53,7 @@ import dev.orne.i18n.I18nStringMap;
  * @see AbstractValidatorForI18nString
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class AbstractValidatorForI18nStringTest {
 
     private static final int RND_STR_LENGTH = 20;
@@ -61,17 +61,6 @@ class AbstractValidatorForI18nStringTest {
     private @Mock I18nString mockI18nString;
     private @Mock I18nStringMap mockI18nStringMap;
     private @Mock ConstraintValidatorContext mockContext;
-    private AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link AbstractValidatorForI18nString#AbstractValidatorForI18nString()}.
@@ -174,10 +163,7 @@ class AbstractValidatorForI18nStringTest {
         final Map<String, String> translations = new HashMap<>(originalTranslations);
         final MockImpl validator = spy(new MockImpl());
         willReturn(text).given(mockI18nStringMap).getDefaultText();
-        willReturn(translations).given(mockI18nStringMap).getI18n();
         willReturn(false).given(validator).isTextValid(text);
-        willReturn(true).given(validator).isTextValid(xxText);
-        willReturn(true).given(validator).isTextValid(yyText);
         final boolean result = validator.isValid(mockI18nStringMap, mockContext);
         assertFalse(result);
         assertEquals(originalTranslations, translations);
@@ -209,7 +195,6 @@ class AbstractValidatorForI18nStringTest {
         willReturn(translations).given(mockI18nStringMap).getI18n();
         willReturn(true).given(validator).isTextValid(text);
         willReturn(false).given(validator).isTextValid(xxText);
-        willReturn(true).given(validator).isTextValid(yyText);
         final boolean result = validator.isValid(mockI18nStringMap, mockContext);
         assertFalse(result);
         assertEquals(originalTranslations, translations);

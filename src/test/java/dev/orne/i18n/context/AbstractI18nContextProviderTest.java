@@ -27,12 +27,11 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.I18nResources;
 import jakarta.validation.constraints.NotNull;
@@ -46,6 +45,7 @@ import jakarta.validation.constraints.NotNull;
  * @see AbstractI18nContextProvider
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class AbstractI18nContextProviderTest {
 
     private static final Locale MOCK_LOCALE = new Locale("xx");
@@ -53,17 +53,6 @@ class AbstractI18nContextProviderTest {
     private @Mock I18nResources mockDefaultResources;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
-    protected AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link AbstractI18nContextProvider#AbstractI18nContextProvider}.

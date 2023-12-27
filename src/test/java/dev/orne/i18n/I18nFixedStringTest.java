@@ -35,12 +35,11 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.test.rnd.Generators;
 import dev.orne.test.rnd.params.GenerationParameters;
@@ -55,6 +54,7 @@ import jakarta.validation.constraints.NotNull;
  * @see I18nFixedString
  */
 @Tag("ut")
+@ExtendWith(MockitoExtension.class)
 class I18nFixedStringTest {
 
     private static final int RND_STR_LENGTH = 20;
@@ -62,17 +62,6 @@ class I18nFixedStringTest {
     private static final Locale MOCK_LOCALE = new Locale(MOCK_LANG);
 
     private @Mock I18nString mockI18nString;
-    protected AutoCloseable mocks;
-
-    @BeforeEach
-    void initMocks() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    void closeMocks() throws Exception {
-        mocks.close();
-    }
 
     /**
      * Test {@link I18nFixedString#from(String)}.
