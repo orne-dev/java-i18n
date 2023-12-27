@@ -30,7 +30,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import dev.orne.i18n.context.I18nContext;
-import dev.orne.i18n.context.I18nContextProvider;
 
 /**
  * Main entry point to I18N framework. Provides methods for configuration and
@@ -53,48 +52,57 @@ public final class I18N {
 
     /**
      * Returns the languages supported by the application.
+     * <p>
+     * Shortcut for {@code I18nContext.getInstance().getAvailableLocales()}.
      * 
      * @return The languages supported by the application
+     * @see I18nContext#getAvailableLocales()
      */
     public static @NotNull Locale[] getAvailableLocales() {
-        return I18nContextProvider.getInstance().getAvailableLocales();
+        return I18nContext.getInstance().getAvailableLocales();
     }
 
     /**
      * Returns the default I18N resources of the application.
+     * <p>
+     * Shortcut for {@code I18nContext.getInstance().getI18nResources()}.
      * 
      * @return The default I18N resources
+     * @see I18nContext#getI18nResources()
      */
-    public static @NotNull I18nResources getI18nResources() {
-        return I18nContextProvider.getInstance().getDefaultI18nResources();
+    public static @NotNull I18nResources getResources() {
+        return I18nContext.getInstance().getI18nResources();
     }
 
     /**
      * Returns the I18N resources identified by the specified key.
      * If key is {@code null} or no resources is associated for such key
      * returns the default I18N resources.
+     * <p>
+     * Shortcut for {@code I18nContext.getInstance().getI18nResources(key)}.
      * 
      * @param key The key of the alternative I18N resources
      * @return The I18N resources to use for the key
+     * @see I18nContext#getI18nResources(String)
      */
-    public static @NotNull I18nResources getI18nResources(
+    public static @NotNull I18nResources getResources(
             final String key) {
-        return I18nContextProvider.getInstance().getI18nResources(key);
+        return I18nContext.getInstance().getI18nResources(key);
     }
 
     /**
-     * Returns the current {@code I18nContext} locale.
+     * Returns the current locale.
      * 
-     * @return The current {@code I18nContext} locale
+     * @return The current locale
      */
     public static @NotNull Locale getLocale() {
         return I18nContext.getInstance().getLocale();
     }
 
     /**
-     * Sets the locale of the current {@code I18nContext}.
+     * Sets the current locale.
      * 
-     * @param locale The current {@code I18nContext} locale
+     * @param locale The current locale
      */
     public static void setLocale(final Locale locale) {
         I18nContext.getInstance().setLocale(locale);

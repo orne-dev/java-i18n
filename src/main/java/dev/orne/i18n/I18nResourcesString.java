@@ -172,7 +172,7 @@ implements I18nString {
      */
     @Override
     public String get() {
-        return I18N.getI18nResources(this.i18nResourcesKey).getMessage(
+        return I18N.getResources(this.i18nResourcesKey).getMessage(
                 this.defaultText,
                 this.codes,
                 (Object[]) this.arguments);
@@ -183,7 +183,7 @@ implements I18nString {
      */
     @Override
     public String get(final @NotNull String language) {
-        return I18N.getI18nResources(this.i18nResourcesKey).getMessage(
+        return I18N.getResources(this.i18nResourcesKey).getMessage(
                 this.defaultText,
                 this.codes,
                 new Locale(Validate.notNull(language)),
@@ -195,7 +195,7 @@ implements I18nString {
      */
     @Override
     public String get(final @NotNull Locale locale) {
-        return I18N.getI18nResources(this.i18nResourcesKey).getMessage(
+        return I18N.getResources(this.i18nResourcesKey).getMessage(
                 this.defaultText,
                 this.codes,
                 Validate.notNull(locale),

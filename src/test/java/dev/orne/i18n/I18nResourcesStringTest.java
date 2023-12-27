@@ -666,14 +666,17 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         final String result = bean.get();
         assertEquals(MOCK_MSG, result);
         then(mockStrategy).should().getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockContext).shouldHaveNoMoreInteractions();
         then(mockResources).should().getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         then(mockResources).shouldHaveNoMoreInteractions();
     }
@@ -690,14 +693,17 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, (Object[]) ARGS);
         final String result = bean.get(MOCK_LANG);
         assertEquals(MOCK_MSG, result);
         then(mockStrategy).should().getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockContext).shouldHaveNoMoreInteractions();
         then(mockResources).should().getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, (Object[]) ARGS);
         then(mockResources).shouldHaveNoMoreInteractions();
     }
@@ -714,7 +720,6 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
         assertThrows(NullPointerException.class, () -> {
             bean.get((String) null);
         });
@@ -732,14 +737,17 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, (Object[]) ARGS);
         final String result = bean.get(MOCK_LOCALE);
         assertEquals(MOCK_MSG, result);
         then(mockStrategy).should().getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockContext).shouldHaveNoMoreInteractions();
         then(mockResources).should().getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, (Object[]) ARGS);
         then(mockResources).shouldHaveNoMoreInteractions();
     }
@@ -756,7 +764,6 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
         assertThrows(NullPointerException.class, () -> {
             bean.get((Locale) null);
         });
@@ -777,7 +784,6 @@ class I18nResourcesStringTest {
         assertEquals(bean, bean);
         assertEquals(bean.hashCode(), bean.hashCode());
         assertNotEquals(bean, new Object());
-        willReturn("other text").given(mockI18nString).get();
         assertNotEquals(bean, mockI18nString);
         then(mockI18nString).shouldHaveNoInteractions();
         I18nResourcesString other = I18nResourcesString
@@ -844,14 +850,17 @@ class I18nResourcesStringTest {
         assertFalse(bean.isEquivalent(null));
         assertTrue(bean.isEquivalent(bean));
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         willReturn(MOCK_MSG).given(mockI18nString).get();
         assertTrue(bean.isEquivalent(mockI18nString));
         then(mockStrategy).should().getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockContext).shouldHaveNoMoreInteractions();
         then(mockResources).should().getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         then(mockResources).shouldHaveNoMoreInteractions();
         then(mockI18nString).should().get();
@@ -870,14 +879,17 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         willReturn("another text").given(mockI18nString).get();
         assertFalse(bean.isEquivalent(mockI18nString));
         then(mockStrategy).should().getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
+        then(mockContext).shouldHaveNoMoreInteractions();
         then(mockResources).should().getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         then(mockResources).shouldHaveNoMoreInteractions();
         then(mockI18nString).should().get();
@@ -956,9 +968,9 @@ class I18nResourcesStringTest {
                 .withArgs(ARGS)
                 .build();
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_LOCALE).given(mockContext).getLocale();
+        willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         final I18nStringMap result = bean.asMap();
         assertNotNull(result);

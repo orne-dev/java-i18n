@@ -118,7 +118,6 @@ class I18nFixedStringTest {
         assertEquals(result, result);
         assertEquals(result.hashCode(), result.hashCode());
         assertNotEquals(result, new Object());
-        willReturn(text).given(mockI18nString).get();
         assertNotEquals(result, mockI18nString);
         then(mockI18nString).shouldHaveNoInteractions();
         I18nFixedString other = I18nFixedString.from(text);

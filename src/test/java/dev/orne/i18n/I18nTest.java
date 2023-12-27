@@ -117,49 +117,58 @@ class I18nTest {
                 Locale.FRENCH
         };
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(locales).given(mockProvider).getAvailableLocales();
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(locales).given(mockContext).getAvailableLocales();
         final Locale[] result = I18N.getAvailableLocales();
         assertSame(locales, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
+        final InOrder order = inOrder(mockStrategy, mockProvider, mockContext);
         then(mockStrategy).should(order).getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getAvailableLocales();
+        then(mockProvider).should(order).getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should(order).getAvailableLocales();
+        then(mockContext).shouldHaveNoMoreInteractions();
     }
 
     /**
-     * Test {@link I18N#getI18nResources()}.
+     * Test {@link I18N#getResources()}.
      */
     @Test
     void testGetDefaultI18nResources() {
         I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
-        final I18nResources result = I18N.getI18nResources();
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources();
+        final I18nResources result = I18N.getResources();
         assertSame(mockResources, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
+        final InOrder order = inOrder(mockStrategy, mockProvider, mockContext);
         then(mockStrategy).should(order).getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getDefaultI18nResources();
+        then(mockProvider).should(order).getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should(order).getI18nResources();
+        then(mockContext).shouldHaveNoMoreInteractions();
     }
 
     /**
-     * Test {@link I18N#getI18nResources(String)}.
+     * Test {@link I18N#getResources(String)}.
      */
     @Test
     void testGetI18nResources() {
         I18nContextProviderStrategy.setInstance(mockStrategy);
         final String key = "mock resources key";
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
-        willReturn(mockResources).given(mockProvider).getI18nResources(key);
-        final I18nResources result = I18N.getI18nResources(key);
+        willReturn(mockContext).given(mockProvider).getContext();
+        willReturn(mockResources).given(mockContext).getI18nResources(key);
+        final I18nResources result = I18N.getResources(key);
         assertSame(mockResources, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
+        final InOrder order = inOrder(mockStrategy, mockProvider, mockContext);
         then(mockStrategy).should(order).getContextProvider();
         then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getI18nResources(key);
+        then(mockProvider).should(order).getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
+        then(mockContext).should(order).getI18nResources(key);
+        then(mockContext).shouldHaveNoMoreInteractions();
     }
 
     /**
