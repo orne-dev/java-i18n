@@ -285,7 +285,7 @@ implements I18nString {
      * {@inheritDoc}
      */
     @Override
-    public I18nStringMap asMap() {
+    public @NotNull I18nStringMap asMap() {
         return this;
     }
 
@@ -295,7 +295,7 @@ implements I18nString {
      * @return The default text.
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return this.getDefaultText();
     }
 }

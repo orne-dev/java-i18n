@@ -178,7 +178,7 @@ implements I18nString {
      * {@inheritDoc}
      */
     @Override
-    public I18nStringMap asMap() {
+    public @NotNull I18nStringMap asMap() {
         return new I18nStringMap(this.text);
     }
 
@@ -186,7 +186,7 @@ implements I18nString {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return this.text;
     }
 }

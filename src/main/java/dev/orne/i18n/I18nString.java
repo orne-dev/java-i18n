@@ -136,5 +136,5 @@ extends Serializable {
      * 
      * @return This instance represented as an {@code I18nStringMap} instance
      */
-    I18nStringMap asMap();
+    @NotNull I18nStringMap asMap();
 }
