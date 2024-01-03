@@ -49,27 +49,38 @@ import dev.orne.i18n.I18nResources;
 public class I18nBundleResources
 implements I18nResources {
 
-    /** The I18N resources bundle. */
-    private final @NotNull ResourceBundle bundle;
+    /** The I18N resources bundle base name. */
+    private final @NotNull String baseName;
 
     /**
      * Creates a new instance for the specified bundle.
      * 
-     * @param bundle The I18N resources bundle
+     * @param bundle The I18N resources bundle base name
      */
     public I18nBundleResources(
-            final @NotNull ResourceBundle bundle) {
+            final @NotNull String baseName) {
         super();
-        this.bundle = Validate.notNull(bundle);
+        this.baseName = Validate.notNull(baseName);
     }
 
     /**
-     * Returns the I18N resources bundle used by this instance.
+     * Returns the I18N resources bundle for the current locale.
      * 
      * @return The I18N resources bundle
      */
     protected @NotNull ResourceBundle getBundle() {
-        return this.bundle;
+        return getBundle(I18N.getLocale());
+    }
+
+    /**
+     * Returns the I18N resources bundle for the specified locale.
+     * 
+     * @param locale The desired locale
+     * @return The I18N resources bundle
+     */
+    protected @NotNull ResourceBundle getBundle(
+            final @NotNull Locale locale) {
+        return ResourceBundle.getBundle(this.baseName, locale);
     }
 
     /**
@@ -95,10 +106,11 @@ implements I18nResources {
         Validate.notNull(defaultMessage);
         Validate.notNull(codes);
         Validate.noNullElements(codes);
+        final ResourceBundle bundle = getBundle(locale);
         String format = null;
         for (final String code : codes) {
             try {
-                format = this.bundle.getString(code);
+                format = bundle.getString(code);
                 break;
             } catch (final MissingResourceException ignore) {
                 // Ignored
@@ -136,9 +148,10 @@ implements I18nResources {
             final Object... params) {
         Validate.notNull(defaultMessage);
         Validate.notNull(code);
+        final ResourceBundle bundle = getBundle(locale);
         String format;
         try {
-            format = this.bundle.getString(code);
+            format = bundle.getString(code);
         } catch (final MissingResourceException mre) {
             format = defaultMessage;
         }

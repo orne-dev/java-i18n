@@ -49,6 +49,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class I18nBundleResourcesTest {
 
+    private static final String BASE_NAME = "dev/orne/i18n/test-messages";
     private static final String MOCK_DEF_MSG = "mock default message";
     private static final String MOCK_DEF_MSG_TMPL = "mock default message: {0} {2}";
     private static final String MOCK_DEF_MSG_INV_TMPL = "mock default message: {";
@@ -70,9 +71,9 @@ class I18nBundleResourcesTest {
             MOCK_PARAM_2,
             MOCK_PARAM_3
     };
-    private static final String MOCK_DEFAULT_LANG = "zz";
-    private static final Locale MOCK_DEFAULT_LOCALE = new Locale(MOCK_DEFAULT_LANG);
-    private static final String MOCK_LANG = "xx";
+    private static final String MOCK_CTX_LANG = "zz";
+    private static final Locale MOCK_CTX_LOCALE = new Locale(MOCK_CTX_LANG);
+    private static final String MOCK_LANG = "yy";
     private static final Locale MOCK_LOCALE = new Locale(MOCK_LANG);
     private static I18nContextProviderStrategy preTestsStrategy;
 
@@ -95,27 +96,30 @@ class I18nBundleResourcesTest {
         I18nContextProviderStrategy.setInstance(mockStrategy);
         willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
-        willReturn(MOCK_DEFAULT_LOCALE).given(mockContext).getLocale();
+        willReturn(MOCK_CTX_LOCALE).given(mockContext).getLocale();
     }
 
     /**
-     * Test {@link I18nBundleResources#I18nBundleResources(ResourceBundle)}.
+     * Test {@link I18nBundleResources#I18nBundleResources(String)}.
      */
     @Test
     void testConstructor() {
-        final I18nBundleResources result = new I18nBundleResources(bundle);
-        assertSame(bundle, result.getBundle());
-        then(bundle).shouldHaveNoInteractions();
-    }
-
-    /**
-     * Test {@link I18nBundleResources#I18nBundleResources(ResourceBundle)}.
-     */
-    @Test
-    void testConstructor_Null() {
         assertThrows(NullPointerException.class, () -> {
             new I18nBundleResources(null);
         });
+        final I18nBundleResources result = new I18nBundleResources(BASE_NAME);
+        ResourceBundle bundle = result.getBundle(MOCK_LOCALE);
+        assertEquals(BASE_NAME, bundle.getBaseBundleName());
+        assertEquals(MOCK_LOCALE, bundle.getLocale());
+        bundle = result.getBundle(new Locale("xx"));
+        assertEquals(BASE_NAME, bundle.getBaseBundleName());
+        assertEquals(Locale.ROOT, bundle.getLocale());
+        bundle = result.getBundle(MOCK_CTX_LOCALE);
+        assertEquals(BASE_NAME, bundle.getBaseBundleName());
+        assertEquals(MOCK_CTX_LOCALE, bundle.getLocale());
+        bundle = result.getBundle();
+        assertEquals(BASE_NAME, bundle.getBaseBundleName());
+        assertEquals(MOCK_CTX_LOCALE, bundle.getLocale());
     }
 
     /**
@@ -124,8 +128,9 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Code() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, MOCK_MSG_CODE, ARGS);
         assertEquals(MOCK_MSG, result);
         then(bundle).should().handleGetObject(MOCK_MSG_CODE);
@@ -138,8 +143,9 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Code_NotFound() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_TMPL, MOCK_MSG_CODE, ARGS);
         assertEquals(MOCK_DEF_MSG_TMPL_RESULT, result);
         then(bundle).should().handleGetObject(MOCK_MSG_CODE);
@@ -152,8 +158,9 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Code_InvalidTemplate() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_INV_TMPL, MOCK_MSG_CODE, ARGS);
         assertEquals(MOCK_DEF_MSG_INV_TMPL, result);
         then(bundle).should().handleGetObject(MOCK_MSG_CODE);
@@ -165,8 +172,9 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Code_Locale() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, MOCK_MSG_CODE, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_MSG, result);
         then(bundle).should().handleGetObject(MOCK_MSG_CODE);
@@ -178,8 +186,9 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Code_Locale_NotFound() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_TMPL, MOCK_MSG_CODE, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_DEF_MSG_TMPL_RESULT, result);
         then(bundle).should().handleGetObject(MOCK_MSG_CODE);
@@ -191,8 +200,9 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Code_Locale_InvalidTemplate() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_INV_TMPL, MOCK_MSG_CODE, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_DEF_MSG_INV_TMPL, result);
         then(bundle).should().handleGetObject(MOCK_MSG_CODE);
@@ -205,8 +215,9 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Codes() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, CODES, ARGS);
         assertEquals(MOCK_MSG, result);
         final InOrder order = inOrder(bundle);
@@ -222,9 +233,10 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Codes_FoundFallback() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, CODES, ARGS);
         assertEquals(MOCK_MSG, result);
         final InOrder order = inOrder(bundle);
@@ -240,10 +252,11 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Codes_NotFound() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_3);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_TMPL, CODES, ARGS);
         assertEquals(MOCK_DEF_MSG_TMPL_RESULT, result);
         final InOrder order = inOrder(bundle);
@@ -259,10 +272,11 @@ class I18nBundleResourcesTest {
     @Test
     void testGetMessage_Codes_InvalidTemplate() {
         mockStrategy();
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_CTX_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_3);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_INV_TMPL, CODES, ARGS);
         assertEquals(MOCK_DEF_MSG_INV_TMPL, result);
         final InOrder order = inOrder(bundle);
@@ -277,8 +291,9 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_Locale() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_MSG, result);
         final InOrder order = inOrder(bundle);
@@ -293,9 +308,10 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_Locale_FoundFallback() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(MOCK_MSG).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_MSG, result);
         final InOrder order = inOrder(bundle);
@@ -310,10 +326,11 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_Locale_NotFound() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_3);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_TMPL, CODES, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_DEF_MSG_TMPL_RESULT, result);
         final InOrder order = inOrder(bundle);
@@ -328,10 +345,11 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testGetMessage_Codes_Locale_InvalidTemplate() {
+        final I18nBundleResources resources = spy(new I18nBundleResources(BASE_NAME));
+        willReturn(bundle).given(resources).getBundle(MOCK_LOCALE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_2);
         willReturn(null).given(bundle).handleGetObject(MOCK_MSG_CODE_3);
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
         final String result = resources.getMessage(MOCK_DEF_MSG_INV_TMPL, CODES, MOCK_LOCALE, ARGS);
         assertEquals(MOCK_DEF_MSG_INV_TMPL, result);
         final InOrder order = inOrder(bundle);

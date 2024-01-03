@@ -25,6 +25,7 @@ package dev.orne.i18n.it.common;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import dev.orne.i18n.I18nResources;
 import dev.orne.i18n.context.DefaultI18nContextProvider;
 import dev.orne.i18n.context.DefaultI18nContextProviderStrategy;
 import dev.orne.i18n.context.I18nBundleResources;
@@ -55,10 +56,10 @@ public final class TestMessages {
     public static final Locale YY_LOCALE = new Locale(YY_LANG);
     public static final String ZZ_LANG = "zz";
     public static final Locale ZZ_LOCALE = new Locale(ZZ_LANG);
+    public static final I18nBundleResources RESOURCES =
+            new I18nBundleResources(BUNDLE_PATH);
     public static final ResourceBundle DEFAULT_BUNDLE =
             ResourceBundle.getBundle(BUNDLE_PATH, DEFAULT_LOCALE);
-    public static final I18nBundleResources DEFAULT_RESOURCES =
-            new I18nBundleResources(DEFAULT_BUNDLE);
 
     private TestMessages() {
         // Utility class
@@ -73,11 +74,10 @@ public final class TestMessages {
     }
 
     public static void configureI18N() {
-        configureI18N(DEFAULT_BUNDLE);
+        configureI18N(RESOURCES);
     }
 
-    public static void configureI18N(ResourceBundle bundle) {
-        final I18nBundleResources resources = new I18nBundleResources(bundle);
+    public static void configureI18N(I18nResources resources) {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider();
         provider.setDefaultI18nResources(resources);
         final DefaultI18nContextProviderStrategy strategy = new DefaultI18nContextProviderStrategy(provider);
