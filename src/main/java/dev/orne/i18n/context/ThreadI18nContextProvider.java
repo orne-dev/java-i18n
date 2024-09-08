@@ -33,7 +33,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 /**
- * Default implementation of {@code I18nContextProvider} that provides a
+ * Implementation of {@code I18nContextProvider} that provides a
  * different {@code I18nContext} for each thread.
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
@@ -42,11 +42,11 @@ import org.apiguardian.api.API.Status;
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
-public class DefaultI18nContextProvider
+public class ThreadI18nContextProvider
 extends AbstractI18nContextProvider {
 
     /** The I18N context provider type. */
-    public static final String TYPE = "DEFAULT";
+    public static final String TYPE = "THREAD";
 
     /** The {@code I18nContext}s per {@code Thread} container. */
     private final @NotNull ThreadLocal<I18nContext> contexts;
@@ -55,7 +55,7 @@ extends AbstractI18nContextProvider {
      * Creates a new instance with {@code I18nContext} instances inherited by
      * child {@code Thread}s
      */
-    public DefaultI18nContextProvider() {
+    public ThreadI18nContextProvider() {
         this(true);
     }
 
@@ -64,7 +64,7 @@ extends AbstractI18nContextProvider {
      * 
      * @param config The I18N configuration.
      */
-    public DefaultI18nContextProvider(
+    public ThreadI18nContextProvider(
             final @NotNull Properties config) {
         super(config);
         if (!config.containsKey(I18nConfiguration.CONTEXT_INHERITED)) {
@@ -82,7 +82,7 @@ extends AbstractI18nContextProvider {
      * @param inheritable If the {@code I18nContext} instances should be
      * inherited by child {@code Thread}s
      */
-    public DefaultI18nContextProvider(
+    public ThreadI18nContextProvider(
             final boolean inheritable) {
         super();
         if (inheritable) {
@@ -167,7 +167,7 @@ extends AbstractI18nContextProvider {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (!getClass().equals(obj.getClass())) { return false; }
-        final DefaultI18nContextProvider other = (DefaultI18nContextProvider) obj;
+        final ThreadI18nContextProvider other = (ThreadI18nContextProvider) obj;
         return new EqualsBuilder()
                 .appendSuper(super.equals(obj))
                 .append(this.isInheritable(), other.isInheritable())
@@ -175,7 +175,7 @@ extends AbstractI18nContextProvider {
     }
 
     /**
-     * Factory for {@code DefaultI18nContextProvider} instances.
+     * Factory for {@code ThreadI18nContextProvider} instances.
      * 
      * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2024-08
@@ -198,7 +198,7 @@ extends AbstractI18nContextProvider {
         @Override
         public @NotNull I18nContextProvider create(
                 final @NotNull Properties config) {
-            return new DefaultI18nContextProvider(config);
+            return new ThreadI18nContextProvider(config);
         }
     }
 }

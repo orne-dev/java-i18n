@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import dev.orne.i18n.context.DefaultI18nContextProvider;
+import dev.orne.i18n.context.ThreadI18nContextProvider;
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
 
@@ -50,7 +50,7 @@ import dev.orne.i18n.context.I18nContextProvider;
  */
 @API(status=Status.STABLE, since="0.1")
 public class I18nSpringContextProvider
-extends DefaultI18nContextProvider {
+extends ThreadI18nContextProvider {
 
     /**
      * Creates a new instance with contexts inherited by child {@code Thread}s.

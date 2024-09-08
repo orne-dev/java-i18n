@@ -80,6 +80,7 @@ implements I18nContextProvider {
     protected AbstractI18nContextProvider(
             final @NotNull Properties config) {
         super();
+        Validate.notNull(config);
         configureAvailableLocales(config);
         configureDefaultI18nResources(config);
         configureAlternativeI18nResources(config);

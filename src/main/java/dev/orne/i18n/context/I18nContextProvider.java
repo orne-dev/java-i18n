@@ -224,7 +224,7 @@ public interface I18nContextProvider {
                 final @NotNull Properties config) {
             String type = config.getProperty(I18nConfiguration.CONTEXT_PROVIDER);
             if (type == null) {
-                type = DefaultI18nContextProvider.TYPE;
+                type = ThreadI18nContextProvider.TYPE;
             }
             final ServiceLoader<I18nContextProviderFactory> loader =
                     ServiceLoader.load(I18nContextProviderFactory.class);

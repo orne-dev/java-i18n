@@ -188,7 +188,7 @@ class I18nContextProviderRegistryTest {
         child.setContextClassLoader(cl);
         child.start();
         child.join();
-        assertInstanceOf(DefaultI18nContextProvider.class, childTest.result);
+        assertInstanceOf(ThreadI18nContextProvider.class, childTest.result);
     }
 
     /**
@@ -199,14 +199,14 @@ class I18nContextProviderRegistryTest {
     throws IOException, InterruptedException {
         createTestClassLoader(null);
         final Properties config = new Properties();
-        config.setProperty(I18nConfiguration.CONTEXT_PROVIDER, DefaultI18nContextProvider.TYPE);
+        config.setProperty(I18nConfiguration.CONTEXT_PROVIDER, ThreadI18nContextProvider.TYPE);
         final ClassLoader cl = createTestClassLoader(config);
         final ConfigurePropertiesTestRunnable childTest = new ConfigurePropertiesTestRunnable(config);
         final Thread child = new Thread(childTest);
         child.setContextClassLoader(cl);
         child.start();
         child.join();
-        assertInstanceOf(DefaultI18nContextProvider.class, childTest.result);
+        assertInstanceOf(ThreadI18nContextProvider.class, childTest.result);
     }
 
     /**
