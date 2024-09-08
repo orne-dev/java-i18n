@@ -59,7 +59,7 @@ import dev.orne.i18n.I18nXmlSchema;
  * &lt;/complexType&gt;
  * </pre>
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @see I18nString
  * @see <a href="https://github.com/eclipse-ee4j/jaxb-ri/issues/1108">JAXB RI Issue 1108</a>

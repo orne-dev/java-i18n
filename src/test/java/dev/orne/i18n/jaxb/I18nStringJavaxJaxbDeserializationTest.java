@@ -56,7 +56,7 @@ import dev.orne.i18n.context.I18nContextProvider;
 /**
  * Unit test for {@code I18nString} JAXB unmarshalling.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
  * @see I18nString.JaxbAdapter

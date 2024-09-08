@@ -42,7 +42,7 @@ import dev.orne.i18n.context.I18nContextProvider;
 /**
  * Unit tests for {@code I18nSpringWebContextClearer}.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-10
  * @since 0.1
  * @see I18nSpringWebContextClearer

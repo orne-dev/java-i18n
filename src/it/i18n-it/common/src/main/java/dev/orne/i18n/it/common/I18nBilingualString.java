@@ -41,7 +41,7 @@ import javax.validation.constraints.NotNull;
 /**
  * {@code I18nString} implementation for two supported languages.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @since 0.1
  */
 @JsonDeserialize(

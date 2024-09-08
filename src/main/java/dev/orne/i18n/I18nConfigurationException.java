@@ -28,7 +28,7 @@ import org.apiguardian.api.API.Status;
 /**
  * Runtime exception when the I18N configuration is invalid.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-10
  * @since 0.1
  */

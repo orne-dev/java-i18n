@@ -44,7 +44,7 @@ import dev.orne.i18n.context.I18nContext;
  * Implementation of {@code I18nContext} that delegates {@code Locale}
  * handling in Spring {@code LocaleContextHolder}.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContext
  * @see LocaleContextHolder

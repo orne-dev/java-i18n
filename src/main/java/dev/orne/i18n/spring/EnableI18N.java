@@ -42,7 +42,7 @@ import org.springframework.context.annotation.Import;
  * <p>
  * For more complex configurations use {@code I18nSpringConfigurer}.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nSpringConfiguration
  * @since 0.1

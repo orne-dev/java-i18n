@@ -25,7 +25,7 @@ package dev.orne.i18n;
 /**
  * Constants of XML schema for library beans 
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @see I18nString
  * @since 0.1

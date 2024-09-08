@@ -53,7 +53,7 @@ import javax.validation.constraints.Pattern.Flag;
  * Integration tests for {@code I18nString} validation with Hibernate
  * implementation of JavaX Bean Validation.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @since 0.1
  */
@@ -381,7 +381,7 @@ public class JavaxValidationTest {
     /**
      * {@code I18nString} validation test container.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @since 0.1
      */
     public static class I18nStringValidationContainer {

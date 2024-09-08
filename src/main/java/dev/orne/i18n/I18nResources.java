@@ -38,7 +38,7 @@ import dev.orne.i18n.context.I18nContext;
  * <p>
  * The default messages are expect to be {@code MessageFormat} compliant.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContext
  * @see MessageFormat

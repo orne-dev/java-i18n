@@ -37,7 +37,7 @@ import dev.orne.i18n.I18nResources;
  * Dummy implementation of {@code I18nResources} that always returns the
  * {@code defaultMessage}, formated with passed arguments.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nResources
  * @since 0.1
@@ -118,7 +118,7 @@ implements I18nResources {
     /**
      * Shared instance lazy initialization class.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2021-01
      * @since 0.1
      */

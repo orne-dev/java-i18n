@@ -31,7 +31,7 @@ import org.apiguardian.api.API.Status;
  * Functional interface for methods able to convert from any {@code I18nString}
  * to the desired {@code I18nString} subtype.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @see I18nString
  * @since 0.1

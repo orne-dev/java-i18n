@@ -38,7 +38,7 @@ import dev.orne.test.rnd.params.StringGenerationParameters;
 /**
  * Generator of {@code I18nStringMap} values.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-10
  * @since 0.1
  */

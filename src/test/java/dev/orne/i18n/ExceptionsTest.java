@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for library exceptions.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-03
  * @since 0.1
  * @see I18nConfigurationException

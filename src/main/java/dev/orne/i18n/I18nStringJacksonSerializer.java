@@ -42,7 +42,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 /**
  * Jackson JSON serializer for {@code I18nString} instances.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @see I18nString
  * @since 0.1
@@ -120,7 +120,7 @@ implements ContextualSerializer {
      * Extension of {@code I18nStringMap} for serialization as
      * JSON object.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2021-02
      * @see I18nStringMap
      * @since 0.1

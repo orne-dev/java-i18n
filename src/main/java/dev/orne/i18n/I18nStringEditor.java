@@ -31,7 +31,7 @@ import org.apiguardian.api.API.Status;
  * Java Beans Editor for {@code I18nString} that converts between
  * {@code String} and {@code I18nFixedString}.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
  */

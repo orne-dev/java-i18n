@@ -39,7 +39,7 @@ import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
 /**
  * Integration tests for Spring Java configuration of Orne I18N.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @since 0.1
  */
 @Tag("spring")

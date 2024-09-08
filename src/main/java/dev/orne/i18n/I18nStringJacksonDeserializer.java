@@ -44,7 +44,7 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 /**
  * Jackson JSON deserializer for {@code I18nString} instances.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @see I18nString
  * @since 0.1
@@ -155,7 +155,7 @@ implements ContextualDeserializer {
      * Extension of {@code I18nStringMap} for deserialization from
      * JSON object.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2021-02
      * @see I18nStringMap
      * @since 0.1

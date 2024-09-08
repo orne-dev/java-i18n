@@ -36,7 +36,7 @@ import org.apiguardian.api.API.Status;
  * Default implementation of {@code I18nContextProvider} that provides a
  * different {@code I18nContext} for each thread.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 2.0, 2022-12
  * @see I18nContextProvider
  * @since 0.1

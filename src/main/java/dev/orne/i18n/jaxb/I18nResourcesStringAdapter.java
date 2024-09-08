@@ -32,7 +32,7 @@ import dev.orne.i18n.I18nResourcesString;
 /**
  * JAXB adapter for {@code I18nResourcesString} instances.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @see I18nResourcesString
  * @since 0.1
@@ -69,7 +69,7 @@ extends XmlAdapter<XmlI18nString, I18nResourcesString> {
      * JAXB adapter for {@code I18nResourcesString} instances that marshalls
      * all available translations.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2021-10
      * @see I18nResourcesString
      * @since {@link I18nResourcesStringAdapter} 1.0

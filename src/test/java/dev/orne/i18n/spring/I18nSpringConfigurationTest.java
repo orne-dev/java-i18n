@@ -43,7 +43,7 @@ import dev.orne.i18n.I18N;
 /**
  * Unit tests for {@code I18nSpringConfiguration}.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-10
  * @since 0.1
  * @see I18nSpringConfiguration

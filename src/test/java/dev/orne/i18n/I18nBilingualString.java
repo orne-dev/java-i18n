@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.util.StdConverter;
 /**
  * {@code I18nString} implementation for two supported languages.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @since 0.1
  */

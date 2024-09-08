@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
  * Configures a listener for clearing I18N context after handling the HTTP
  * requests.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-05
  * @see I18nSpringBaseConfiguration
  * @see I18nSpringWebContextClearer

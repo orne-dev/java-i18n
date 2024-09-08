@@ -45,7 +45,7 @@ import dev.orne.i18n.spring.I18nSpringResources;
 /**
  * Unit tests for {@code I18nSpringContextProvider}.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @since 0.1
  * @see I18nSpringContextProvider
  */

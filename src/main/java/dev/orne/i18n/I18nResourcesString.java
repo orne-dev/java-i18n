@@ -52,7 +52,7 @@ import dev.orne.i18n.jaxb.I18nResourcesStringAdapter;
  * the default text will be formatted with {@code MessageFormat} passing the
  * configured arguments, if any.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
  * @see MessageFormat
@@ -263,7 +263,7 @@ implements I18nString {
     /**
      * Builder of {@code I18nResourcesString} instances. 
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2021-01
      * @since 0.1
      */

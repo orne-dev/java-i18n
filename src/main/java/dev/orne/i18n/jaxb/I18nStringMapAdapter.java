@@ -32,7 +32,7 @@ import dev.orne.i18n.I18nStringMap;
 /**
  * JAXB adapter for {@code I18nStringMap} instances.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @see I18nStringMap
  * @since 0.1
@@ -68,7 +68,7 @@ extends XmlAdapter<XmlI18nString, I18nStringMap> {
      * JAXB adapter for {@code I18nStringMap} instances that marshalls
      * all available translations.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2021-02
      * @see I18nStringMap
      * @since {@link I18nStringMapAdapter} 1.0

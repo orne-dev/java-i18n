@@ -41,7 +41,7 @@ import dev.orne.i18n.I18nResources;
 /**
  * Unit tests for {@code AbstractI18nContextProvider}.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-10
  * @since 0.1
  * @see AbstractI18nContextProvider

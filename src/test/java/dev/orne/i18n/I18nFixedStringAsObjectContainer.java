@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * {@code I18nFixedString} Jackson serialization test container.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @since 0.1
  */

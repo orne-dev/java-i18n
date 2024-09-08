@@ -47,7 +47,7 @@ import dev.orne.i18n.I18nConfigurationException;
 /**
  * Utility class with I18N configuration constants and retrieval methods.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-11
  * @since 0.1
  */

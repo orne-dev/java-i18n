@@ -36,7 +36,7 @@ import dev.orne.i18n.I18nString;
  * Implementation of Javax Bean Validation {@code ConstraintValidator} for
  * {@code Pattern} constraint on {@code I18nString} instances.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @see Pattern
  * @see I18nString

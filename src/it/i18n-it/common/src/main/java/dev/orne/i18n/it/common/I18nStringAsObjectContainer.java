@@ -41,7 +41,7 @@ import dev.orne.i18n.jaxb.I18nStringAdapter;
 /**
  * {@code I18nString} Jackson serialization test container.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @since 0.1
  */
 @XmlAccessorType(XmlAccessType.FIELD)

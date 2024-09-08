@@ -42,7 +42,7 @@ import dev.orne.i18n.context.I18nContextProvider;
  * children {@code ClassLoader}, allowing different configurations for each
  * application even when the library is deployed as a shared library.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContextProvider
  * @see I18nSpringContextProvider
@@ -64,7 +64,7 @@ public class I18nSpringConfiguration {
      * Selector of Spring configuration based on presence of {@code spring-web}
      * on the classpath.
      * 
-     * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2023-05
      * @since 0.1
      */

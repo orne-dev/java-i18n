@@ -44,7 +44,7 @@ import dev.orne.i18n.jaxb.I18nFixedStringAdapter;
  * language (texts provided by users, translations retrieved from DB in lazy
  * mode, etc.).
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
  */

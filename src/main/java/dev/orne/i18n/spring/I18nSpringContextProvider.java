@@ -41,7 +41,7 @@ import dev.orne.i18n.context.I18nContextProvider;
  * Uses {code I18nSpringContext} as context implementation and supports
  * {@code MessageSource} auto-wiring for default I18N resources lookup.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContextProvider
  * @see I18nSpringContext

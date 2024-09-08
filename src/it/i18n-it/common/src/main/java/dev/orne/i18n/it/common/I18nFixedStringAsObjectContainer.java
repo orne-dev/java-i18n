@@ -39,7 +39,7 @@ import dev.orne.i18n.I18nFixedString;
 /**
  * {@code I18nFixedString} Jackson serialization test container.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @since 0.1
  */
 @XmlAccessorType(XmlAccessType.FIELD)

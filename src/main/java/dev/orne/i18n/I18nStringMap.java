@@ -42,7 +42,7 @@ import dev.orne.i18n.jaxb.I18nStringMapAdapter;
  * <p>
  * Useful for translations edition and visualization.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nString
  * @since 0.1

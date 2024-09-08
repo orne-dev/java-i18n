@@ -34,7 +34,7 @@ import dev.orne.i18n.I18nConfigurationException;
 /**
  * SPI based I18N context provider factory.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2024-01
  * @see I18nContextProvider
  * @since 0.1

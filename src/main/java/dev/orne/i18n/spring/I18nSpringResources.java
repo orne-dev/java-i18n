@@ -40,7 +40,7 @@ import dev.orne.i18n.I18nResources;
  * Implementation of {@code I18nResources} based on Spring
  * {@code MessageSource}.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nResources
  * @see MessageSource

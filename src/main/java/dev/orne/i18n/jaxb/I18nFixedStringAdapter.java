@@ -32,7 +32,7 @@ import dev.orne.i18n.I18nFixedString;
 /**
  * JAXB adapter for {@code I18nFixedString} instances.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-10
  * @see I18nFixedString
  * @since 0.1

@@ -50,7 +50,7 @@ import dev.orne.i18n.I18nStringMap;
 /**
  * Abstract unit tests for {@code I18nString} {@code ConstraintValidator}.
  *
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-02
  * @param <T> The constraint type validated
  * @see ConstraintValidator

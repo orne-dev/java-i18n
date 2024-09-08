@@ -41,7 +41,7 @@ import dev.orne.i18n.I18nResources;
  * I18n contexts, to check if a given context is still alive and to access
  * default I18N resources of the application.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContext
  * @see I18nResources

@@ -36,7 +36,7 @@ import dev.orne.i18n.I18nResources;
  * Interface for I18N context. Contains the data required to return the I18N
  * texts in user's language.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @since 0.1
  */

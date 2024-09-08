@@ -35,7 +35,7 @@ import org.apiguardian.api.API.Status;
  * Implementation of {@code I18nContextProvider} that shares a single
  * {@code I18nContext} instance for all threads.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2022-10
  * @see I18nContextProvider
  * @since 0.2

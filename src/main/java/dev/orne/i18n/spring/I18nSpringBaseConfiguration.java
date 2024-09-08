@@ -58,7 +58,7 @@ import dev.orne.i18n.context.I18nContextProvider;
  * different configurations for each sub-module when the library is deployed
  * at EAR level in JavaEE environments.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-05
  * @see I18nContextProvider
  * @see I18nSpringContextProvider

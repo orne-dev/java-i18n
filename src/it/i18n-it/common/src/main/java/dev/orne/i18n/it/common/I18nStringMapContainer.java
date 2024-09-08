@@ -37,7 +37,7 @@ import dev.orne.i18n.I18nStringMap;
 /**
  * {@code I18nString} JSON/XML serialization test container.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @since 0.1
  */
 @XmlAccessorType(XmlAccessType.FIELD)

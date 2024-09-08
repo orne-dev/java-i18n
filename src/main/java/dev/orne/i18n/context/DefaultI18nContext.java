@@ -39,7 +39,7 @@ import org.apiguardian.api.API.Status;
 /**
  * Default implementation of {@code I18nContext}.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContext
  * @since 0.1

@@ -35,7 +35,7 @@ import dev.orne.i18n.context.I18nContext;
  * Main entry point to I18N framework. Provides methods for configuration and
  * manipulation of I18N contexts.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContext
  * @since 0.1
