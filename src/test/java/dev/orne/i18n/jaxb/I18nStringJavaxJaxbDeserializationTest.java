@@ -28,6 +28,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -49,9 +50,8 @@ import dev.orne.i18n.I18nStringContainer;
 import dev.orne.i18n.I18nStringMap;
 import dev.orne.i18n.I18nStringMapAsObjectContainer;
 import dev.orne.i18n.I18nStringMapContainer;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit test for {@code I18nString} JAXB unmarshalling.
@@ -76,7 +76,7 @@ class I18nStringJavaxJaxbDeserializationTest {
 
     @AfterAll
     static void resetI18N() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     private String randomXmlText() {

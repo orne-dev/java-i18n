@@ -35,9 +35,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.context.support.RequestHandledEvent;
 
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * Unit tests for {@code I18nSpringWebContextClearer}.
@@ -51,22 +51,19 @@ import dev.orne.i18n.context.I18nContextProviderStrategy;
 @ExtendWith(MockitoExtension.class)
 class I18nSpringWebContextClearerTest {
 
-    private static I18nContextProviderStrategy preTestsStrategy;
-
-    private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
     private @Mock RequestHandledEvent event;
 
     @BeforeAll
-    static void saveDefaultStrategy() {
-        preTestsStrategy = I18nContextProviderStrategy.getInstance();
+    static void resetConfiguration() {
+        ContextTestUtils.reset();
     }
 
     @AfterEach
-    void restoreDefaultStrategy() {
-        I18nContextProviderStrategy.setInstance(preTestsStrategy);
+    void cleanConfiguration() {
+        ContextTestUtils.reset();
     }
 
     /**
@@ -74,13 +71,10 @@ class I18nSpringWebContextClearerTest {
      */
     @Test
     void testClearContext() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         final I18nSpringWebContextClearer listener = new I18nSpringWebContextClearer();
         listener.onApplicationEvent(event);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
+        final InOrder order = inOrder(mockProvider);
         then(mockProvider).should(order).clearContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
     }

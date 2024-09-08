@@ -1,5 +1,7 @@
 package dev.orne.i18n.context;
 
+import java.util.Properties;
+
 /*-
  * #%L
  * Orne I18N
@@ -42,6 +44,9 @@ import org.apiguardian.api.API.Status;
 public class SharedI18nContextProvider
 extends AbstractI18nContextProvider {
 
+    /** The I18N context provider type. */
+    public static final String TYPE = "SHARED";
+
     /** The shared I18N context. */
     private I18nContext context;
 
@@ -50,6 +55,16 @@ extends AbstractI18nContextProvider {
      */
     public SharedI18nContextProvider() {
         super();
+    }
+
+    /**
+     * Creates a new instance based on specified configuration.
+     * 
+     * @param config The I18N configuration.
+     */
+    public SharedI18nContextProvider(
+            final @NotNull Properties config) {
+        super(config);
     }
 
     /**
@@ -104,5 +119,33 @@ extends AbstractI18nContextProvider {
                 .appendSuper(super.equals(obj))
                 .append(this.context, other.context)
                 .isEquals();
+    }
+
+    /**
+     * Factory for {@code SharedI18nContextProvider} instances.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-08
+     * @since 0.1
+     */
+    public static class Factory
+    implements I18nContextProviderFactory {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull String getType() {
+            return TYPE;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull I18nContextProvider create(
+                final @NotNull Properties config) {
+            return new SharedI18nContextProvider(config);
+        }
     }
 }

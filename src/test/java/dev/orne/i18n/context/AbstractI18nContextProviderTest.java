@@ -26,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
+import java.util.Properties;
+
+import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -34,7 +37,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.i18n.I18nResources;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code AbstractI18nContextProvider}.
@@ -55,15 +57,79 @@ class AbstractI18nContextProviderTest {
     private @Mock I18nContext mockContext;
 
     /**
-     * Test {@link AbstractI18nContextProvider#AbstractI18nContextProvider}.
+     * Test {@link AbstractI18nContextProvider#AbstractI18nContextProvider()}.
      */
     @Test
     void testConstructor() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
+        final TestImpl provider = new TestImpl();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
+    }
+
+    /**
+     * Test {@link AbstractI18nContextProvider#AbstractI18nContextProvider(Properties)}.
+     */
+    @Test
+    void testConfigConstructor() {
+        final Properties config = new Properties();
+        TestImpl provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
+        assertTrue(provider.getI18nResources().isEmpty());
+        config.clear();
+        config.setProperty(I18nConfiguration.AVAILABLE_LANGUAGES, "en,fr");
+        provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(new Locale[] { Locale.ENGLISH, Locale.FRENCH }, provider.getAvailableLocales());
+        assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
+        assertTrue(provider.getI18nResources().isEmpty());
+        config.clear();
+        config.setProperty(I18nConfiguration.DEFAULT_RESOURCES, "dev.orne.i18n.test-messages");
+        provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        I18nBundleResources bundle = assertInstanceOf(I18nBundleResources.class, provider.getDefaultI18nResources());
+        assertEquals("dev.orne.i18n.test-messages", bundle.getBundle().getBaseBundleName());
+        assertTrue(provider.getI18nResources().isEmpty());
+        config.clear();
+        config.setProperty(I18nConfiguration.DEFAULT_RESOURCES, "dev.orne.i18n.missing-messages");
+        provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
+        assertTrue(provider.getI18nResources().isEmpty());
+        config.clear();
+        config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt", "dev.orne.i18n.test-messages-alt");
+        provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        bundle = assertInstanceOf(I18nBundleResources.class, provider.getI18nResources("alt"));
+        assertEquals("dev.orne.i18n.test-messages-alt", bundle.getBundle().getBaseBundleName());
+        assertEquals(1, provider.getI18nResources().size());
+        config.clear();
+        config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt", "dev.orne.i18n.missing-messages");
+        provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
+        assertSame(provider.getDefaultI18nResources(), provider.getI18nResources("alt"));
+        assertEquals(1, provider.getI18nResources().size());
+        config.clear();
+        config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt1", "dev.orne.i18n.test-messages");
+        config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt2", "dev.orne.i18n.test-messages-alt");
+        provider = new TestImpl(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        bundle = assertInstanceOf(I18nBundleResources.class, provider.getI18nResources("alt1"));
+        assertEquals("dev.orne.i18n.test-messages", bundle.getBundle().getBaseBundleName());
+        bundle = assertInstanceOf(I18nBundleResources.class, provider.getI18nResources("alt2"));
+        assertEquals("dev.orne.i18n.test-messages-alt", bundle.getBundle().getBaseBundleName());
+        assertEquals(2, provider.getI18nResources().size());
     }
 
     /**
@@ -320,6 +386,12 @@ class AbstractI18nContextProviderTest {
 
     private static class TestImpl
     extends AbstractI18nContextProvider {
+        public TestImpl() {
+            super();
+        }
+        public TestImpl(@NotNull Properties config) {
+            super(config);
+        }
         @Override
         public @NotNull I18nContext getContext() {
             return null;

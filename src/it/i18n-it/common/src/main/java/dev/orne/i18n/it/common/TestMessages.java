@@ -26,10 +26,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.DefaultI18nContextProvider;
-import dev.orne.i18n.context.DefaultI18nContextProviderStrategy;
 import dev.orne.i18n.context.I18nBundleResources;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 public final class TestMessages {
 
@@ -80,8 +79,7 @@ public final class TestMessages {
     public static void configureI18N(I18nResources resources) {
         final DefaultI18nContextProvider provider = new DefaultI18nContextProvider();
         provider.setDefaultI18nResources(resources);
-        final DefaultI18nContextProviderStrategy strategy = new DefaultI18nContextProviderStrategy(provider);
-        I18nContextProviderStrategy.setInstance(strategy);
+        ContextTestUtils.setProvider(provider);
     }
 
     public final static class Entries {

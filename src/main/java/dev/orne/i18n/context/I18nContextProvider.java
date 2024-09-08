@@ -4,7 +4,7 @@ package dev.orne.i18n.context;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2021-2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,12 +23,17 @@ package dev.orne.i18n.context;
  */
 
 import java.util.Locale;
+import java.util.Properties;
+import java.util.ServiceLoader;
+import java.util.WeakHashMap;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import dev.orne.i18n.I18nConfigurationException;
 import dev.orne.i18n.I18nResources;
 
 /**
@@ -52,7 +57,7 @@ public interface I18nContextProvider {
      */
     @API(status=Status.EXPERIMENTAL, since="0.1")
     public static @NotNull I18nContextProvider getInstance() {
-        return I18nContextProviderStrategy.getInstance().getContextProvider();
+        return Registry.get();
     }
 
     /**
@@ -112,4 +117,158 @@ public interface I18nContextProvider {
      * implementations choice, and thus is discouraged.
      */
     void invalidate();
+
+    /**
+     * The I18N context provider registry.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2021-01
+     * @since 0.1
+     */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
+    final class Registry {
+
+        /** The per class loader I18N context provider cache. */
+        private static final WeakHashMap<ClassLoader, I18nContextProvider> CACHE = new WeakHashMap<>();
+
+        /**
+         * Private constructor.
+         */
+        private Registry() {
+            // Utility class
+        }
+
+        /**
+         * Returns the I18N context provider for current thread context class loader.
+         * 
+         * @return The I18N context provider.
+         */
+        public static @NotNull I18nContextProvider get() {
+            return get(Thread.currentThread().getContextClassLoader());
+        }
+
+        /**
+         * Returns the I18N context provider for the specified class loader.
+         * 
+         * @param The class loader.
+         * @return The I18N context provider.
+         */
+        public static synchronized @NotNull I18nContextProvider get(
+                final @NotNull ClassLoader cl) {
+            return CACHE.computeIfAbsent(cl, Registry::configure);
+        }
+
+        /**
+         * Resets the I18N context provider cache.
+         */
+        static void reset() {
+            CACHE.clear();
+        }
+
+        /**
+         * Sets the I18N context provider for the current thread's context class loader.
+         * 
+         * @param provider The I18N context provider.
+         */
+        static void set(
+                final @NotNull I18nContextProvider provider) {
+            set(Thread.currentThread().getContextClassLoader(), provider);
+        }
+
+        /**
+         * Sets the I18N context provider for the specified class loader.
+         * 
+         * @param cl The class loader.
+         * @param provider The I18N context provider.
+         */
+        static synchronized void set(
+                final @NotNull ClassLoader cl,
+                final @NotNull I18nContextProvider provider) {
+            Validate.notNull(cl);
+            Validate.notNull(provider);
+            CACHE.put(cl, provider);
+        }
+
+        /**
+         * Configures the I18N context provider based on the
+         * I18N configuration for the specified class loader.
+         * <p>
+         * If the class loader inherits configuration from parent then
+         * parent class loader's context provider is assigned.
+         * Otherwise a new context provider is created based on the
+         * I18N configuration.
+         * 
+         * @param cl The class loader.
+         * @return The configured I18N context provider.
+         */
+        static @NotNull I18nContextProvider configure(
+                final @NotNull ClassLoader cl) {
+            final Properties config = I18nConfiguration.get(cl);
+            if (cl.getParent() != null) {
+                final Properties parentConfig = I18nConfiguration.get(cl.getParent());
+                if (config.equals(parentConfig)) {
+                    return get(cl.getParent());
+                }
+            }
+            return configure(config);
+        }
+
+        /**
+         * Creates and configures a I18N context provider based on the
+         * specified application I18N configuration.
+         * 
+         * @param config The I18N configuration.
+         * @return The configured I18N context provider.
+         */
+        static @NotNull I18nContextProvider configure(
+                final @NotNull Properties config) {
+            String type = config.getProperty(I18nConfiguration.CONTEXT_PROVIDER);
+            if (type == null) {
+                type = DefaultI18nContextProvider.TYPE;
+            }
+            final ServiceLoader<I18nContextProviderFactory> loader =
+                    ServiceLoader.load(I18nContextProviderFactory.class);
+            for (final I18nContextProviderFactory configurer : loader) {
+                if (type.equals(configurer.getType())) {
+                    return configurer.create(config);
+                }
+            }
+            throw new I18nConfigurationException("No I18N context provider found for configured type: " + type);
+        }
+    }
+
+
+    /**
+     * Interface for configuration classes that need to set I18N context
+     * provider instances to use.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-08
+     * @since 0.1
+     */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
+    interface Configurer {
+
+        /**
+         * Sets the I18N context provider for the current thread's context class loader.
+         * 
+         * @param provider The I18N context provider.
+         */
+        default void setI18nContextProvider(
+                final @NotNull I18nContextProvider provider) {
+            setI18nContextProvider(Thread.currentThread().getContextClassLoader(), provider);
+        }
+
+        /**
+         * Sets the I18N context provider for the specified class loader.
+         * 
+         * @param cl The class loader.
+         * @param provider The I18N context provider.
+         */
+        default void setI18nContextProvider(
+                final @NotNull ClassLoader cl,
+                final @NotNull I18nContextProvider provider) {
+            Registry.set(cl, provider);
+        }
+    }
 }

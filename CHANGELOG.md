@@ -23,11 +23,7 @@
         01. Added `dev.orne.i18n.context.AbstractI18nContextProvider`
         01. Added `dev.orne.i18n.context.DefaultI18nContextProvider`
         01. Added `dev.orne.i18n.context.SharedI18nContextProvider`
-    01. Added `dev.orne.i18n.context.I18nContextProviderStrategy`
-        01. Added `dev.orne.i18n.context.I18nContextProviderStrategyConfigurer`
-        01. Added `dev.orne.i18n.context.DefaultI18nContextProviderStrategy`
-        01. Added `dev.orne.i18n.context.I18nContextProviderConfigurableStrategy`
-        01. Added `dev.orne.i18n.context.I18nContextProviderByClassLoaderStrategy`
+    01. Added `dev.orne.i18n.context.I18nContextProviderFactory`
 01. :gift: Added Spring framework integration support
     01. Added `dev.orne.i18n.spring.I18nSpringContext`
     01. Added `dev.orne.i18n.spring.I18nSpringResources`

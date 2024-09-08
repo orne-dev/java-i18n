@@ -32,6 +32,8 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.Validate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
@@ -49,6 +51,9 @@ import dev.orne.i18n.I18nResources;
 public class I18nBundleResources
 implements I18nResources {
 
+    /** The logger of the class. */
+    private static final Logger LOG = LoggerFactory.getLogger(I18nBundleResources.class);
+
     /** The I18N resources bundle base name. */
     private final @NotNull String baseName;
 
@@ -61,6 +66,24 @@ implements I18nResources {
             final @NotNull String baseName) {
         super();
         this.baseName = Validate.notNull(baseName);
+    }
+
+    /**
+     * Returns a non null I18N resources for the specified bundle base name.
+     * If the bundle cannot be found a dommy I18N resources is returned.
+     * 
+     * @param baseName The I18N resources bundle base name
+     * @return The I18N resources instance.
+     */
+    public static @NotNull I18nResources forBasename(
+            final @NotNull String baseName) {
+        try {
+            ResourceBundle.getBundle(baseName, Locale.getDefault());
+            return new I18nBundleResources(baseName);
+        } catch (final MissingResourceException e) {
+            LOG.warn("No bundle for I18N resources found. Using dummy resources.");
+            return DummyI18nResources.getInstance();
+        }
     }
 
     /**

@@ -38,9 +38,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * Unit tests for {@code I18nSpringResources}.
@@ -79,26 +79,23 @@ class I18nSpringResourcesTest {
     private static final Locale MOCK_DEFAULT_LOCALE = new Locale(MOCK_DEFAULT_LANG);
     private static final String MOCK_LANG = "xx";
     private static final Locale MOCK_LOCALE = new Locale(MOCK_LANG);
-    private static I18nContextProviderStrategy preTestsStrategy;
 
-    private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nContext mockContext;
     private @Mock MessageSource source;
 
     @BeforeAll
-    static void saveDefaultStrategy() {
-        preTestsStrategy = I18nContextProviderStrategy.getInstance();
+    static void resetConfiguration() {
+        ContextTestUtils.reset();
     }
 
     @AfterAll
     static void restoreDefaultStrategy() {
-        I18nContextProviderStrategy.setInstance(preTestsStrategy);
+        ContextTestUtils.reset();
     }
 
     void mockStrategy() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_DEFAULT_LOCALE).given(mockContext).getLocale();
     }

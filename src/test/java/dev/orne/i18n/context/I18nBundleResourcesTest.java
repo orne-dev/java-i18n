@@ -28,8 +28,7 @@ import static org.mockito.BDDMockito.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +48,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class I18nBundleResourcesTest {
 
-    private static final String BASE_NAME = "dev/orne/i18n/test-messages";
+    private static final String BASE_NAME = "dev.orne.i18n.test-messages";
     private static final String MOCK_DEF_MSG = "mock default message";
     private static final String MOCK_DEF_MSG_TMPL = "mock default message: {0} {2}";
     private static final String MOCK_DEF_MSG_INV_TMPL = "mock default message: {";
@@ -75,26 +74,18 @@ class I18nBundleResourcesTest {
     private static final Locale MOCK_CTX_LOCALE = new Locale(MOCK_CTX_LANG);
     private static final String MOCK_LANG = "yy";
     private static final Locale MOCK_LOCALE = new Locale(MOCK_LANG);
-    private static I18nContextProviderStrategy preTestsStrategy;
 
-    private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nContext mockContext;
     private @Mock MockResourceBundle bundle;
 
-    @BeforeAll
-    static void saveDefaultStrategy() {
-        preTestsStrategy = I18nContextProviderStrategy.getInstance();
-    }
-
-    @AfterAll
-    static void restoreDefaultStrategy() {
-        I18nContextProviderStrategy.setInstance(preTestsStrategy);
+    @AfterEach
+    void resetConfiguration() {
+        ContextTestUtils.reset();
     }
 
     void mockStrategy() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_CTX_LOCALE).given(mockContext).getLocale();
     }
@@ -104,6 +95,7 @@ class I18nBundleResourcesTest {
      */
     @Test
     void testConstructor() {
+        mockStrategy();
         assertThrows(NullPointerException.class, () -> {
             new I18nBundleResources(null);
         });
@@ -120,6 +112,18 @@ class I18nBundleResourcesTest {
         bundle = result.getBundle();
         assertEquals(BASE_NAME, bundle.getBaseBundleName());
         assertEquals(MOCK_CTX_LOCALE, bundle.getLocale());
+    }
+
+    /**
+     * Test {@link I18nBundleResources#forBasename(String)}.
+     */
+    @Test
+    void testForBasename() {
+        I18nBundleResources result = assertInstanceOf(I18nBundleResources.class, 
+                I18nBundleResources.forBasename(BASE_NAME));
+        assertEquals(BASE_NAME, result.getBundle().getBaseBundleName());
+        assertInstanceOf(DummyI18nResources.class,
+                I18nBundleResources.forBasename("dev.orne.i18n.missing-messages"));
     }
 
     /**

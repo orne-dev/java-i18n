@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
+import java.util.Properties;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Tag;
@@ -57,7 +58,26 @@ class DefaultI18nContextProviderTest {
      */
     @Test
     void testConstructor() {
-        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(false);
+        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider();
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertTrue(provider.getI18nResources().isEmpty());
+        assertTrue(provider.isInheritable());
+    }
+
+    /**
+     * Test {@link DefaultI18nContextProvider#DefaultI18nContextProvider(boolean)}.
+     */
+    @Test
+    void testConstructor_Inheritable() {
+        DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertTrue(provider.getI18nResources().isEmpty());
+        assertTrue(provider.isInheritable());
+        provider = new DefaultI18nContextProvider(false);
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -66,16 +86,33 @@ class DefaultI18nContextProviderTest {
     }
 
     /**
-     * Test {@link DefaultI18nContextProvider#DefaultI18nContextProvider(boolean)}.
+     * Test {@link DefaultI18nContextProvider#DefaultI18nContextProvider(Properties)}.
      */
     @Test
-    void testConstructor_Inheritable() {
-        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider(true);
+    void testConfigConstructor() {
+        final Properties config = new Properties();
+        DefaultI18nContextProvider provider = new DefaultI18nContextProvider(config);
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
         assertTrue(provider.isInheritable());
+        config.clear();
+        config.setProperty(I18nConfiguration.CONTEXT_INHERITED, "true");
+        provider = new DefaultI18nContextProvider(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertTrue(provider.getI18nResources().isEmpty());
+        assertTrue(provider.isInheritable());
+        config.clear();
+        config.setProperty(I18nConfiguration.CONTEXT_INHERITED, "false");
+        provider = new DefaultI18nContextProvider(config);
+        assertNotNull(provider.getSessionUUID());
+        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
+        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
+        assertTrue(provider.getI18nResources().isEmpty());
+        assertFalse(provider.isInheritable());
     }
 
     /**

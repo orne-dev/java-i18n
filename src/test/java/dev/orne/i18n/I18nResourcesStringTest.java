@@ -43,9 +43,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.test.rnd.Generators;
 import dev.orne.test.rnd.params.GenerationParameters;
 
@@ -86,7 +86,6 @@ class I18nResourcesStringTest {
     private static final String MOCK_LANG = "xx";
     private static final Locale MOCK_LOCALE = new Locale(MOCK_LANG);
 
-    private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
@@ -94,12 +93,12 @@ class I18nResourcesStringTest {
 
     @BeforeEach
     void mockStrategy() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
+        ContextTestUtils.setProvider(mockProvider);
     }
 
     @AfterEach
     void restStrategy() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**
@@ -660,14 +659,11 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         final String result = bean.get();
         assertEquals(MOCK_MSG, result);
-        then(mockStrategy).should().getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
         then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
         then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
@@ -687,14 +683,11 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, (Object[]) ARGS);
         final String result = bean.get(MOCK_LANG);
         assertEquals(MOCK_MSG, result);
-        then(mockStrategy).should().getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
         then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
         then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
@@ -714,7 +707,6 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         assertThrows(NullPointerException.class, () -> {
             bean.get((String) null);
         });
@@ -731,14 +723,11 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, MOCK_LOCALE, (Object[]) ARGS);
         final String result = bean.get(MOCK_LOCALE);
         assertEquals(MOCK_MSG, result);
-        then(mockStrategy).should().getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
         then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
         then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
@@ -758,7 +747,6 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         assertThrows(NullPointerException.class, () -> {
             bean.get((Locale) null);
         });
@@ -844,14 +832,11 @@ class I18nResourcesStringTest {
                 .build();
         assertFalse(bean.isEquivalent(null));
         assertTrue(bean.isEquivalent(bean));
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         willReturn(MOCK_MSG).given(mockI18nString).get();
         assertTrue(bean.isEquivalent(mockI18nString));
-        then(mockStrategy).should().getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
         then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
         then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
@@ -873,14 +858,11 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);
         willReturn(MOCK_MSG).given(mockResources).getMessage(MOCK_DEF_MSG, CODES, (Object[]) ARGS);
         willReturn("another text").given(mockI18nString).get();
         assertFalse(bean.isEquivalent(mockI18nString));
-        then(mockStrategy).should().getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
         then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
         then(mockContext).should().getI18nResources(MOCK_RESOURCES_KEY);
@@ -962,7 +944,6 @@ class I18nResourcesStringTest {
                 .withCodes(CODES)
                 .withArgs(ARGS)
                 .build();
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(MOCK_LOCALE).given(mockContext).getLocale();
         willReturn(mockResources).given(mockContext).getI18nResources(MOCK_RESOURCES_KEY);

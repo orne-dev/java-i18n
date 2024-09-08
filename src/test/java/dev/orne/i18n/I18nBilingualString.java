@@ -24,14 +24,14 @@ package dev.orne.i18n;
 
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * {@code I18nString} implementation for two supported languages.

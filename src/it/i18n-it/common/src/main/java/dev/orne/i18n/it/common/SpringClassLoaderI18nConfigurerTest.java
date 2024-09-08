@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -37,10 +36,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.SpringVersion;
 
 import dev.orne.i18n.I18N;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.DefaultI18nContextProvider;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderByClassLoaderStrategy;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
 
 /**
@@ -98,7 +96,7 @@ public class SpringClassLoaderI18nConfigurerTest {
 
     @AfterEach
     void resetI18N() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**
@@ -107,18 +105,14 @@ public class SpringClassLoaderI18nConfigurerTest {
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Runtime()
     throws InterruptedException {
-        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
+        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider, bootCL);
         test.targetClass = Runtime.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
         assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        final ClassLoader providerCL = test.resultProviders.keySet().iterator().next();
-        assertSame(bootCL, providerCL);
-        assertSame(provider, test.resultProviders.get(bootCL));
+        assertSame(provider, test.resultClassLoaderProvider);
     }
 
     /**
@@ -127,18 +121,14 @@ public class SpringClassLoaderI18nConfigurerTest {
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_System()
     throws InterruptedException {
-        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
+        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider, ClassLoader.getSystemClassLoader());
         test.targetClass = System.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
         assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        final ClassLoader providerCL = test.resultProviders.keySet().iterator().next();
-        assertSame(ClassLoader.getSystemClassLoader(), providerCL);
-        assertSame(provider, test.resultProviders.get(ClassLoader.getSystemClassLoader()));
+        assertSame(provider, test.resultClassLoaderProvider);
     }
 
     /**
@@ -147,18 +137,14 @@ public class SpringClassLoaderI18nConfigurerTest {
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Spring()
     throws InterruptedException {
-        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
+        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider, springCL);
         test.targetClass = SpringVersion.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
         assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        final ClassLoader providerCL = test.resultProviders.keySet().iterator().next();
-        assertSame(springCL, providerCL);
-        assertSame(provider, test.resultProviders.get(springCL));
+        assertSame(provider, test.resultClassLoaderProvider);
     }
 
     /**
@@ -167,18 +153,14 @@ public class SpringClassLoaderI18nConfigurerTest {
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Lib()
     throws InterruptedException {
-        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
+        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider, libCL);
         test.targetClass = I18N.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
         assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        final ClassLoader providerCL = test.resultProviders.keySet().iterator().next();
-        assertSame(libCL, providerCL);
-        assertSame(provider, test.resultProviders.get(libCL));
+        assertSame(provider, test.resultClassLoaderProvider);
     }
 
     /**
@@ -187,18 +169,14 @@ public class SpringClassLoaderI18nConfigurerTest {
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Test()
     throws InterruptedException {
-        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
+        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider, testCL);
         test.targetClass = SpringClassLoaderI18nConfigurerTest.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
         assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        final ClassLoader providerCL = test.resultProviders.keySet().iterator().next();
-        assertSame(testCL, providerCL);
-        assertSame(provider, test.resultProviders.get(testCL));
+        assertSame(provider, test.resultClassLoaderProvider);
     }
 
     /**
@@ -207,48 +185,36 @@ public class SpringClassLoaderI18nConfigurerTest {
     @Test
     void testAfterPropertiesSet_Configurable_TargetClass_Thread()
     throws InterruptedException {
-        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider);
+        final ClassLoaderSelectionTestRunnable test = new ClassLoaderSelectionTestRunnable(provider, threadCL);
         test.targetClass = Thread.class;
         final Thread childThread = new Thread(test);
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
         assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        final ClassLoader providerCL = test.resultProviders.keySet().iterator().next();
-        assertSame(threadCL, providerCL);
-        assertSame(provider, test.resultProviders.get(threadCL));
+        assertSame(provider, test.resultClassLoaderProvider);
     }
 
-    static class TestI18nContextProviderByClassLoaderStrategy
-    extends I18nContextProviderByClassLoaderStrategy {
-
-        @Override
-        protected Map<ClassLoader, I18nContextProvider> getContextProviders() {
-            return super.getContextProviders();
-        }
-    }
 
     class ClassLoaderSelectionTestRunnable
     implements Runnable {
 
         private final @NotNull I18nContextProvider provider;
+        private final @NotNull ClassLoader cl;
         private Class<?> targetClass;
         private I18nContextProvider resultDefaultProvider;
-        private Map<ClassLoader, I18nContextProvider> resultProviders;
+        private I18nContextProvider resultClassLoaderProvider;
 
         public ClassLoaderSelectionTestRunnable(
-                final @NotNull I18nContextProvider provider) {
+                final @NotNull I18nContextProvider provider,
+                final @NotNull ClassLoader cl) {
             super();
             this.provider = provider;
+            this.cl = cl;
         }
 
         @Override
         public void run() {
-            final TestI18nContextProviderByClassLoaderStrategy strategy =
-                    new TestI18nContextProviderByClassLoaderStrategy();
-            I18nContextProviderStrategy.setInstance(strategy);
             final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setContextProvider(this.provider);
             if (this.targetClass != null) {
@@ -262,9 +228,9 @@ public class SpringClassLoaderI18nConfigurerTest {
                 }
             }
             configurer.afterPropertiesSet();
-            I18nContextProviderStrategy.getInstance();
-            resultDefaultProvider = strategy.getDefaultContextProvider();
-            resultProviders = strategy.getContextProviders();
+            I18nContextProvider.getInstance();
+            resultDefaultProvider = I18nContextProvider.getInstance();
+            resultClassLoaderProvider = I18nContextProvider.Registry.get(cl);
         }
     }
 }

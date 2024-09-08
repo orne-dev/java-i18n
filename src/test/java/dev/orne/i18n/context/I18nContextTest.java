@@ -24,7 +24,6 @@ package dev.orne.i18n.context;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.inOrder;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -36,7 +35,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -54,20 +52,18 @@ import dev.orne.i18n.I18nResources;
 @ExtendWith(MockitoExtension.class)
 class I18nContextTest {
 
-    private static I18nContextProviderStrategy preTestsStrategy;
-    private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
 
     @BeforeAll
-    static void saveDefaultStrategy() {
-        preTestsStrategy = I18nContextProviderStrategy.getInstance();
+    static void resetConfiguration() {
+        ContextTestUtils.reset();
     }
 
     @AfterEach
-    void restoreDefaultStrategy() {
-        I18nContextProviderStrategy.setInstance(preTestsStrategy);
+    void cleanConfiguration() {
+        ContextTestUtils.reset();
     }
 
     /**
@@ -75,15 +71,11 @@ class I18nContextTest {
      */
     @Test
     void testGetInstance() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockContext).given(mockProvider).getContext();
         final I18nContext result = I18nContext.getInstance();
         assertSame(mockContext, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getContext();
+        then(mockProvider).should().getContext();
         then(mockProvider).shouldHaveNoMoreInteractions();
         then(mockContext).shouldHaveNoInteractions();
     }
@@ -93,20 +85,16 @@ class I18nContextTest {
      */
     @Test
     void testGetAvailableLocales() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
+        ContextTestUtils.setProvider(mockProvider);
         final Locale[] locales = new Locale[] {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(locales).given(mockProvider).getAvailableLocales();
-        final I18nContext context = spy(new TestContext());
+        final I18nContext context = new TestContext();
         final Locale[] result = context.getAvailableLocales();
         assertSame(locales, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getAvailableLocales();
+        then(mockProvider).should().getAvailableLocales();
         then(mockProvider).shouldHaveNoMoreInteractions();
     }
 
@@ -115,16 +103,12 @@ class I18nContextTest {
      */
     @Test
     void testGetDefaultI18nResources() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
-        final I18nContext context = spy(new TestContext());
+        final I18nContext context = new TestContext();
         final I18nResources result = context.getI18nResources();
         assertSame(mockResources, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getDefaultI18nResources();
+        then(mockProvider).should().getDefaultI18nResources();
         then(mockProvider).shouldHaveNoMoreInteractions();
     }
 
@@ -133,17 +117,13 @@ class I18nContextTest {
      */
     @Test
     void testGetI18nResources() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
+        ContextTestUtils.setProvider(mockProvider);
         final String key = "mock resources key";
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
         willReturn(mockResources).given(mockProvider).getI18nResources(key);
-        final I18nContext context = spy(new TestContext());
+        final I18nContext context = new TestContext();
         final I18nResources result = context.getI18nResources(key);
         assertSame(mockResources, result);
-        final InOrder order = inOrder(mockStrategy, mockProvider);
-        then(mockStrategy).should(order).getContextProvider();
-        then(mockStrategy).shouldHaveNoMoreInteractions();
-        then(mockProvider).should(order).getI18nResources(key);
+        then(mockProvider).should().getI18nResources(key);
         then(mockProvider).shouldHaveNoMoreInteractions();
     }
 

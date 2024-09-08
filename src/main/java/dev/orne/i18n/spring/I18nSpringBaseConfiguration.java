@@ -44,8 +44,6 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import dev.orne.i18n.I18nResources;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderConfigurableStrategy;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * I18N context provider configuration for Spring. Configures a
@@ -69,7 +67,7 @@ import dev.orne.i18n.context.I18nContextProviderStrategy;
 @API(status=Status.STABLE, since="0.1")
 @Configuration
 public class I18nSpringBaseConfiguration
-implements InitializingBean, ImportAware {
+implements InitializingBean, ImportAware, I18nContextProvider.Configurer {
 
     /** The Spring context. */
     private ApplicationContext context;
@@ -495,14 +493,12 @@ implements InitializingBean, ImportAware {
         } else {
             provider = this.contextProvider;
         }
-        final I18nContextProviderStrategy strategy = I18nContextProviderStrategy.getInstance();
-        if (this.targetClass != null &&
-                strategy instanceof I18nContextProviderConfigurableStrategy) {
-            ((I18nContextProviderConfigurableStrategy) strategy).setContextProvider(
+        if (this.targetClass != null) {
+            setI18nContextProvider(
                     getTargetClassLoader(),
                     provider);
         } else {
-            strategy.setDefaultContextProvider(provider);
+            setI18nContextProvider(provider);
         }
     }
 }

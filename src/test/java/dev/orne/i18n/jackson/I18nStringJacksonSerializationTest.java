@@ -27,6 +27,8 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -52,9 +54,8 @@ import dev.orne.i18n.I18nStringJacksonSerializer;
 import dev.orne.i18n.I18nStringMap;
 import dev.orne.i18n.I18nStringMapAsObjectContainer;
 import dev.orne.i18n.I18nStringMapContainer;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18nString} Jackson serialization support.
@@ -88,7 +89,7 @@ class I18nStringJacksonSerializationTest {
 
     @AfterAll
     static void resetI18N() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**

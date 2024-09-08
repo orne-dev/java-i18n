@@ -35,9 +35,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.i18n.spring.I18nSpringContext;
 import dev.orne.i18n.spring.I18nSpringContextProvider;
 import dev.orne.i18n.spring.I18nSpringResources;
@@ -59,7 +59,7 @@ abstract class AbstractSpringConfigurationIT {
 
     @AfterEach
     void clearContext() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class AbstractSpringConfigurationIT {
      */
     @Test
     void testDefaultProvider() {
-        final I18nContextProvider provider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider provider = I18nContextProvider.getInstance();
         assertNotNull(provider);
         assertTrue(provider instanceof I18nSpringContextProvider);
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());

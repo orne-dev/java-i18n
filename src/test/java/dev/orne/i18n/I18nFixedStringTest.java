@@ -34,6 +34,8 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -43,7 +45,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.orne.test.rnd.Generators;
 import dev.orne.test.rnd.params.GenerationParameters;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18nFixedString}.

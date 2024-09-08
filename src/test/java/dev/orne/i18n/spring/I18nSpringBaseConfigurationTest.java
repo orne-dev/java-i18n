@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -45,12 +47,9 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
-import dev.orne.i18n.context.DefaultI18nContextProvider;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.DummyI18nResources;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderByClassLoaderStrategy;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18nSpringBaseConfiguration}.
@@ -81,9 +80,6 @@ class I18nSpringBaseConfigurationTest {
     @BeforeAll
     static void createComplexClassLoader() {
         bootCL = ClassLoader.getSystemClassLoader();
-        while (bootCL.getParent() != null) {
-            bootCL = bootCL.getParent();
-        }
         springCL = new URLClassLoader(
                 new URL[] {
                     org.slf4j.Logger.class.getProtectionDomain().getCodeSource().getLocation(),
@@ -114,7 +110,7 @@ class I18nSpringBaseConfigurationTest {
 
     @AfterEach
     void resetI18N() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**
@@ -651,11 +647,11 @@ class I18nSpringBaseConfigurationTest {
      */
     @Test
     void testAfterPropertiesSet() {
-        final I18nContextProvider previousProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider previousProvider = I18nContextProvider.getInstance();
         final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         final I18nContextProvider expected = configurer.createContextProvider();
         configurer.afterPropertiesSet();
-        final I18nContextProvider defaultProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider defaultProvider = I18nContextProvider.getInstance();
         assertNotSame(previousProvider, defaultProvider);
         assertEquals(expected, defaultProvider);
     }
@@ -665,11 +661,11 @@ class I18nSpringBaseConfigurationTest {
      */
     @Test
     void testAfterPropertiesSet_ContextProvider() {
-        final I18nContextProvider previousProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider previousProvider = I18nContextProvider.getInstance();
         final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(this.provider);
         configurer.afterPropertiesSet();
-        final I18nContextProvider defaultProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider defaultProvider = I18nContextProvider.getInstance();
         assertNotSame(previousProvider, defaultProvider);
         assertSame(this.provider, defaultProvider);
     }
@@ -679,12 +675,12 @@ class I18nSpringBaseConfigurationTest {
      */
     @Test
     void testAfterPropertiesSet_TargetClass() {
-        final I18nContextProvider previousProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider previousProvider = I18nContextProvider.getInstance();
         final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
         configurer.setContextProvider(this.provider);
         configurer.setTargetClass(I18nSpringBaseConfigurationTest.class);
         configurer.afterPropertiesSet();
-        final I18nContextProvider defaultProvider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider defaultProvider = I18nContextProvider.getInstance();
         assertNotSame(previousProvider, defaultProvider);
         assertSame(this.provider, defaultProvider);
     }
@@ -700,9 +696,7 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertSame(this.provider, test.resultDefaultProvider);
-        assertNotNull(test.resultProviders);
-        assertTrue(test.resultProviders.isEmpty());
+        assertSame(this.provider, test.resultProvider);
     }
 
     /**
@@ -717,10 +711,8 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        assertSame(this.provider, test.resultProviders.get(bootCL));
+        assertSame(this.provider, I18nContextProvider.Registry.get(bootCL));
+        assertSame(this.provider, test.resultProvider);
     }
 
     /**
@@ -735,10 +727,8 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        assertSame(this.provider, test.resultProviders.get(ClassLoader.getSystemClassLoader()));
+        assertSame(this.provider, I18nContextProvider.Registry.get(ClassLoader.getSystemClassLoader()));
+        assertSame(this.provider, test.resultProvider);
     }
 
     /**
@@ -753,10 +743,8 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        assertSame(this.provider, test.resultProviders.get(springCL));
+        assertSame(this.provider, I18nContextProvider.Registry.get(springCL));
+        assertSame(this.provider, test.resultProvider);
     }
 
     /**
@@ -771,10 +759,8 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        assertSame(this.provider, test.resultProviders.get(libCL));
+        assertSame(this.provider, I18nContextProvider.Registry.get(libCL));
+        assertSame(this.provider, test.resultProvider);
     }
 
     /**
@@ -789,10 +775,8 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        assertSame(this.provider, test.resultProviders.get(testCL));
+        assertSame(this.provider, I18nContextProvider.Registry.get(testCL));
+        assertSame(this.provider, test.resultProvider);
     }
 
     /**
@@ -807,19 +791,8 @@ class I18nSpringBaseConfigurationTest {
         childThread.setContextClassLoader(threadCL);
         childThread.start();
         childThread.join();
-        assertTrue(test.resultDefaultProvider instanceof DefaultI18nContextProvider);
-        assertNotNull(test.resultProviders);
-        assertEquals(1, test.resultProviders.size());
-        assertSame(this.provider, test.resultProviders.get(threadCL));
-    }
-
-    static class TestI18nContextProviderByClassLoaderStrategy
-    extends I18nContextProviderByClassLoaderStrategy {
-
-        @Override
-        protected Map<ClassLoader, I18nContextProvider> getContextProviders() {
-            return super.getContextProviders();
-        }
+        assertSame(this.provider, I18nContextProvider.Registry.get(threadCL));
+        assertSame(this.provider, test.resultProvider);
     }
 
     class ClassLoaderSelectionTestRunnable
@@ -827,8 +800,7 @@ class I18nSpringBaseConfigurationTest {
 
         private final @NotNull I18nContextProvider provider;
         private Class<?> targetClass;
-        private I18nContextProvider resultDefaultProvider;
-        private Map<ClassLoader, I18nContextProvider> resultProviders;
+        private I18nContextProvider resultProvider;
 
         public ClassLoaderSelectionTestRunnable(
                 final @NotNull I18nContextProvider provider) {
@@ -838,9 +810,6 @@ class I18nSpringBaseConfigurationTest {
 
         @Override
         public void run() {
-            final TestI18nContextProviderByClassLoaderStrategy strategy =
-                    new TestI18nContextProviderByClassLoaderStrategy();
-            I18nContextProviderStrategy.setInstance(strategy);
             final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
             configurer.setContextProvider(this.provider);
             if (this.targetClass != null) {
@@ -854,9 +823,7 @@ class I18nSpringBaseConfigurationTest {
                 }
             }
             configurer.afterPropertiesSet();
-            I18nContextProviderStrategy.getInstance();
-            resultDefaultProvider = strategy.getDefaultContextProvider();
-            resultProviders = strategy.getContextProviders();
+            resultProvider = I18nContextProvider.getInstance();
         }
     }
 }

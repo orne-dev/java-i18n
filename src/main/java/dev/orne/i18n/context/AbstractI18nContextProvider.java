@@ -27,10 +27,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -42,7 +44,7 @@ import dev.orne.i18n.I18nResources;
 /**
  * Abstract implementation of {@code I18nContextProvider}.
  * 
- * @author <a href="mailto:wamphiry@orne.dev">(w) Iker Hernaez</a>
+ * @author <a href="mailto:ihernaez@users.noreply.github.com">(w) Iker Hernaez</a>
  * @version 1.0, 2022-12
  * @see I18nContextProvider
  * @since 0.2
@@ -71,6 +73,19 @@ implements I18nContextProvider {
     }
 
     /**
+     * Creates a new instance based on specified configuration.
+     * 
+     * @param config The I18N configuration.
+     */
+    protected AbstractI18nContextProvider(
+            final @NotNull Properties config) {
+        super();
+        configureAvailableLocales(config);
+        configureDefaultI18nResources(config);
+        configureAlternativeI18nResources(config);
+    }
+
+    /**
      * Returns the UUID of this provider instance and session.
      * Used to check contexts validity. Constant from instance creation to
      * call to {@code invalidate()}
@@ -79,6 +94,25 @@ implements I18nContextProvider {
      */
     public @NotNull UUID getSessionUUID() {
         return this.sessionUUID;
+    }
+
+    /**
+     * Configures the supported languages based on specified configuration.
+     * 
+     * @param config The I18N configuration.
+     */
+    protected void configureAvailableLocales(
+            final @NotNull Properties config) {
+        if (config.containsKey(I18nConfiguration.AVAILABLE_LANGUAGES)) {
+            final String[] langs = StringUtils.split(
+                    config.getProperty(I18nConfiguration.AVAILABLE_LANGUAGES),
+                    ",");
+            final Locale[] locales = new Locale[langs.length];
+            for (int i = 0; i < langs.length; i++) {
+                locales[i] = new Locale(langs[i]);
+            }
+            setAvailableLocales(locales);
+        }
     }
 
     /**
@@ -99,6 +133,36 @@ implements I18nContextProvider {
         Validate.notNull(locales);
         Validate.noNullElements(locales);
         availableLocales = Arrays.copyOf(locales, locales.length);
+    }
+
+    /**
+     * Configures the default I18N resources based on specified configuration.
+     * 
+     * @param config The I18N configuration.
+     */
+    protected void configureDefaultI18nResources(
+            final @NotNull Properties config) {
+        if (config.containsKey(I18nConfiguration.DEFAULT_RESOURCES)) {
+            setDefaultI18nResources(I18nBundleResources.forBasename(
+                    config.getProperty(I18nConfiguration.DEFAULT_RESOURCES)));
+        }
+    }
+
+    /**
+     * Configures the alternative I18N resources based on specified configuration.
+     * 
+     * @param config The I18N configuration.
+     */
+    protected void configureAlternativeI18nResources(
+            final @NotNull Properties config) {
+        for (final String prop : config.stringPropertyNames()) {
+            if (prop.startsWith(I18nConfiguration.NAMED_RESOURCES_PREFIX)) {
+                final String resourceName = prop.substring(I18nConfiguration.NAMED_RESOURCES_PREFIX.length());
+                addI18nResources(
+                        resourceName,
+                        I18nBundleResources.forBasename(config.getProperty(prop)));
+            }
+        }
     }
 
     /**

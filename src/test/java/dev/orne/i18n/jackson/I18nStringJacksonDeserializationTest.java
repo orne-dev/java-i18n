@@ -29,6 +29,8 @@ import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -62,9 +64,8 @@ import dev.orne.i18n.I18nStringJacksonDeserializer;
 import dev.orne.i18n.I18nStringMap;
 import dev.orne.i18n.I18nStringMapAsObjectContainer;
 import dev.orne.i18n.I18nStringMapContainer;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Unit tests for {@code I18nString} Jackson deserialization support.
@@ -100,7 +101,7 @@ class I18nStringJacksonDeserializationTest {
 
     @AfterAll
     static void resetI18N() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**

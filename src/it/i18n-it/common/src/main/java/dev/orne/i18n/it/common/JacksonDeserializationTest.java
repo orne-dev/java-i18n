@@ -56,8 +56,8 @@ import dev.orne.i18n.I18nResourcesString;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringJacksonDeserializer;
 import dev.orne.i18n.I18nStringMap;
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 
 /**
  * Tests for {@code I18nString} Jackson deserialization support.
@@ -90,7 +90,7 @@ public class JacksonDeserializationTest {
 
     @AfterAll
     static void resetI18N() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     /**

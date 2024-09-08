@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.i18n.spring.I18nSpringContextProvider;
 
 /**
@@ -51,7 +50,7 @@ extends AbstractSpringConfigurationIT {
      */
     @Test
     void testDefaultProvider() {
-        final I18nContextProvider provider = I18nContextProviderStrategy.getInstance().getDefaultContextProvider();
+        final I18nContextProvider provider = I18nContextProvider.getInstance();
         assertNotNull(provider);
         assertTrue(provider instanceof I18nSpringContextProvider);
         assertArrayEquals(new Locale[] {

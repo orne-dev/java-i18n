@@ -241,7 +241,7 @@ class AbstractValidatorForI18nStringTest {
         then(validator).shouldHaveNoMoreInteractions();
     }
 
-    class MockImpl
+    static class MockImpl
     extends AbstractValidatorForI18nString<Annotation> {
         @Override
         protected boolean isTextValid(@NotNull String text) {

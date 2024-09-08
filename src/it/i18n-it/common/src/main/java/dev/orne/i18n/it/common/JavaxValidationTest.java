@@ -36,7 +36,7 @@ import dev.orne.i18n.I18nFixedString;
 import dev.orne.i18n.I18nResourcesString;
 import dev.orne.i18n.I18nString;
 import dev.orne.i18n.I18nStringMap;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
+import dev.orne.i18n.context.ContextTestUtils;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -75,7 +75,7 @@ public class JavaxValidationTest {
 
     @AfterAll
     static void restoreDefaultStrategy() {
-        I18nContextProviderStrategy.setInstance(null);
+        ContextTestUtils.reset();
     }
 
     @Test

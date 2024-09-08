@@ -37,16 +37,15 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContext;
 import dev.orne.i18n.context.I18nContextProvider;
-import dev.orne.i18n.context.I18nContextProviderStrategy;
 import dev.orne.test.rnd.Generators;
 import dev.orne.test.rnd.params.GenerationParameters;
 
@@ -78,20 +77,12 @@ class I18nStringMapTest {
     private static final Locale YY_LOCALE = new Locale(YY_LANG);
     private static final Locale ZZ_LOCALE = new Locale(ZZ_LANG);
 
-    private static I18nContextProviderStrategy preTestsStrategy;
-    private @Mock I18nContextProviderStrategy mockStrategy;
     private @Mock I18nContextProvider mockProvider;
     private @Mock I18nResources mockResources;
     private @Mock I18nContext mockContext;
 
-    @BeforeAll
-    static void saveDefaultStrategy() {
-        preTestsStrategy = I18nContextProviderStrategy.getInstance();
-    }
-
-    void mockStrategy() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+    void mockProvider() {
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockResources).given(mockProvider).getDefaultI18nResources();
         willReturn(mockResources).given(mockProvider).getI18nResources(any());
         willReturn(mockContext).given(mockProvider).getContext();
@@ -99,8 +90,8 @@ class I18nStringMapTest {
     }
 
     @AfterEach
-    void restoreDefaultStrategy() {
-        I18nContextProviderStrategy.setInstance(preTestsStrategy);
+    void resetI18N() {
+        ContextTestUtils.reset();
     }
 
     /**
@@ -163,8 +154,7 @@ class I18nStringMapTest {
      */
     @Test
     void testCopyConstructor_Resources() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
         final I18nResourcesString copy = spy(I18nResourcesString
@@ -401,8 +391,7 @@ class I18nStringMapTest {
      */
     @Test
     void testGet() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
         final I18nStringMap bean = spy(new I18nStringMap(MOCK_DEF_MSG));
@@ -597,7 +586,7 @@ class I18nStringMapTest {
      */
     @Test
     void testEqualsHash() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
+        ContextTestUtils.setProvider(mockProvider);
         final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG);
         assertNotEquals(bean, (Object) null);
         assertEquals(bean, bean);
@@ -641,8 +630,7 @@ class I18nStringMapTest {
      */
     @Test
     void testIsEquivalent_I18nString_Other() {
-        I18nContextProviderStrategy.setInstance(mockStrategy);
-        willReturn(mockProvider).given(mockStrategy).getContextProvider();
+        ContextTestUtils.setProvider(mockProvider);
         willReturn(mockContext).given(mockProvider).getContext();
         willReturn(CONTEXT_LOCALE).given(mockContext).getLocale();
         final I18nStringMap bean = new I18nStringMap(MOCK_DEF_MSG)

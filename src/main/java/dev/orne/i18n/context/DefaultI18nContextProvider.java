@@ -1,5 +1,7 @@
 package dev.orne.i18n.context;
 
+import java.util.Properties;
+
 /*-
  * #%L
  * Orne I18N
@@ -43,6 +45,9 @@ import org.apiguardian.api.API.Status;
 public class DefaultI18nContextProvider
 extends AbstractI18nContextProvider {
 
+    /** The I18N context provider type. */
+    public static final String TYPE = "DEFAULT";
+
     /** The {@code I18nContext}s per {@code Thread} container. */
     private final @NotNull ThreadLocal<I18nContext> contexts;
 
@@ -52,6 +57,23 @@ extends AbstractI18nContextProvider {
      */
     public DefaultI18nContextProvider() {
         this(true);
+    }
+
+    /**
+     * Creates a new instance based on specified configuration.
+     * 
+     * @param config The I18N configuration.
+     */
+    public DefaultI18nContextProvider(
+            final @NotNull Properties config) {
+        super(config);
+        if (!config.containsKey(I18nConfiguration.CONTEXT_INHERITED)) {
+            this.contexts = new InheritableThreadLocal<>();
+        } else if (Boolean.parseBoolean(config.getProperty(I18nConfiguration.CONTEXT_INHERITED))) {
+            this.contexts = new InheritableThreadLocal<>();
+        } else {
+            this.contexts = new ThreadLocal<>();
+        }
     }
 
     /**
@@ -150,5 +172,33 @@ extends AbstractI18nContextProvider {
                 .appendSuper(super.equals(obj))
                 .append(this.isInheritable(), other.isInheritable())
                 .isEquals();
+    }
+
+    /**
+     * Factory for {@code DefaultI18nContextProvider} instances.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-08
+     * @since 0.1
+     */
+    public static class Factory
+    implements I18nContextProviderFactory {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull String getType() {
+            return TYPE;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull I18nContextProvider create(
+                final @NotNull Properties config) {
+            return new DefaultI18nContextProvider(config);
+        }
     }
 }
