@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
 import javax.validation.constraints.NotNull;
 
@@ -117,6 +118,87 @@ public interface I18nContextProvider {
      * implementations choice, and thus is discouraged.
      */
     void invalidate();
+
+    /**
+     * Builder of I18N context provider instances.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-09
+     * @param <T> The type of I18N context provider build by the builder.
+     * @param <B> The type of builder returned for method chaining.
+     * @since 0.1
+     */
+    @API(status=Status.STABLE, since="0.1")
+    public interface Builder {
+
+        /**
+         * Configures the builder with I18N configuration for the current class loader.
+         * 
+         * @return This builder, for method chaining.
+         * @see I18nConfiguration#get()
+         */
+        default @NotNull Builder configure() {
+            return configure(I18nConfiguration.get());
+        }
+
+        /**
+         * Configures the builder with specified I18N configuration.
+         * 
+         * @param config The I18N configuration.
+         * @return This builder, for method chaining.
+         * @see I18nConfiguration#get()
+         */
+        @NotNull Builder configure(
+                @NotNull Properties config);
+
+        /**
+         * Sets the default locale supplier.
+         * 
+         * @param supplier The default locale supplier.
+         * @return This builder, for method chaining.
+         */
+        @NotNull Builder setDefaultLocaleSupplier(
+                @NotNull Supplier<@NotNull Locale> supplier);
+
+        /**
+         * Sets the available locales.
+         * 
+         * @param locales The available locales.
+         * @return This builder, for method chaining.
+         */
+        @NotNull Builder setAvailableLocales(
+                @NotNull Locale[] locales);
+
+        /**
+         * Sets the default I18N resources.
+         * 
+         * @param resources The default I18N resources
+         * @return This builder, for method chaining.
+         */
+        @NotNull Builder setDefaultI18nResources(
+                @NotNull I18nResources resources);
+
+        /**
+         * Adds alternative I18N resources to be used when the specified key is
+         * used.
+         * 
+         * @param key The key of the alternative I18N resources
+         * @param resource The alternative I18N resources
+         * @return This builder, for method chaining.
+         */
+        @NotNull Builder addI18nResources(
+                @NotNull String key,
+                @NotNull I18nResources resource);
+
+        /**
+         * Builds an immutable I18N context provider instance with the current
+         * configuration of this builder. Further modifications to the builder
+         * will have no effect in the returned instance.
+         * 
+         * @return The I18N context provider instance.
+         */
+        @NotNull I18nContextProvider build();
+    }
 
     /**
      * The I18N context provider registry.
@@ -236,7 +318,6 @@ public interface I18nContextProvider {
             throw new I18nConfigurationException("No I18N context provider found for configured type: " + type);
         }
     }
-
 
     /**
      * Interface for configuration classes that need to set I18N context

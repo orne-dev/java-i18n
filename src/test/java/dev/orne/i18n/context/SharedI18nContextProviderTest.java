@@ -56,7 +56,7 @@ class SharedI18nContextProviderTest {
      */
     @Test
     void testConstructor() {
-        final SharedI18nContextProvider provider = new SharedI18nContextProvider();
+        final SharedI18nContextProvider provider = SharedI18nContextProvider.builder().build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -68,7 +68,7 @@ class SharedI18nContextProviderTest {
      */
     @Test
     void testGetContext() {
-        final SharedI18nContextProvider provider = spy(new SharedI18nContextProvider());
+        final SharedI18nContextProvider provider = spy(SharedI18nContextProvider.builder().build());
         willReturn(mockContext).given(provider).createContext();
         final I18nContext result = provider.getContext();
         assertSame(mockContext, result);
@@ -83,7 +83,7 @@ class SharedI18nContextProviderTest {
     @Test
     void testIsContextAlive() {
         final I18nContext otherContext = mock(I18nContext.class);
-        final SharedI18nContextProvider provider = spy(new SharedI18nContextProvider());
+        final SharedI18nContextProvider provider = spy(SharedI18nContextProvider.builder().build());
         willReturn(mockContext).given(provider).createContext();
         assertFalse(provider.isContextValid(mockContext));
         assertFalse(provider.isContextValid(otherContext));
@@ -99,7 +99,7 @@ class SharedI18nContextProviderTest {
     @Test
     void testClearContext() {
         final I18nContext otherContext = mock(I18nContext.class);
-        final SharedI18nContextProvider provider = spy(new SharedI18nContextProvider());
+        final SharedI18nContextProvider provider = spy(SharedI18nContextProvider.builder().build());
         willReturn(mockContext, otherContext).given(provider).createContext();
         I18nContext context = provider.getContext();
         assertSame(mockContext, context);
@@ -124,30 +124,45 @@ class SharedI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final SharedI18nContextProvider provider = new SharedI18nContextProvider();
+        SharedI18nContextProvider provider = SharedI18nContextProvider.builder()
+                .build();
         assertNotEquals(provider, (Object) null);
         assertEquals(provider, provider);
         assertEquals(provider.hashCode(), provider.hashCode());
         assertNotEquals(provider, new Object());
-        final SharedI18nContextProvider other = new SharedI18nContextProvider();
+        SharedI18nContextProvider other = SharedI18nContextProvider.builder()
+                .build();
         assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
         assertEquals(provider, other);
-        other.setAvailableLocales(locales);
+        other = SharedI18nContextProvider.builder()
+                .setAvailableLocales(locales)
+                .build();
         assertNotEquals(provider, other);
-        provider.setAvailableLocales(locales);
+        provider = SharedI18nContextProvider.builder()
+                .setAvailableLocales(locales)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
-        provider.setDefaultI18nResources(mockDefaultResources);
+        provider = SharedI18nContextProvider.builder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .build();
         assertNotEquals(provider, other);
-        other.setDefaultI18nResources(mockDefaultResources);
+        other = SharedI18nContextProvider.builder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
-        provider.addI18nResources("mock key", mockResources);
+        provider = SharedI18nContextProvider.builder()
+                .addI18nResources("mock key", mockResources)
+                .build();
         assertNotEquals(provider, other);
-        other.addI18nResources("other mock key", mockResources);
+        other = SharedI18nContextProvider.builder()
+                .addI18nResources("other mock key", mockResources)
+                .build();
         assertNotEquals(provider, other);
-        other.clearI18nResources();
-        other.addI18nResources("mock key", mockResources);
+        other = SharedI18nContextProvider.builder()
+                .addI18nResources("mock key", mockResources)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
         provider.getContext();

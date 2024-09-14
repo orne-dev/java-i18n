@@ -1,12 +1,10 @@
 package dev.orne.i18n.context;
 
-import java.util.Properties;
-
 /*-
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2021-2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,6 +22,10 @@ import java.util.Properties;
  * #L%
  */
 
+import java.util.Locale;
+import java.util.Properties;
+import java.util.function.Supplier;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.Validate;
@@ -31,6 +33,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nResources;
 
 /**
  * Implementation of {@code I18nContextProvider} that provides a
@@ -52,24 +56,14 @@ extends AbstractI18nContextProvider {
     private final @NotNull ThreadLocal<I18nContext> contexts;
 
     /**
-     * Creates a new instance with {@code I18nContext} instances inherited by
-     * child {@code Thread}s
-     */
-    public ThreadI18nContextProvider() {
-        this(true);
-    }
-
-    /**
-     * Creates a new instance based on specified configuration.
+     * Creates a new instance based on specified builder.
      * 
-     * @param config The I18N configuration.
+     * @param builder The I18N context provider builder.
      */
-    public ThreadI18nContextProvider(
-            final @NotNull Properties config) {
-        super(config);
-        if (!config.containsKey(I18nConfiguration.CONTEXT_INHERITED)) {
-            this.contexts = new InheritableThreadLocal<>();
-        } else if (Boolean.parseBoolean(config.getProperty(I18nConfiguration.CONTEXT_INHERITED))) {
+    protected ThreadI18nContextProvider(
+            @NotNull BuilderImpl<?, ?> builder) {
+        super(builder);
+        if (builder.inheritableContexts) {
             this.contexts = new InheritableThreadLocal<>();
         } else {
             this.contexts = new ThreadLocal<>();
@@ -77,19 +71,12 @@ extends AbstractI18nContextProvider {
     }
 
     /**
-     * Creates a new instance.
+     * Creates a new {@code ThreadI18nContextProvider} instances builder.
      * 
-     * @param inheritable If the {@code I18nContext} instances should be
-     * inherited by child {@code Thread}s
+     * @return The {@code ThreadI18nContextProvider} instances builder.
      */
-    public ThreadI18nContextProvider(
-            final boolean inheritable) {
-        super();
-        if (inheritable) {
-            this.contexts = new InheritableThreadLocal<>();
-        } else {
-            this.contexts = new ThreadLocal<>();
-        }
+    public static @NotNull Builder builder() {
+        return new BuilderImpl<>();
     }
 
     /**
@@ -175,6 +162,155 @@ extends AbstractI18nContextProvider {
     }
 
     /**
+     * Interface for {@code ThreadI18nContextProvider} instance builders.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-09
+     * @since 0.1
+     */
+    public interface Builder
+    extends I18nContextProvider.Builder {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default @NotNull Builder configure() {
+            return configure(I18nConfiguration.get());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder configure(
+                @NotNull Properties config);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder setDefaultLocaleSupplier(
+                @NotNull Supplier<@NotNull Locale> supplier);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder setAvailableLocales(
+                @NotNull Locale[] locales);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder setDefaultI18nResources(
+                @NotNull I18nResources resources);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder addI18nResources(
+                @NotNull String key,
+                @NotNull I18nResources resource);
+
+        /**
+         * Sets if the {@code I18nContext} instances will be inherited by child
+         * threads.
+         * 
+         * @param inheritable If the {@code I18nContext} instances will be
+         * inherited by child threads.
+         * @return This builder, for method chaining.
+         */
+        @NotNull Builder setInheritableContexts(
+                @NotNull boolean inheritable);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull ThreadI18nContextProvider build();
+    }
+
+    /**
+     * Abstract builder of {@code ThreadI18nContextProvider} instances.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-09
+     * @param <T> The type of I18N context provider build by the builder.
+     * @param <B> The type of builder returned for method chaining.
+     * @since 0.1
+     */
+    protected static class BuilderImpl<
+            T extends ThreadI18nContextProvider,
+            B extends BuilderImpl<T, B>>
+    extends AbstractI18nContextProvider.BuilderImpl<T, B>
+    implements Builder {
+
+        /**
+         * If the {@code I18nContext} instances should be inherited by child
+         * {@code Thread}s.
+         */
+        protected boolean inheritableContexts = true;
+
+        /**
+         * Creates a new instance.
+         */
+        protected BuilderImpl() {
+            super();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @SuppressWarnings("unchecked")
+        public B configure(
+                final @NotNull Properties config) {
+            super.configure(config);
+            configureInheritable(config);
+            return (B) this;
+        }
+
+        /**
+         * Configures the default language based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureInheritable(
+                final @NotNull Properties config) {
+            if (config.containsKey(I18nConfiguration.CONTEXT_INHERITED)) {
+                setInheritableContexts(Boolean.valueOf(
+                        config.getProperty(I18nConfiguration.CONTEXT_INHERITED)));
+            }
+        }
+
+        /**
+         * Sets if the {@code I18nContext} instances will be inherited by child
+         * threads.
+         * 
+         * @param inheritable If the {@code I18nContext} instances will be
+         * inherited by child threads.
+         * @return This builder, for method chaining.
+         */
+        @SuppressWarnings("unchecked")
+        public @NotNull B setInheritableContexts(
+                @NotNull boolean inheritable) {
+            this.inheritableContexts = inheritable;
+            return (B) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull ThreadI18nContextProvider build() {
+            return new ThreadI18nContextProvider(this);
+        }
+    }
+
+    /**
      * Factory for {@code ThreadI18nContextProvider} instances.
      * 
      * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
@@ -196,9 +332,11 @@ extends AbstractI18nContextProvider {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull I18nContextProvider create(
+        public @NotNull ThreadI18nContextProvider create(
                 final @NotNull Properties config) {
-            return new ThreadI18nContextProvider(config);
+            return ThreadI18nContextProvider.builder()
+                    .configure(config)
+                    .build();
         }
     }
 }

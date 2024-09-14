@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import javax.validation.constraints.NotNull;
 
@@ -44,10 +45,10 @@ import dev.orne.i18n.I18nResources;
 /**
  * Abstract implementation of {@code I18nContextProvider}.
  * 
- * @author <a href="mailto:ihernaez@users.noreply.github.com">(w) Iker Hernaez</a>
+ * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2022-12
  * @see I18nContextProvider
- * @since 0.2
+ * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
 public abstract class AbstractI18nContextProvider
@@ -55,35 +56,28 @@ implements I18nContextProvider {
 
     /** The UUID of this provider instance. */
     private @NotNull UUID sessionUUID = UUID.randomUUID();
-    /** The supported languages. */
-    private @NotNull Locale[] availableLocales =
-            Locale.getAvailableLocales();
+    /** The default locale supplier. */
+    private final @NotNull Supplier<@NotNull Locale> defaultLocaleSupplier;
+    /** The available locales. */
+    private final @NotNull @NotNull Locale[] availableLocales;
     /** The default I18N resources. */
-    private @NotNull I18nResources defaultI18nResources =
-            DummyI18nResources.getInstance();
+    private final @NotNull I18nResources defaultI18nResources;
     /** The alternative I18N resources by key. */
-    private final @NotNull Map<@NotNull String, @NotNull I18nResources> i18nResources =
-            new HashMap<>();
+    private final @NotNull Map<@NotNull String, @NotNull I18nResources> i18nResources;
 
     /**
-     * Creates a new instance.
-     */
-    protected AbstractI18nContextProvider() {
-        super();
-    }
-
-    /**
-     * Creates a new instance based on specified configuration.
+     * Creates a new instance based on specified builder.
      * 
-     * @param config The I18N configuration.
+     * @param builder The I18N context provider builder.
      */
     protected AbstractI18nContextProvider(
-            final @NotNull Properties config) {
+            final @NotNull BuilderImpl<?, ?> builder) {
         super();
-        Validate.notNull(config);
-        configureAvailableLocales(config);
-        configureDefaultI18nResources(config);
-        configureAlternativeI18nResources(config);
+        this.defaultLocaleSupplier = builder.defaultLocaleSupplier;
+        this.availableLocales = builder.availableLocales;
+        this.defaultI18nResources = builder.defaultI18nResources;
+        this.i18nResources = Collections.unmodifiableMap(
+                new HashMap<>(builder.i18nResources));
     }
 
     /**
@@ -98,22 +92,12 @@ implements I18nContextProvider {
     }
 
     /**
-     * Configures the supported languages based on specified configuration.
+     * Returns the default locale supplier.
      * 
-     * @param config The I18N configuration.
+     * @return The default locale supplier.
      */
-    protected void configureAvailableLocales(
-            final @NotNull Properties config) {
-        if (config.containsKey(I18nConfiguration.AVAILABLE_LANGUAGES)) {
-            final String[] langs = StringUtils.split(
-                    config.getProperty(I18nConfiguration.AVAILABLE_LANGUAGES),
-                    ",");
-            final Locale[] locales = new Locale[langs.length];
-            for (int i = 0; i < langs.length; i++) {
-                locales[i] = new Locale(langs[i]);
-            }
-            setAvailableLocales(locales);
-        }
+    protected @NotNull Supplier<@NotNull Locale> getDefaultLocaleSupplier() {
+        return this.defaultLocaleSupplier;
     }
 
     /**
@@ -125,63 +109,11 @@ implements I18nContextProvider {
     }
 
     /**
-     * Sets the supported languages.
-     * 
-     * @param locales The supported languages
-     */
-    public void setAvailableLocales(
-            final @NotNull Locale[] locales) {
-        Validate.notNull(locales);
-        Validate.noNullElements(locales);
-        availableLocales = Arrays.copyOf(locales, locales.length);
-    }
-
-    /**
-     * Configures the default I18N resources based on specified configuration.
-     * 
-     * @param config The I18N configuration.
-     */
-    protected void configureDefaultI18nResources(
-            final @NotNull Properties config) {
-        if (config.containsKey(I18nConfiguration.DEFAULT_RESOURCES)) {
-            setDefaultI18nResources(I18nBundleResources.forBasename(
-                    config.getProperty(I18nConfiguration.DEFAULT_RESOURCES)));
-        }
-    }
-
-    /**
-     * Configures the alternative I18N resources based on specified configuration.
-     * 
-     * @param config The I18N configuration.
-     */
-    protected void configureAlternativeI18nResources(
-            final @NotNull Properties config) {
-        for (final String prop : config.stringPropertyNames()) {
-            if (prop.startsWith(I18nConfiguration.NAMED_RESOURCES_PREFIX)) {
-                final String resourceName = prop.substring(I18nConfiguration.NAMED_RESOURCES_PREFIX.length());
-                addI18nResources(
-                        resourceName,
-                        I18nBundleResources.forBasename(config.getProperty(prop)));
-            }
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull I18nResources getDefaultI18nResources() {
         return this.defaultI18nResources;
-    }
-
-    /**
-     * Returns the default I18N resources.
-     * 
-     * @param resources The default I18N resources
-     */
-    public void setDefaultI18nResources(
-            final @NotNull I18nResources resources) {
-        this.defaultI18nResources = Validate.notNull(resources);
     }
 
     /**
@@ -211,35 +143,14 @@ implements I18nContextProvider {
     }
 
     /**
-     * Adds alternative I18N resources to be used when the specified key is
-     * used.
-     * 
-     * @param key The key of the alternative I18N resources
-     * @param resource The alternative I18N resources
-     */
-    public void addI18nResources(
-            final @NotNull String key,
-            final @NotNull I18nResources resource) {
-        this.i18nResources.put(
-                Validate.notNull(key),
-                Validate.notNull(resource));
-    }
-
-    /**
-     * Clears the registered alternative I18N resources.
-     * Default I18N resources remain unmodified.
-     */
-    public void clearI18nResources() {
-        this.i18nResources.clear();
-    }
-
-    /**
      * Creates a new I18N context with default values.
      * 
      * @return The new I18N context
      */
     public @NotNull I18nContext createContext() {
-        return new DefaultI18nContext(this.sessionUUID);
+        final I18nContext context = new DefaultI18nContext(this.sessionUUID);
+        context.setLocale(getDefaultLocaleSupplier().get());
+        return context;
     }
 
     /**
@@ -267,9 +178,6 @@ implements I18nContextProvider {
     @Override
     public synchronized void invalidate() {
         this.sessionUUID = UUID.randomUUID();
-        this.availableLocales = Locale.getAvailableLocales();
-        this.defaultI18nResources = DummyI18nResources.getInstance();
-        this.i18nResources.clear();
     }
 
     /**
@@ -278,6 +186,7 @@ implements I18nContextProvider {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(this.defaultLocaleSupplier)
                 .append(this.availableLocales)
                 .append(this.defaultI18nResources)
                 .append(this.i18nResources)
@@ -294,9 +203,168 @@ implements I18nContextProvider {
         if (!getClass().equals(obj.getClass())) { return false; }
         final AbstractI18nContextProvider other = (AbstractI18nContextProvider) obj;
         return new EqualsBuilder()
+                .append(this.defaultLocaleSupplier, other.defaultLocaleSupplier)
                 .append(this.availableLocales, other.availableLocales)
                 .append(this.defaultI18nResources, other.defaultI18nResources)
                 .append(this.i18nResources, other.i18nResources)
                 .isEquals();
+    }
+
+    /**
+     * Abstract builder of I18N context provider instances.
+     * 
+     * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
+     * @version 1.0, 2024-09
+     * @param <T> The type of I18N context provider build by the builder.
+     * @param <B> The type of builder returned for method chaining.
+     * @since 0.1
+     */
+    protected abstract static class BuilderImpl<
+            T extends AbstractI18nContextProvider,
+            B extends BuilderImpl<T, B>> {
+
+        /** The default language supplier. */
+        protected @NotNull Supplier<@NotNull Locale> defaultLocaleSupplier =
+                Locale::getDefault;
+        /** The supported languages. */
+        protected @NotNull Locale[] availableLocales =
+                Locale.getAvailableLocales();
+        /** The default I18N resources. */
+        protected @NotNull I18nResources defaultI18nResources =
+                DummyI18nResources.getInstance();
+        /** The alternative I18N resources by key. */
+        protected final @NotNull Map<@NotNull String, @NotNull I18nResources> i18nResources =
+                new HashMap<>();
+
+        /**
+         * Creates a new instance.
+         * 
+         * @param type The type of builder.
+         */
+        protected BuilderImpl() {
+            super();
+        }
+
+        /**
+         * Configures the builder with specified I18N configuration.
+         * 
+         * @param config The I18N configuration.
+         * @return This builder, for method chaining.
+         * @see I18nConfiguration#get()
+         */
+        @SuppressWarnings("unchecked")
+        public @NotNull B configure(
+                @NotNull Properties config) {
+            configureDefaultLocaleSupplier(config);
+            configureAvailableLocalesSupplier(config);
+            configureDefaultI18nResources(config);
+            configureAlternativeI18nResources(config);
+            return (B) this;
+        }
+
+        /**
+         * Configures the default language based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureDefaultLocaleSupplier(
+                final @NotNull Properties config) {
+            if (config.containsKey(I18nConfiguration.DEFAULT_LANGUAGE)) {
+                final Locale locale = new Locale(config.getProperty(I18nConfiguration.DEFAULT_LANGUAGE));
+                setDefaultLocaleSupplier(() -> locale);
+            }
+        }
+
+        /**
+         * Configures the supported languages based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureAvailableLocalesSupplier(
+                final @NotNull Properties config) {
+            if (config.containsKey(I18nConfiguration.AVAILABLE_LANGUAGES)) {
+                final String[] langs = StringUtils.split(
+                        config.getProperty(I18nConfiguration.AVAILABLE_LANGUAGES),
+                        ",");
+                final Locale[] locales = new Locale[langs.length];
+                for (int i = 0; i < langs.length; i++) {
+                    locales[i] = new Locale(langs[i]);
+                }
+                setAvailableLocales(locales);
+            }
+        }
+
+        /**
+         * Configures the default I18N resources based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureDefaultI18nResources(
+                final @NotNull Properties config) {
+            if (config.containsKey(I18nConfiguration.DEFAULT_RESOURCES)) {
+                setDefaultI18nResources(I18nBundleResources.forBasename(
+                        config.getProperty(I18nConfiguration.DEFAULT_RESOURCES)));
+            }
+        }
+
+        /**
+         * Configures the alternative I18N resources based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureAlternativeI18nResources(
+                final @NotNull Properties config) {
+            for (final String prop : config.stringPropertyNames()) {
+                if (prop.startsWith(I18nConfiguration.NAMED_RESOURCES_PREFIX)) {
+                    final String resourceName = prop.substring(I18nConfiguration.NAMED_RESOURCES_PREFIX.length());
+                    addI18nResources(
+                            resourceName,
+                            I18nBundleResources.forBasename(config.getProperty(prop)));
+                }
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @SuppressWarnings("unchecked")
+        public @NotNull B setDefaultLocaleSupplier(
+                final @NotNull Supplier<@NotNull Locale> supplier) {
+            this.defaultLocaleSupplier = supplier;
+            return (B) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @SuppressWarnings("unchecked")
+        public @NotNull B setAvailableLocales(
+                final @NotNull Locale[] locales) {
+            this.availableLocales = Validate.notNull(locales);
+            return (B) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @SuppressWarnings("unchecked")
+        public @NotNull B setDefaultI18nResources(
+                final @NotNull I18nResources resources) {
+            this.defaultI18nResources = Validate.notNull(resources);
+            return (B) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @SuppressWarnings("unchecked")
+        public @NotNull B addI18nResources(
+                final @NotNull String key,
+                final @NotNull I18nResources resource) {
+            this.i18nResources.put(
+                    Validate.notNull(key),
+                    Validate.notNull(resource));
+            return (B) this;
+        }
     }
 }

@@ -27,6 +27,7 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Locale;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -61,7 +62,7 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testConstructor() {
-        final TestImpl provider = new TestImpl();
+        final TestImpl provider = new TestBuilder().build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -69,26 +70,30 @@ class AbstractI18nContextProviderTest {
     }
 
     /**
-     * Test {@link AbstractI18nContextProvider#AbstractI18nContextProvider(Properties)}.
+     * Test {@link AbstractI18nContextProvider.Factory}.
      */
     @Test
-    void testConfigConstructor() {
+    void testFactory() {
         final Properties config = new Properties();
-        TestImpl provider = new TestImpl(config);
+        TestImpl provider = new TestBuilder().build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
         assertTrue(provider.getI18nResources().isEmpty());
         config.clear();
         config.setProperty(I18nConfiguration.AVAILABLE_LANGUAGES, "en,fr");
-        provider = new TestImpl(config);
+        provider = new TestBuilder()
+                .configure(config)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(new Locale[] { Locale.ENGLISH, Locale.FRENCH }, provider.getAvailableLocales());
         assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
         assertTrue(provider.getI18nResources().isEmpty());
         config.clear();
         config.setProperty(I18nConfiguration.DEFAULT_RESOURCES, "dev.orne.i18n.test-messages");
-        provider = new TestImpl(config);
+        provider = new TestBuilder()
+                .configure(config)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         I18nBundleResources bundle = assertInstanceOf(I18nBundleResources.class, provider.getDefaultI18nResources());
@@ -96,14 +101,18 @@ class AbstractI18nContextProviderTest {
         assertTrue(provider.getI18nResources().isEmpty());
         config.clear();
         config.setProperty(I18nConfiguration.DEFAULT_RESOURCES, "dev.orne.i18n.missing-messages");
-        provider = new TestImpl(config);
+        provider = new TestBuilder()
+                .configure(config)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
         assertTrue(provider.getI18nResources().isEmpty());
         config.clear();
         config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt", "dev.orne.i18n.test-messages-alt");
-        provider = new TestImpl(config);
+        provider = new TestBuilder()
+                .configure(config)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -112,7 +121,9 @@ class AbstractI18nContextProviderTest {
         assertEquals(1, provider.getI18nResources().size());
         config.clear();
         config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt", "dev.orne.i18n.missing-messages");
-        provider = new TestImpl(config);
+        provider = new TestBuilder()
+                .configure(config)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertInstanceOf(DummyI18nResources.class, provider.getDefaultI18nResources());
@@ -121,7 +132,9 @@ class AbstractI18nContextProviderTest {
         config.clear();
         config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt1", "dev.orne.i18n.test-messages");
         config.setProperty(I18nConfiguration.NAMED_RESOURCES_PREFIX + "alt2", "dev.orne.i18n.test-messages-alt");
-        provider = new TestImpl(config);
+        provider = new TestBuilder()
+                .configure(config)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -141,19 +154,13 @@ class AbstractI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        provider.setAvailableLocales(locales);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .setAvailableLocales(locales)
+                .build());
         assertArrayEquals(locales, provider.getAvailableLocales());
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#setAvailableLocales(Locale[])}.
-     */
-    @Test
-    void testSetAvailableLocales_Null() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
         assertThrows(NullPointerException.class, () -> {
-            provider.setAvailableLocales(null);
+            new TestBuilder()
+                    .setAvailableLocales(null);
         });
     }
 
@@ -162,22 +169,15 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testSetDefaultI18nResources() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        provider.setDefaultI18nResources(mockResources);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .setDefaultI18nResources(mockResources)
+                .build());
         assertSame(mockResources, provider.getDefaultI18nResources());
         assertTrue(provider.getI18nResources().isEmpty());
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#setDefaultI18nResources(I18nResources)}.
-     */
-    @Test
-    void testSetDefaultI18nResources_Null() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
         assertThrows(NullPointerException.class, () -> {
-            provider.setDefaultI18nResources(null);
+            new TestBuilder()
+            .setDefaultI18nResources(null);
         });
-        assertTrue(provider.getI18nResources().isEmpty());
     }
 
     /**
@@ -185,56 +185,26 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testAddI18nResources() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
         final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources(key, mockResources)
+                .build());
         assertSame(mockDefaultResources, provider.getDefaultI18nResources());
         assertEquals(1, provider.getI18nResources().size());
         assertEquals(mockResources, provider.getI18nResources().get(key));
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#addI18nResources(String, I18nResources)}.
-     */
-    @Test
-    void testAddI18nResources_NullKey() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        provider.setDefaultI18nResources(mockDefaultResources);
         assertThrows(NullPointerException.class, () -> {
-            provider.addI18nResources(null, mockResources);
+            new TestBuilder()
+                    .addI18nResources(null, mockResources);
         });
-        assertSame(mockDefaultResources, provider.getDefaultI18nResources());
-        assertTrue(provider.getI18nResources().isEmpty());
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#addI18nResources(String, I18nResources)}.
-     */
-    @Test
-    void testAddI18nResources_NullResources() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
         assertThrows(NullPointerException.class, () -> {
-            provider.addI18nResources(key, null);
+            new TestBuilder()
+                    .addI18nResources(key, null);
         });
-        assertSame(mockDefaultResources, provider.getDefaultI18nResources());
-        assertTrue(provider.getI18nResources().isEmpty());
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#addI18nResources(String, I18nResources)}.
-     */
-    @Test
-    void testAddI18nResources_Nulls() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        provider.setDefaultI18nResources(mockDefaultResources);
         assertThrows(NullPointerException.class, () -> {
-            provider.addI18nResources(null, null);
+            new TestBuilder()
+            .addI18nResources(null, null);
         });
-        assertSame(mockDefaultResources, provider.getDefaultI18nResources());
-        assertTrue(provider.getI18nResources().isEmpty());
     }
 
     /**
@@ -242,10 +212,11 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testGetI18nResources() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
         final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources(key, mockResources)
+                .build());
         final I18nResources result = provider.getI18nResources(key);
         assertSame(mockResources, result);
     }
@@ -255,38 +226,18 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testGetI18nResources_Missing() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
         final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        final I18nResources result = provider.getI18nResources(key);
+        AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .build());
+        I18nResources result = provider.getI18nResources(key);
         assertSame(mockDefaultResources, result);
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#getI18nResources(String)}.
-     */
-    @Test
-    void testGetI18nResources_Null() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
-        final I18nResources result = provider.getI18nResources(null);
+        provider = spy(new TestBuilder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources(key, mockResources)
+                .build());
+        result = provider.getI18nResources(null);
         assertSame(mockDefaultResources, result);
-    }
-
-    /**
-     * Test {@link AbstractI18nContextProvider#clearI18nResources()}.
-     */
-    @Test
-    void testClearI18nResources() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
-        provider.clearI18nResources();
-        assertSame(mockDefaultResources, provider.getDefaultI18nResources());
-        assertTrue(provider.getI18nResources().isEmpty());
     }
 
     /**
@@ -294,7 +245,8 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testCreateContext() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .build());
         final I18nContext result = provider.createContext();
         assertTrue(result instanceof DefaultI18nContext);
     }
@@ -304,7 +256,8 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testCreateContext_Parent() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .build());
         willReturn(MOCK_LOCALE).given(mockContext).getLocale();
         final I18nContext result = provider.createContext(mockContext);
         assertTrue(result instanceof DefaultI18nContext);
@@ -315,7 +268,8 @@ class AbstractI18nContextProviderTest {
      */
     @Test
     void testCreateContext_Parent_Null() {
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .build());
         assertThrows(NullPointerException.class, () -> {
             provider.createContext(null);
         });
@@ -330,17 +284,17 @@ class AbstractI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final AbstractI18nContextProvider provider = spy(AbstractI18nContextProvider.class);
-        provider.setAvailableLocales(locales);
         final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
+        final AbstractI18nContextProvider provider = spy(new TestBuilder()
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources(key, mockResources)
+                .build());
+        final UUID prevUUID = provider.getSessionUUID();
         final I18nContext context = provider.getContext();
         provider.invalidate();
         assertNotNull(provider.getSessionUUID());
-        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
-        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
-        assertTrue(provider.getI18nResources().isEmpty());
+        assertNotEquals(prevUUID, provider.getSessionUUID());
         assertFalse(provider.isContextValid(context));
         provider.clearContext();
     }
@@ -355,42 +309,54 @@ class AbstractI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final AbstractI18nContextProvider provider = new TestImpl();
+        AbstractI18nContextProvider provider = new TestBuilder()
+                .build();
         assertFalse(provider.equals(null));
         assertEquals(provider, provider);
         assertEquals(provider.hashCode(), provider.hashCode());
         assertNotEquals(provider, new Object());
-        assertNotEquals(provider, spy(AbstractI18nContextProvider.class));
-        final AbstractI18nContextProvider other = new TestImpl();
+        AbstractI18nContextProvider other = new TestBuilder()
+                .build();
         assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
         assertEquals(provider, other);
-        other.setAvailableLocales(locales);
+        other = new TestBuilder()
+                .setAvailableLocales(locales)
+                .build();
         assertNotEquals(provider, other);
-        provider.setAvailableLocales(locales);
+        provider = new TestBuilder()
+                .setAvailableLocales(locales)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
-        provider.setDefaultI18nResources(mockDefaultResources);
+        provider = new TestBuilder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .build();
         assertNotEquals(provider, other);
-        other.setDefaultI18nResources(mockDefaultResources);
+        other = new TestBuilder()
+                .setDefaultI18nResources(mockDefaultResources)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
-        provider.addI18nResources("mock key", mockResources);
+        provider = new TestBuilder()
+                .addI18nResources("mock key", mockResources)
+                .build();
         assertNotEquals(provider, other);
-        other.addI18nResources("other mock key", mockResources);
+        other = new TestBuilder()
+                .addI18nResources("other mock key", mockResources)
+                .build();
         assertNotEquals(provider, other);
-        other.clearI18nResources();
-        other.addI18nResources("mock key", mockResources);
+        other = new TestBuilder()
+                .addI18nResources("mock key", mockResources)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
     }
 
     private static class TestImpl
     extends AbstractI18nContextProvider {
-        public TestImpl() {
-            super();
-        }
-        public TestImpl(@NotNull Properties config) {
-            super(config);
+        public TestImpl(
+                final @NotNull AbstractI18nContextProvider.BuilderImpl<?, ?> builder) {
+            super(builder);
         }
         @Override
         public @NotNull I18nContext getContext() {
@@ -403,6 +369,17 @@ class AbstractI18nContextProviderTest {
         @Override
         public void clearContext() {
             // NOP
+        }
+    }
+    private static class TestBuilder
+    extends AbstractI18nContextProvider.BuilderImpl<TestImpl, TestBuilder>
+    implements AbstractI18nContextProvider.Builder {
+        public TestBuilder() {
+            super();
+        }
+        @Override
+        public @NotNull TestImpl build() {
+            return new TestImpl(this);
         }
     }
 }

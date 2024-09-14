@@ -58,7 +58,8 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testConstructor() {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider();
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -71,13 +72,17 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testConstructor_Inheritable() {
-        ThreadI18nContextProvider provider = new ThreadI18nContextProvider(true);
+        ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
         assertTrue(provider.isInheritable());
-        provider = new ThreadI18nContextProvider(false);
+        provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -89,9 +94,11 @@ class ThreadI18nContextProviderTest {
      * Test {@link ThreadI18nContextProvider#ThreadI18nContextProvider(Properties)}.
      */
     @Test
-    void testConfigConstructor() {
+    void testFactory() {
         final Properties config = new Properties();
-        ThreadI18nContextProvider provider = new ThreadI18nContextProvider(config);
+        ThreadI18nContextProvider provider = assertInstanceOf(
+                ThreadI18nContextProvider.class,
+                new ThreadI18nContextProvider.Factory().create(config));
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -99,7 +106,9 @@ class ThreadI18nContextProviderTest {
         assertTrue(provider.isInheritable());
         config.clear();
         config.setProperty(I18nConfiguration.CONTEXT_INHERITED, "true");
-        provider = new ThreadI18nContextProvider(config);
+        provider = assertInstanceOf(
+                ThreadI18nContextProvider.class,
+                new ThreadI18nContextProvider.Factory().create(config));
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -107,7 +116,9 @@ class ThreadI18nContextProviderTest {
         assertTrue(provider.isInheritable());
         config.clear();
         config.setProperty(I18nConfiguration.CONTEXT_INHERITED, "false");
-        provider = new ThreadI18nContextProvider(config);
+        provider = assertInstanceOf(
+                ThreadI18nContextProvider.class,
+                new ThreadI18nContextProvider.Factory().create(config));
         assertNotNull(provider.getSessionUUID());
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
@@ -120,7 +131,8 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testGetContext() {
-        final ThreadI18nContextProvider provider = spy(new ThreadI18nContextProvider(false));
+        final ThreadI18nContextProvider provider = spy(ThreadI18nContextProvider.builder()
+                .build());
         willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final I18nContext result = provider.getContext();
@@ -134,7 +146,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testGetContext_Missing() {
-        final ThreadI18nContextProvider provider = spy(new ThreadI18nContextProvider(false));
+        final ThreadI18nContextProvider provider = spy(ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build());
         willReturn(mockContext).given(provider).createContext();
         final I18nContext result = provider.getContext();
         assertSame(mockContext, result);
@@ -148,7 +162,9 @@ class ThreadI18nContextProviderTest {
     @Test
     void testGetContext_Inheritable()
     throws InterruptedException {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(true);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .build();
         willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final InheritableGetContextChild childTest =
@@ -164,7 +180,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testGetContext_Invalid() {
-        final ThreadI18nContextProvider provider = spy(new ThreadI18nContextProvider(false));
+        final ThreadI18nContextProvider provider = spy(ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build());
         provider.getContexts().set(mockContext);
         willReturn(false).given(provider).isContextValid(mockContext);
         final I18nContext result = provider.getContext();
@@ -178,7 +196,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testIsContextAlive() {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(false);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         assertFalse(provider.isContextValid(mockContext));
     }
 
@@ -187,7 +207,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testIsContextAlive_Same() {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(false);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         assertTrue(provider.isContextValid(mockContext));
@@ -198,7 +220,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testIsContextAlive_WrongUUID() {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(false);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         willReturn(UUID.randomUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         assertFalse(provider.isContextValid(mockContext));
@@ -209,7 +233,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testIsContextAlive_Null() {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(false);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         assertThrows(NullPointerException.class, () -> {
             provider.isContextValid(null);
         });
@@ -220,7 +246,9 @@ class ThreadI18nContextProviderTest {
      */
     @Test
     void testClearContext() {
-        final ThreadI18nContextProvider provider = spy(new ThreadI18nContextProvider(false));
+        final ThreadI18nContextProvider provider = spy(ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build());
         willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final I18nContext tmp = provider.getContext();
@@ -236,7 +264,9 @@ class ThreadI18nContextProviderTest {
     @Test
     void testClearContext_Inheritable()
     throws InterruptedException {
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(true);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .build();
         willReturn(provider.getSessionUUID()).given(mockContext).getProviderUUID();
         provider.getContexts().set(mockContext);
         final InheritableGetContextChild preTest =
@@ -263,17 +293,18 @@ class ThreadI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(false);
-        provider.setAvailableLocales(locales);
         final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources(key, mockResources)
+                .build();
+        final UUID prevUUID = provider.getSessionUUID();
         final I18nContext context = provider.getContext();
         provider.invalidate();
         assertNotNull(provider.getSessionUUID());
-        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
-        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
-        assertTrue(provider.getI18nResources().isEmpty());
+        assertNotEquals(prevUUID, provider.getSessionUUID());
         assertFalse(provider.isInheritable());
         assertFalse(provider.isContextValid(context));
         provider.clearContext();
@@ -288,17 +319,18 @@ class ThreadI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(true);
-        provider.setAvailableLocales(locales);
         final String key = "mock key";
-        provider.setDefaultI18nResources(mockDefaultResources);
-        provider.addI18nResources(key, mockResources);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources(key, mockResources)
+                .build();
+        final UUID prevUUID = provider.getSessionUUID();
         final I18nContext context = provider.getContext();
         provider.invalidate();
         assertNotNull(provider.getSessionUUID());
-        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
-        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
-        assertTrue(provider.getI18nResources().isEmpty());
+        assertNotEquals(prevUUID, provider.getSessionUUID());
         assertTrue(provider.isInheritable());
         assertFalse(provider.isContextValid(context));
         provider.clearContext();
@@ -314,31 +346,65 @@ class ThreadI18nContextProviderTest {
                 Locale.ENGLISH,
                 Locale.FRENCH
         };
-        final ThreadI18nContextProvider provider = new ThreadI18nContextProvider(true);
+        ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .build();
         assertNotEquals(provider, (Object) null);
         assertEquals(provider, provider);
         assertEquals(provider.hashCode(), provider.hashCode());
         assertNotEquals(provider, new Object());
-        assertNotEquals(provider, new ThreadI18nContextProvider(false));
-        final ThreadI18nContextProvider other = new ThreadI18nContextProvider(true);
+        assertNotEquals(provider, ThreadI18nContextProvider.builder()
+                .setInheritableContexts(false)
+                .build());
+        ThreadI18nContextProvider other = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .build();
         assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
         assertEquals(provider, other);
-        other.setAvailableLocales(locales);
+        other = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .build();
         assertNotEquals(provider, other);
-        provider.setAvailableLocales(locales);
+        provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
-        provider.setDefaultI18nResources(mockDefaultResources);
+        provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .build();
         assertNotEquals(provider, other);
-        other.setDefaultI18nResources(mockDefaultResources);
+        other = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
-        provider.addI18nResources("mock key", mockResources);
+        provider = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources("mock key", mockResources)
+                .build();
         assertNotEquals(provider, other);
-        other.addI18nResources("other mock key", mockResources);
+        other = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources("other mock key", mockResources)
+                .build();
         assertNotEquals(provider, other);
-        other.clearI18nResources();
-        other.addI18nResources("mock key", mockResources);
+        other = ThreadI18nContextProvider.builder()
+                .setInheritableContexts(true)
+                .setAvailableLocales(locales)
+                .setDefaultI18nResources(mockDefaultResources)
+                .addI18nResources("mock key", mockResources)
+                .build();
         assertEquals(provider, other);
         assertEquals(provider.hashCode(), other.hashCode());
     }

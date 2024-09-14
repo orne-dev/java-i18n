@@ -59,7 +59,8 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testConstructor() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider();
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .build();
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
@@ -71,7 +72,9 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testConstructor_MessageSource() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider(source);
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .setDefaultI18nResources(source)
+                .build();
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof I18nSpringResources);
         assertSame(source, ((I18nSpringResources) provider.getDefaultI18nResources()).getSource());
@@ -80,24 +83,15 @@ class I18nSpringContextProviderTest {
         then(source).shouldHaveNoInteractions();
     }
 
-    /**
-     * Test {@link I18nSpringContextProvider#I18nSpringContextProvider(MessageSource)}.
-     */
-    @Test
-    void testConstructor_MessageSource_Null() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider((MessageSource) null);
-        assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
-        assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
-        assertTrue(provider.getI18nResources().isEmpty());
-        assertTrue(provider.isInheritable());
-    }
 
     /**
      * Test {@link I18nSpringContextProvider#I18nSpringContextProvider(boolean)}.
      */
     @Test
     void testConstructor_Inheritable() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider(false);
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof DummyI18nResources);
         assertTrue(provider.getI18nResources().isEmpty());
@@ -109,7 +103,10 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testConstructor_MessageSource_Inheritable() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider(source, false);
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .setDefaultI18nResources(source)
+                .setInheritableContexts(false)
+                .build();
         assertArrayEquals(Locale.getAvailableLocales(), provider.getAvailableLocales());
         assertTrue(provider.getDefaultI18nResources() instanceof I18nSpringResources);
         assertSame(source, ((I18nSpringResources) provider.getDefaultI18nResources()).getSource());
@@ -124,7 +121,8 @@ class I18nSpringContextProviderTest {
     @Test
     void testConstructor_MessageSource_Inheritable_Null() {
         assertThrows(NullPointerException.class, () -> {
-            new I18nSpringContextProvider(null, false);
+            I18nSpringContextProvider.builder()
+                    .setDefaultI18nResources((MessageSource) null);
         });
     }
 
@@ -133,7 +131,8 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testCreateContext() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider();
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .build();
         final I18nContext result = provider.createContext();
         assertTrue(result instanceof I18nSpringContext);
     }
@@ -143,7 +142,8 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testCreateContext_Parent() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider();
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .build();
         final I18nContext result = provider.createContext(mockContext);
         assertTrue(result instanceof I18nSpringContext);
     }
@@ -153,7 +153,9 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testCreateContext_Parent_Null() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider(false);
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .setInheritableContexts(false)
+                .build();
         assertThrows(NullPointerException.class, () -> {
             provider.createContext(null);
         });
@@ -164,7 +166,8 @@ class I18nSpringContextProviderTest {
      */
     @Test
     void testClearContext() {
-        final I18nSpringContextProvider provider = new I18nSpringContextProvider();
+        final I18nSpringContextProvider provider = I18nSpringContextProvider.builder()
+                .build();
         final I18nContext context = provider.getContext();
         final Locale locale = new Locale("zz");
         context.setLocale(locale);
