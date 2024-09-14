@@ -46,6 +46,9 @@ import dev.orne.i18n.I18nConfigurationException;
 
 /**
  * Utility class with I18N configuration constants and retrieval methods.
+ * <p>
+ * Configuration is loaded from application provided {@value #FILE}
+ * properties file. Only one configuration file is allowed by class loader.
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-11

@@ -320,6 +320,15 @@ class AbstractI18nContextProviderTest {
         assertNotEquals(provider.getSessionUUID(), other.getSessionUUID());
         assertEquals(provider, other);
         other = new TestBuilder()
+                .setDefaultLocaleSupplier(() -> Locale.CANADA)
+                .build();
+        assertNotEquals(provider, other);
+        provider = new TestBuilder()
+                .setDefaultLocaleSupplier(() -> Locale.CANADA)
+                .build();
+        assertEquals(provider, other);
+        assertEquals(provider.hashCode(), other.hashCode());
+        other = new TestBuilder()
                 .setAvailableLocales(locales)
                 .build();
         assertNotEquals(provider, other);

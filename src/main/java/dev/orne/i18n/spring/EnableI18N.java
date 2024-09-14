@@ -4,7 +4,7 @@ package dev.orne.i18n.spring;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2021-2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -32,15 +32,91 @@ import java.lang.annotation.Target;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import dev.orne.i18n.context.I18nConfiguration;
 
 /**
  * Annotation for I18N context provider configuration on Spring contexts Java
  * configurations.
  * <p>
- * Provides simple configuration of basic properties.
+ * To be used together with @{@link Configuration Configuration} classes as
+ * follows, configuring current thread context class loader's I18N context
+ * provider using the provided I18N configuration file, if any
+ * (see {@link I18nConfiguration}):
+ *
+ * <pre class="code">
+ * {@literal @}Configuration
+ * {@literal @}EnableI18N
+ * public class AppConfig {
+ *
+ * }</pre>
+ * 
  * <p>
- * For more complex configurations use {@code I18nSpringConfigurer}.
+ * To provide a custom configuration (ignoring the any configuration file if
+ * desired) implement {@code I18nSpringConfigurer} in the
+ * @{@link Configuration Configuration} class:
+ * 
+ * <pre class="code">
+ * {@literal @}Configuration
+ * {@literal @}EnableI18N
+ * public class AppConfig implements I18nSpringConfigurer {
+ *
+ *     {@literal @Override}
+ *     public void configureI18nContextProvider(
+ *             @NotNull I18nSpringContextProvider.Builder builder,
+ *             @NotNull ApplicationContext context) {
+ *         // Custom provider configuration
+ *     }
+ *
+ * }</pre>
+ * 
+ * <p>
+ * This allows using custom {@code I18nSpringContextProvider} extensions:
+ * 
+ * <pre class="code">
+ * {@literal @}Configuration
+ * {@literal @}EnableI18N
+ * public class AppConfig implements I18nSpringConfigurer {
+ *
+ *     {@literal @Override}
+ *     public @NotNull I18nSpringContextProvider.Builder getI18nContextProviderBuilder() {
+ *         return MyCustomSpringContextProvider.builder();
+ *     }
+ *
+ *     {@literal @Override}
+ *     public void configureI18nContextProvider(
+ *             @NotNull I18nSpringContextProvider.Builder builder,
+ *             @NotNull ApplicationContext context) {
+ *         MyCustomSpringContextProvider.Builder myBuilder = (MyCustomSpringContextProvider.Builder) builder;
+ *         // Custom provider configuration
+ *     }
+ *
+ * }</pre>
+ * 
+ * <p>
+ * By default current current thread context class loader's I18N context
+ * provider is configured.
+ * In J2EE contexts loading Spring context through
+ * {@code ContextLoaderListener} this means the WAR's class loader.
+ * To configure an EAR class loader's I18N context provider (for example
+ * in shared parent contexts loaded through
+ * {@code ContextLoaderListener.loadParentContext(ServletContext)}),
+ * set a class in the EAR's libraries (the @{@link Configuration Configuration}
+ * class, for example):
+ * 
+ * <pre class="code">
+ * {@literal @}Configuration
+ * {@literal @}EnableI18N(classLoader=SharedAppConfig.class)
+ * public class SharedAppConfig {
+ *
+ * }</pre>
+ * 
+ * <p>
+ * This allows separate I18N configurations for EAR level thread like
+ * asynchronous task executors or JMS listeners threads and WAR and EJB modules
+ * if desired.
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
@@ -55,31 +131,14 @@ import org.springframework.context.annotation.Import;
 public @interface EnableI18N {
 
     /**
-     * Returns the {@code ClassLoader} level to apply the configuration to.
+     * Returns the class whom {@code ClassLoader} to apply the configuration to.
+     * <p>
+     * Default value {@code Void.class} configures the current thread context
+     * class loader's I18N context provider.
+     * <p>
+     * See {@link EnableI18N} javadoc for additional examples.
      * 
-     * @return The {@code ClassLoader} level to apply the configuration to.
+     * @return The class whom {@code ClassLoader} to apply the configuration to.
      */
-    Class<?> targetClass() default Void.class;
-    /**
-     * Returns the supported languages.
-     * 
-     * @return The supported languages.
-     */
-    String[] availableLanguages() default {};
-    /**
-     * Returns {@code true} if the Spring context must be scanned for
-     * additional {@code I18nResources} beans.
-     * 
-     * @return If the Spring context must be scanned for additional
-     * {@code I18nResources} beans.
-     */
-    boolean scanI18nResources() default true;
-    /**
-     * Returns {@code true} If the Spring context must be scanned for
-     * additional {@code MessageSource} beans.
-     * 
-     * @return If the Spring context must be scanned for additional
-     * {@code MessageSource} beans.
-     */
-    boolean scanMessageSources() default true;
+    Class<?> classLoader() default Void.class;
 }

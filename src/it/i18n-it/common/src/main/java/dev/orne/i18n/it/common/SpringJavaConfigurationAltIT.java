@@ -1,7 +1,5 @@
 package dev.orne.i18n.it.common;
 
-import java.nio.charset.StandardCharsets;
-
 /*-
  * #%L
  * Orne I18N
@@ -24,9 +22,10 @@ import java.nio.charset.StandardCharsets;
  * #L%
  */
 
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-import java.util.Map;
+
+import javax.validation.constraints.NotNull;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,8 +38,9 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.orne.i18n.I18nResources;
 import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
+import dev.orne.i18n.spring.I18nSpringConfigurer;
+import dev.orne.i18n.spring.I18nSpringContextProvider;
 import dev.orne.i18n.spring.I18nSpringResources;
 
 /**
@@ -56,7 +56,7 @@ public class SpringJavaConfigurationAltIT
 extends AbstractSpringConfigurationAltIT {
 
     @Configuration
-    static class SpringConfig {
+    static class SpringConfig implements I18nSpringConfigurer {
         @Bean
         @Primary
         public MessageSource messageSource() {
@@ -76,15 +76,18 @@ extends AbstractSpringConfigurationAltIT {
         public I18nSpringBaseConfiguration I18nSpringBaseConfiguration(
                 final @Autowired MessageSource messageSource) {
             final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
-            configurer.setAvailableLocales(new Locale[] {
-                    TestMessages.DEFAULT_LOCALE,
-                    TestMessages.YY_LOCALE,
-                    TestMessages.ZZ_LOCALE
-            });
-            final Map<String, I18nResources> namedResources = new HashMap<>();
-            namedResources.put(ALT_I18N_RESOURCES_KEY, new I18nSpringResources(altMessageSource()));
-            configurer.setNamedI18nResources(namedResources);
             return configurer;
+        }
+        @Override
+        public void configureI18nContextProvider(
+                final @NotNull I18nSpringContextProvider.Builder builder) {
+            builder.configure()
+                    .setAvailableLocales(new Locale[] {
+                            TestMessages.DEFAULT_LOCALE,
+                            TestMessages.YY_LOCALE,
+                            TestMessages.ZZ_LOCALE
+                    })
+                    .addI18nResources(ALT_I18N_RESOURCES_KEY, new I18nSpringResources(altMessageSource()));
         }
     }
 }

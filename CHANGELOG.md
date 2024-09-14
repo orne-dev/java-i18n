@@ -28,6 +28,7 @@
     01. Added `dev.orne.i18n.spring.I18nSpringContext`
     01. Added `dev.orne.i18n.spring.I18nSpringResources`
     01. Added `dev.orne.i18n.spring.I18nSpringContextProvider`
+    01. Added `dev.orne.i18n.spring.I18nSpringConfigurer`
     01. Added `dev.orne.i18n.spring.I18nSpringBaseConfiguration`
     01. Added `dev.orne.i18n.spring.I18nSpringWebContextClearer`
     01. Added `dev.orne.i18n.spring.I18nSpringWebConfiguration`

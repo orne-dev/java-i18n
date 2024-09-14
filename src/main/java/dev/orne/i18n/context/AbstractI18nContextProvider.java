@@ -186,7 +186,7 @@ implements I18nContextProvider {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(this.defaultLocaleSupplier)
+                .append(this.defaultLocaleSupplier.get())
                 .append(this.availableLocales)
                 .append(this.defaultI18nResources)
                 .append(this.i18nResources)
@@ -203,7 +203,7 @@ implements I18nContextProvider {
         if (!getClass().equals(obj.getClass())) { return false; }
         final AbstractI18nContextProvider other = (AbstractI18nContextProvider) obj;
         return new EqualsBuilder()
-                .append(this.defaultLocaleSupplier, other.defaultLocaleSupplier)
+                .append(this.defaultLocaleSupplier.get(), other.defaultLocaleSupplier.get())
                 .append(this.availableLocales, other.availableLocales)
                 .append(this.defaultI18nResources, other.defaultI18nResources)
                 .append(this.i18nResources, other.i18nResources)

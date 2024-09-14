@@ -1,7 +1,5 @@
 package dev.orne.i18n.it.common;
 
-import java.nio.charset.StandardCharsets;
-
 /*-
  * #%L
  * Orne I18N
@@ -24,6 +22,11 @@ import java.nio.charset.StandardCharsets;
  * #L%
  */
 
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+
+import javax.validation.constraints.NotNull;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.MessageSource;
@@ -35,6 +38,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import dev.orne.i18n.spring.EnableI18N;
+import dev.orne.i18n.spring.I18nSpringConfigurer;
+import dev.orne.i18n.spring.I18nSpringContextProvider;
+import dev.orne.i18n.spring.I18nSpringResources;
 
 /**
  * Integration tests for Spring Java annotation based configuration of Orne I18N.
@@ -49,12 +55,8 @@ public class SpringAnnotationConfigurationAltIT
 extends AbstractSpringConfigurationAltIT {
 
     @Configuration
-    @EnableI18N(availableLanguages= {
-            TestMessages.DEFAULT_LANG,
-            TestMessages.YY_LANG,
-            TestMessages.ZZ_LANG
-    })
-    static class SpringConfig {
+    @EnableI18N
+    static class SpringConfig implements I18nSpringConfigurer {
         @Bean
         @Primary
         public MessageSource messageSource() {
@@ -69,6 +71,17 @@ extends AbstractSpringConfigurationAltIT {
             source.addBasenames(TestMessages.BUNDLE_ALT_PATH);
             source.setDefaultEncoding(StandardCharsets.UTF_8.name());
             return source;
+        }
+        @Override
+        public void configureI18nContextProvider(
+                final @NotNull I18nSpringContextProvider.Builder builder) {
+            builder.configure()
+                    .setAvailableLocales(new Locale[] {
+                            TestMessages.DEFAULT_LOCALE,
+                            TestMessages.YY_LOCALE,
+                            TestMessages.ZZ_LOCALE
+                    })
+                    .addI18nResources(ALT_I18N_RESOURCES_KEY, new I18nSpringResources(altMessageSource()));
         }
     }
 }

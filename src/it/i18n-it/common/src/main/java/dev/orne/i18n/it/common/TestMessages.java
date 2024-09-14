@@ -27,8 +27,8 @@ import java.util.ResourceBundle;
 
 import dev.orne.i18n.I18nResources;
 import dev.orne.i18n.context.ContextTestUtils;
-import dev.orne.i18n.context.DefaultI18nContextProvider;
 import dev.orne.i18n.context.I18nBundleResources;
+import dev.orne.i18n.context.ThreadI18nContextProvider;
 
 public final class TestMessages {
 
@@ -77,8 +77,9 @@ public final class TestMessages {
     }
 
     public static void configureI18N(I18nResources resources) {
-        final DefaultI18nContextProvider provider = new DefaultI18nContextProvider();
-        provider.setDefaultI18nResources(resources);
+        final ThreadI18nContextProvider provider = ThreadI18nContextProvider.builder()
+                .setDefaultI18nResources(resources)
+                .build();
         ContextTestUtils.setProvider(provider);
     }
 
