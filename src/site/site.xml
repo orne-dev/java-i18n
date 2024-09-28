@@ -3,7 +3,7 @@
   #%L
   Orne Root POM
   %%
-  Copyright (C) 2019 - 2021 Orne Developments
+  Copyright (C) 2019 - 2023 Orne Developments
   %%
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -40,8 +40,22 @@
     </fluidoSkin>
   </custom>
   <body>
+    <head><![CDATA[
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.esm.min.mjs';
+      mermaid.init({ startOnLoad: true });
+      document.querySelectorAll('.language-mermaid').forEach(s => s.parentElement.classList.remove("prettyprint"));
+      await mermaid.run({
+        querySelector: '.language-mermaid',
+        suppressErrors: true,
+      });
+    </script>
+    ]]></head>
     <menu name="Overview">
       <item name="Introduction" href="index.html"/>
+      <item name="I18N Resources" href="resources.html"/>
+      <item name="I18N Strings" href="strings.html"/>
+      <item name="Configuration" href="configuration.html"/>
     </menu>
     <menu ref="reports" inherit="bottom" />
   </body>

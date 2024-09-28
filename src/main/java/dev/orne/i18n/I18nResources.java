@@ -59,10 +59,12 @@ public interface I18nResources {
      * @param params The message parameters
      * @return The formatted message in the I18N context locale
      */
-    @NotNull String getMessage(
+    default @NotNull String getMessage(
             @NotNull String defaultMessage,
             @NotNull String code,
-            Object... params);
+            Object... params) {
+        return getMessage(defaultMessage, code, I18N.getLocale(), params);
+    }
 
     /**
      * Retrieves the I18N message for the specified message code and locale.
@@ -94,10 +96,12 @@ public interface I18nResources {
      * @param params The message parameters
      * @return The formatted message in the I18N context locale
      */
-    @NotNull String getMessage(
+    default @NotNull String getMessage(
             @NotNull String defaultMessage,
             @NotNull String[] codes,
-            Object... params);
+            Object... params) {
+        return getMessage(defaultMessage, codes, I18N.getLocale(), params);
+    }
 
     /**
      * Retrieves the I18N message for the specified locale of the first

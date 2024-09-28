@@ -190,6 +190,15 @@
             <groups>it</groups>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <configuration>
+            <excludes>
+              <exclude>site/resources/schema.json</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>

@@ -48,6 +48,13 @@ public class I18nResourcesStringContainer {
     private I18nResourcesString bean;
 
     /**
+     * Creates a new instance.
+     */
+    public I18nResourcesStringContainer() {
+        super();
+    }
+
+    /**
      * Returns the I18N string.
      * 
      * @return The I18N string.

@@ -195,6 +195,13 @@ implements I18nString {
     extends StdConverter<I18nString, I18nBilingualString> {
 
         /**
+         * Creates a new instance.
+         */
+        public Converter() {
+            super();
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override

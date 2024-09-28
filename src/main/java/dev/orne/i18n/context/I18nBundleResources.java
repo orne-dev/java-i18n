@@ -60,7 +60,7 @@ implements I18nResources {
     /**
      * Creates a new instance for the specified bundle.
      * 
-     * @param bundle The I18N resources bundle base name
+     * @param baseName The I18N resources bundle base name
      */
     public I18nBundleResources(
             final @NotNull String baseName) {
@@ -113,17 +113,6 @@ implements I18nResources {
     public @NotNull String getMessage(
             final @NotNull String defaultMessage,
             final @NotNull String[] codes,
-            final Object... params) {
-        return getMessage(defaultMessage, codes, I18N.getLocale(), params);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String getMessage(
-            final @NotNull String defaultMessage,
-            final @NotNull String[] codes,
             final Locale locale,
             final Object... params) {
         Validate.notNull(defaultMessage);
@@ -147,17 +136,6 @@ implements I18nResources {
         } catch (final IllegalArgumentException ignore) {
             return format;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getMessage(
-            final @NotNull String defaultMessage,
-            final @NotNull String code,
-            final Object... params) {
-        return getMessage(defaultMessage, code, I18N.getLocale(), params);
     }
 
     /**

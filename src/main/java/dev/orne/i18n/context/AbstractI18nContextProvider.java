@@ -238,8 +238,6 @@ implements I18nContextProvider {
 
         /**
          * Creates a new instance.
-         * 
-         * @param type The type of builder.
          */
         protected BuilderImpl() {
             super();
@@ -250,7 +248,7 @@ implements I18nContextProvider {
          * 
          * @param config The I18N configuration.
          * @return This builder, for method chaining.
-         * @see I18nConfiguration#get()
+         * @see I18nContextProvider.Builder#configure(Properties)
          */
         @SuppressWarnings("unchecked")
         public @NotNull B configure(
@@ -325,7 +323,11 @@ implements I18nContextProvider {
         }
 
         /**
-         * {@inheritDoc}
+         * Sets the default locale supplier.
+         * 
+         * @param supplier The default locale supplier.
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#setDefaultLocaleSupplier(Supplier)
          */
         @SuppressWarnings("unchecked")
         public @NotNull B setDefaultLocaleSupplier(
@@ -335,7 +337,11 @@ implements I18nContextProvider {
         }
 
         /**
-         * {@inheritDoc}
+         * Sets the available locales.
+         * 
+         * @param locales The available locales.
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#setAvailableLocales(Locale[])
          */
         @SuppressWarnings("unchecked")
         public @NotNull B setAvailableLocales(
@@ -345,7 +351,11 @@ implements I18nContextProvider {
         }
 
         /**
-         * {@inheritDoc}
+         * Sets the default I18N resources.
+         * 
+         * @param resources The default I18N resources
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#setDefaultI18nResources(I18nResources)
          */
         @SuppressWarnings("unchecked")
         public @NotNull B setDefaultI18nResources(
@@ -355,7 +365,13 @@ implements I18nContextProvider {
         }
 
         /**
-         * {@inheritDoc}
+         * Adds alternative I18N resources to be used when the specified key is
+         * used.
+         * 
+         * @param key The key of the alternative I18N resources
+         * @param resource The alternative I18N resources
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#addI18nResources(String, I18nResources)
          */
         @SuppressWarnings("unchecked")
         public @NotNull B addI18nResources(

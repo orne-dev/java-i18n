@@ -4,7 +4,7 @@ package dev.orne.i18n.context;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021-2024 Orne Developments
+ * Copyright (C) 2021 - 2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -124,8 +124,6 @@ public interface I18nContextProvider {
      * 
      * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
      * @version 1.0, 2024-09
-     * @param <T> The type of I18N context provider build by the builder.
-     * @param <B> The type of builder returned for method chaining.
      * @since 0.1
      */
     @API(status=Status.STABLE, since="0.1")
@@ -145,8 +143,7 @@ public interface I18nContextProvider {
          * Configures the builder with specified I18N configuration.
          * 
          * @param config The I18N configuration.
-         * @return This builder, for method chaining.
-         * @see I18nConfiguration#get()
+         * @return This instance, for method chaining.
          */
         @NotNull Builder configure(
                 @NotNull Properties config);
@@ -155,7 +152,7 @@ public interface I18nContextProvider {
          * Sets the default locale supplier.
          * 
          * @param supplier The default locale supplier.
-         * @return This builder, for method chaining.
+         * @return This instance, for method chaining.
          */
         @NotNull Builder setDefaultLocaleSupplier(
                 @NotNull Supplier<@NotNull Locale> supplier);
@@ -164,7 +161,7 @@ public interface I18nContextProvider {
          * Sets the available locales.
          * 
          * @param locales The available locales.
-         * @return This builder, for method chaining.
+         * @return This instance, for method chaining.
          */
         @NotNull Builder setAvailableLocales(
                 @NotNull Locale[] locales);
@@ -173,7 +170,7 @@ public interface I18nContextProvider {
          * Sets the default I18N resources.
          * 
          * @param resources The default I18N resources
-         * @return This builder, for method chaining.
+         * @return This instance, for method chaining.
          */
         @NotNull Builder setDefaultI18nResources(
                 @NotNull I18nResources resources);
@@ -184,7 +181,7 @@ public interface I18nContextProvider {
          * 
          * @param key The key of the alternative I18N resources
          * @param resource The alternative I18N resources
-         * @return This builder, for method chaining.
+         * @return This instance, for method chaining.
          */
         @NotNull Builder addI18nResources(
                 @NotNull String key,
@@ -232,7 +229,7 @@ public interface I18nContextProvider {
         /**
          * Returns the I18N context provider for the specified class loader.
          * 
-         * @param The class loader.
+         * @param cl The class loader.
          * @return The I18N context provider.
          */
         public static synchronized @NotNull I18nContextProvider get(

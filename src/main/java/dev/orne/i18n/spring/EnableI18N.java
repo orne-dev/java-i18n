@@ -4,7 +4,7 @@ package dev.orne.i18n.spring;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021-2024 Orne Developments
+ * Copyright (C) 2021 - 2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -56,17 +56,17 @@ import dev.orne.i18n.context.I18nConfiguration;
  * <p>
  * To provide a custom configuration (ignoring the any configuration file if
  * desired) implement {@code I18nSpringConfigurer} in the
- * @{@link Configuration Configuration} class:
+ * {@literal @}{@link Configuration} class:
  * 
  * <pre class="code">
  * {@literal @}Configuration
  * {@literal @}EnableI18N
  * public class AppConfig implements I18nSpringConfigurer {
  *
- *     {@literal @Override}
+ *     {@literal @}Override
  *     public void configureI18nContextProvider(
- *             @NotNull I18nSpringContextProvider.Builder builder,
- *             @NotNull ApplicationContext context) {
+ *             {@literal @}NotNull I18nSpringContextProvider.Builder builder,
+ *             {@literal @}NotNull ApplicationContext context) {
  *         // Custom provider configuration
  *     }
  *
@@ -80,15 +80,15 @@ import dev.orne.i18n.context.I18nConfiguration;
  * {@literal @}EnableI18N
  * public class AppConfig implements I18nSpringConfigurer {
  *
- *     {@literal @Override}
- *     public @NotNull I18nSpringContextProvider.Builder getI18nContextProviderBuilder() {
+ *     {@literal @}Override
+ *     public {@literal @}NotNull I18nSpringContextProvider.Builder getI18nContextProviderBuilder() {
  *         return MyCustomSpringContextProvider.builder();
  *     }
  *
- *     {@literal @Override}
+ *     {@literal @}Override
  *     public void configureI18nContextProvider(
- *             @NotNull I18nSpringContextProvider.Builder builder,
- *             @NotNull ApplicationContext context) {
+ *             {@literal @}NotNull I18nSpringContextProvider.Builder builder,
+ *             {@literal @}NotNull ApplicationContext context) {
  *         MyCustomSpringContextProvider.Builder myBuilder = (MyCustomSpringContextProvider.Builder) builder;
  *         // Custom provider configuration
  *     }
@@ -103,7 +103,7 @@ import dev.orne.i18n.context.I18nConfiguration;
  * To configure an EAR class loader's I18N context provider (for example
  * in shared parent contexts loaded through
  * {@code ContextLoaderListener.loadParentContext(ServletContext)}),
- * set a class in the EAR's libraries (the @{@link Configuration Configuration}
+ * set a class in the EAR's libraries (the {@literal @}{@link Configuration}
  * class, for example):
  * 
  * <pre class="code">

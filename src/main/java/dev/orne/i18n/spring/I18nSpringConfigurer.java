@@ -30,16 +30,16 @@ import org.apiguardian.api.API.Status;
 import dev.orne.i18n.context.I18nContextProvider;
 
 /**
- * Interface to be implemented by @{@link org.springframework.context.annotation.Configuration
- * Configuration} classes annotated with @{@link EnableI18n} that wish to customize the
+ * Interface to be implemented by {@literal @}{@link org.springframework.context.annotation.Configuration}
+ * classes annotated with {@literal @}{@link EnableI18N} that wish to customize the
  * {@link I18nContextProvider} instance used by the application
  * <p>
- * See @{@link EnableI18n} for usage examples.
+ * See {@literal @}{@link EnableI18N} for usage examples.
  *
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
  * @see I18nContextProvider
- * @see EnableI18n
+ * @see EnableI18N
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")

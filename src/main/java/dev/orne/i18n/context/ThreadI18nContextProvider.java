@@ -4,7 +4,7 @@ package dev.orne.i18n.context;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021-2024 Orne Developments
+ * Copyright (C) 2021 - 2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -319,6 +319,13 @@ extends AbstractI18nContextProvider {
      */
     public static class Factory
     implements I18nContextProviderFactory {
+
+        /**
+         * Creates a new instance.
+         */
+        public Factory() {
+            super();
+        }
 
         /**
          * {@inheritDoc}

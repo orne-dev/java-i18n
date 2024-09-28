@@ -51,6 +51,13 @@ public class I18nFixedStringAsObjectContainer {
     private I18nFixedString bean;
 
     /**
+     * Creates a new instance.
+     */
+    public I18nFixedStringAsObjectContainer() {
+        super();
+    }
+
+    /**
      * Returns the I18N string.
      * 
      * @return The I18N string.

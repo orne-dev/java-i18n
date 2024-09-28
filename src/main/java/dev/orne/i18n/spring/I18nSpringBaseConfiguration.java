@@ -92,6 +92,11 @@ implements InitializingBean,
         this.messageSource = messageSource;
     }
 
+    /**
+     * Returns the application default {@code MessageSource}.
+     * 
+     * @return The application default {@code MessageSource}.
+     */
     protected MessageSource getMessageSource() {
         return this.messageSource;
     }
@@ -136,7 +141,6 @@ implements InitializingBean,
 
     /**
      * Sets the {@code ClassLoader} this configuration will be applied to.
-     * <p>
      * <p>
      * If {@code null} the configuration will be applied to current thread's
      * context class loader.

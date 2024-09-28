@@ -56,6 +56,8 @@ extends AbstractI18nContextProvider {
 
     /**
      * Creates a new instance based on specified builder.
+     * 
+     * @param builder The I18N context provider builder.
      */
     protected SharedI18nContextProvider(
             final @NotNull BuilderImpl<?, ?> builder) {
@@ -226,6 +228,13 @@ extends AbstractI18nContextProvider {
      */
     public static class Factory
     implements I18nContextProviderFactory {
+
+        /**
+         * Creates a new instance.
+         */
+        public Factory() {
+            super();
+        }
 
         /**
          * {@inheritDoc}

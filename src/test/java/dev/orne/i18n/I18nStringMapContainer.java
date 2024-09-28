@@ -48,6 +48,13 @@ public class I18nStringMapContainer {
     private I18nStringMap bean;
 
     /**
+     * Creates a new instance.
+     */
+    public I18nStringMapContainer() {
+        super();
+    }
+
+    /**
      * Returns the I18N string.
      * 
      * @return The I18N string.

@@ -33,7 +33,6 @@ import org.apiguardian.api.API.Status;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
-import dev.orne.i18n.I18N;
 import dev.orne.i18n.I18nResources;
 
 /**
@@ -80,31 +79,9 @@ implements I18nResources {
     public @NotNull String getMessage(
             final @NotNull String defaultMessage,
             final @NotNull String code,
-            final Object... params) {
-        return getMessage(defaultMessage, code, I18N.getLocale(), params);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String getMessage(
-            final @NotNull String defaultMessage,
-            final @NotNull String code,
             final @NotNull Locale locale,
             final Object... params) {
         return getMessage(defaultMessage, new String[] { code }, locale, params);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String getMessage(
-            final @NotNull String defaultMessage,
-            final @NotNull String[] codes,
-            final Object... params) {
-        return getMessage(defaultMessage, codes, I18N.getLocale(), params);
     }
 
     /**

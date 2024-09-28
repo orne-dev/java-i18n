@@ -57,6 +57,13 @@ public class I18nStringContainer {
     private I18nString bean;
 
     /**
+     * Creates a new instance.
+     */
+    public I18nStringContainer() {
+        super();
+    }
+
+    /**
      * Returns the I18N string.
      * 
      * @return The I18N string.
