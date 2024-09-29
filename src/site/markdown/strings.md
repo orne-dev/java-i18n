@@ -2,7 +2,7 @@
 
 The library provides classes for internationalized strings, compatibles with
 Java Beans model. The core interface, `I18nString` provides methods to
-obtain the string in any language.
+obtain the string current user locale or in an specified locale.
 
 Beans that contain potentially internationalized strings can use the interface
 as property type:
@@ -63,10 +63,8 @@ Immutable implementation that contains a single shared string for all languages.
 To be used when a I18N string is declared (in the API, for example) but it's
 known that there is no I18N support for the value.
 
-Its factory method, `I18nFixedString.from(String)`
-(or the shortcut `I18nString.fixed(String)`),
-provides instances caching, returning the same instance for the same `String`
-instance, preventing memory leaks.
+Use its factory method, `I18nFixedString.from(String)`
+(or the shortcut `I18nString.fixed(String)`) to create new instances:
 
 ```java
 I18nString description = I18nString.fixed("This text has no translation");

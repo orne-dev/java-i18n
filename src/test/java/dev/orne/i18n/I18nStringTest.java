@@ -53,7 +53,7 @@ class I18nStringTest {
         final String text = Generators.randomValue(String.class);
         final I18nFixedString result = I18nString.fixed(text);
         assertNotNull(result);
-        assertSame(I18nFixedString.from(text), result);
+        assertSame(text, result.get());
     }
 
     /**

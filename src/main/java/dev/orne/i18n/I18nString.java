@@ -56,7 +56,7 @@ extends Serializable {
      * Will return {@code null} if {@code text} is {@code null}.
      * 
      * @param text The fixed text for all languages
-     * @return The instance for the specified text, or {@code null} if
+     * @return A instance with the specified text, or {@code null} if
      * {@code text} is {@code null}
      * @see I18nFixedString#from(String)
      */
@@ -129,6 +129,7 @@ extends Serializable {
      * @param other The instance to compare against
      * @return If both instances are equivalent
      */
+    @API(status=Status.EXPERIMENTAL, since="0.1")
     boolean isEquivalent(I18nString other);
 
     /**

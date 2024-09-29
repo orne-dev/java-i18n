@@ -4,7 +4,7 @@ package dev.orne.i18n;
  * #%L
  * Orne I18N
  * %%
- * Copyright (C) 2021 Orne Developments
+ * Copyright (C) 2021 - 2024 Orne Developments
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,9 +22,7 @@ package dev.orne.i18n;
  * #L%
  */
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
-import java.util.WeakHashMap;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -56,10 +54,6 @@ implements I18nString {
     /** The serial version UID. */
     private static final long serialVersionUID = 1L;
 
-    /** The cache of {@code String} to {@code I18nFixedString} relations. */
-    private static final @NotNull WeakHashMap<@NotNull String, @NotNull WeakReference<I18nFixedString>> CACHE =
-            new WeakHashMap<>();
-
     /** The fixed text for all languages. */
     private final @NotNull String text;
 
@@ -80,22 +74,13 @@ implements I18nString {
      * Will return {@code null} if {@code text} is {@code null}.
      * 
      * @param text The fixed text for all languages
-     * @return The instance for the specified text, or {@code null} if
+     * @return A instance with the specified text, or {@code null} if
      * {@code text} is {@code null}
      */
     public static I18nFixedString from(
             final String text) {
         if (text == null) { return null; }
-        final WeakReference<I18nFixedString> cachedRef = CACHE.get(text);
-        I18nFixedString result = null;
-        if (cachedRef != null) {
-            result = cachedRef.get();
-        }
-        if (result == null) {
-            result = new I18nFixedString(text);
-            CACHE.put(text, new WeakReference<>(result));
-        }
-        return result;
+        return new I18nFixedString(text);
     }
 
     /**
@@ -105,7 +90,7 @@ implements I18nString {
      * Will return {@code null} if {@code source} is {@code null}.
      * 
      * @param source The source of the I18N text
-     * @return The instance for the current language translation, or
+     * @return A instance with the current language translation, or
      * {@code null} if {@code source} is {@code null}
      */
     public static I18nFixedString from(

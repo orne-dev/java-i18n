@@ -76,7 +76,6 @@ class I18nFixedStringTest {
         assertSame(text, result.get());
         assertSame(text, result.get(MOCK_LANG));
         assertSame(text, result.get(MOCK_LOCALE));
-        assertSame(result, I18nFixedString.from(text));
     }
 
     /**
@@ -94,7 +93,6 @@ class I18nFixedStringTest {
         assertSame(text, result.get(MOCK_LOCALE));
         then(mockI18nString).should().get();
         then(mockI18nString).shouldHaveNoMoreInteractions();
-        assertSame(result, I18nFixedString.from(text));
     }
 
     /**
