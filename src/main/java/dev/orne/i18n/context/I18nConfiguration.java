@@ -173,7 +173,7 @@ public final class I18nConfiguration {
         Validate.notNull(config);
         final Properties copy = new Properties();
         copy.putAll(config);
-        final Set<String> clRes = CACHE.get(cl).getRight();
+        final Set<String> clRes = getCache(cl).getRight();
         CACHE.put(cl, Pair.of(copy, clRes));
         CACHE.forEach((key, cache) -> {
             boolean child = key.getParent() != null &&

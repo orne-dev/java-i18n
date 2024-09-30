@@ -25,6 +25,8 @@ package dev.orne.i18n.context;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Properties;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -52,12 +54,52 @@ class I18nContextProviderConfigurerTest {
     }
 
     /**
-     * Test {@link I18nContextProvider.Configurer#set(I18nContextProvider)}.
+     * Test {@link I18nContextProvider.Configurer#setI18nConfiguration(Properties)}.
      */
     @Test
-    void testSet() {
+    void testSetI18nConfiguration() {
+        final Properties config = new Properties();
+        new I18nContextProvider.Configurer() {{
+            setI18nConfiguration(config);
+        }};
+        final Properties result = I18nConfiguration.get(
+                Thread.currentThread().getContextClassLoader());
+        assertNotSame(config, result);
+        assertEquals(config, result);
+        assertNotSame(
+                config,
+                I18nConfiguration.get(
+                    Thread.currentThread().getContextClassLoader().getParent()));
+    }
+
+    /**
+     * Test {@link I18nContextProvider.Configurer#setI18nConfiguration(Properties)}.
+     */
+    @Test
+    void testSetI18nConfiguration_ClassLoader() {
+        final Properties config = new Properties();
+        new I18nContextProvider.Configurer() {{
+            setI18nConfiguration(Thread.currentThread().getContextClassLoader(), config);
+        }};
+        final Properties result = I18nConfiguration.get(
+                Thread.currentThread().getContextClassLoader());
+        assertNotSame(config, result);
+        assertEquals(config, result);
+        assertNotSame(
+                config,
+                I18nConfiguration.get(
+                    Thread.currentThread().getContextClassLoader().getParent()));
+    }
+
+    /**
+     * Test {@link I18nContextProvider.Configurer#setI18nContextProvider(I18nContextProvider)}.
+     */
+    @Test
+    void testSetI18nContextProvider() {
         final I18nContextProvider provider = mock(I18nContextProvider.class);
-        I18nContextProvider.Registry.set(provider);
+        new I18nContextProvider.Configurer() {{
+            setI18nContextProvider(provider);
+        }};
         assertSame(
                 provider,
                 I18nContextProvider.Registry.get(
@@ -72,11 +114,11 @@ class I18nContextProviderConfigurerTest {
      * Test {@link I18nContextProvider.Configurer#setI18nContextProvider(ClassLoader, I18nContextProvider)}.
      */
     @Test
-    void testSetClassLoader() {
+    void testSetI18nContextProvider_ClassLoader() {
         final I18nContextProvider provider = mock(I18nContextProvider.class);
-        I18nContextProvider.Registry.set(
-                Thread.currentThread().getContextClassLoader(),
-                provider);
+        new I18nContextProvider.Configurer() {{
+            setI18nContextProvider(Thread.currentThread().getContextClassLoader(), provider);
+        }};
         assertSame(
                 provider,
                 I18nContextProvider.Registry.get(

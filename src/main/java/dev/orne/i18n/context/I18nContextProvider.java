@@ -328,6 +328,28 @@ public interface I18nContextProvider {
     interface Configurer {
 
         /**
+         * Sets the I18N configuration for the current thread's context class loader.
+         * 
+         * @param config The I18N configuration.
+         */
+        default void setI18nConfiguration(
+                final @NotNull Properties config) {
+            setI18nConfiguration(Thread.currentThread().getContextClassLoader(), config);
+        }
+
+        /**
+         * Sets the I18N configuration for the specified class loader.
+         * 
+         * @param cl The class loader to configure.
+         * @param config The I18N configuration.
+         */
+        default void setI18nConfiguration(
+                final @NotNull ClassLoader cl,
+                final @NotNull Properties config) {
+            I18nConfiguration.set(cl, config);
+        }
+
+        /**
          * Sets the I18N context provider for the current thread's context class loader.
          * 
          * @param provider The I18N context provider.
