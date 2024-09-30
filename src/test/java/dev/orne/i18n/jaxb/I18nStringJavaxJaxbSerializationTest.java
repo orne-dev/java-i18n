@@ -216,6 +216,23 @@ class I18nStringJavaxJaxbSerializationTest {
     }
 
     /**
+     * Test JAXB XML marshalling support for {@code I18nFixedString}
+     * in containers.
+     */
+    @Test
+    void testContainer_InvalidChars() {
+        final String text = "\"bread\" & \"butter\" <> XML values";
+        final I18nFixedString bean = I18nFixedString.from(text);
+        final I18nStringContainer container = new I18nStringContainer();
+        container.setBean(bean);
+        final String xml = toXml(container);
+        assertNotNull(xml);
+        final Element tree = xmlToRootElement(xml);
+        final Element beanNode = assertContainerNode(tree);
+        assertHasNoTranslations(text, beanNode);
+    }
+
+    /**
      * Test JAXB XML marshalling support for null {@code I18nString}
      * in containers.
      */

@@ -1,8 +1,8 @@
 # :package: 0.1.0
 
 01. :wrench: Added JPMS default module name `dev.orne.i18n`.
+01. :wrench: Added `org.slf4j:slf4j-api:2.0.9` dependency.
 01. :wrench: Added `org.apache.commons:commons-lang3:3.12.0` dependency.
-01. :wrench: Added `org.apache.commons:commons-text:1.9` dependency.
 01. :gift: Added `dev.orne.i18n.I18nConfigurationException`
 01. :gift: Added `dev.orne.i18n.I18nResources`
 01. :gift: Added `dev.orne.i18n.I18N`

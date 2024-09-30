@@ -29,7 +29,6 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
@@ -68,7 +67,7 @@ public final class JaxbUtils {
             result = null;
         } else {
             result = new XmlI18nString();
-            result.getContent().add(StringEscapeUtils.escapeXml10(value.get()));
+            result.getContent().add(value.get());
         }
         return result;
     }
@@ -90,11 +89,11 @@ public final class JaxbUtils {
         } else {
             final I18nStringMap map = value.asMap();
             result = new XmlI18nString();
-            result.getContent().add(StringEscapeUtils.escapeXml10(map.getDefaultText()));
+            result.getContent().add(map.getDefaultText());
             for (final Map.Entry<String,String> entry : map.getI18n().entrySet()) {
                 final XmlI18nStringTranslation translation = new XmlI18nStringTranslation();
-                translation.setLang(StringEscapeUtils.escapeXml10(entry.getKey()));
-                translation.setValue(StringEscapeUtils.escapeXml10(entry.getValue()));
+                translation.setLang(entry.getKey());
+                translation.setValue(entry.getValue());
                 result.getContent().add(translation);
             }
         }
@@ -118,7 +117,7 @@ public final class JaxbUtils {
             if (part instanceof XmlI18nStringTranslation) {
                 translations.add((XmlI18nStringTranslation) part);
             } else {
-                buffer.append(StringEscapeUtils.unescapeXml(part.toString()));
+                buffer.append(part.toString());
             }
         }
         final String text = buffer.toString().trim();
@@ -129,8 +128,8 @@ public final class JaxbUtils {
             final I18nStringMap tmp = new I18nStringMap(text);
             for (final XmlI18nStringTranslation trans : translations) {
                 tmp.set(
-                        StringEscapeUtils.unescapeXml(trans.getLang()),
-                        StringEscapeUtils.unescapeXml(trans.getValue()));
+                        trans.getLang(),
+                        trans.getValue());
             }
             result = tmp;
         }

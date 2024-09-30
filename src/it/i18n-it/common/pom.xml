@@ -54,6 +54,7 @@
     <jakarta.validation.version>3.0.0</jakarta.validation.version>
     <javax.jaxb.version>2.3.1</javax.jaxb.version>
     <jakarta.jaxb.version>3.0.0</jakarta.jaxb.version>
+    <commons.text.version>1.9</commons.text.version>
     <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
     <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
 
@@ -71,9 +72,18 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
       <groupId>dev.orne</groupId>
       <artifactId>i18n</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>${commons.text.version}</version>
     </dependency>
 
     <dependency>
