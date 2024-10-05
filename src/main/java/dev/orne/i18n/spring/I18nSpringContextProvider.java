@@ -81,6 +81,9 @@ extends ThreadI18nContextProvider {
      */
     @Override
     public @NotNull I18nContext createContext() {
+        LocaleContextHolder.setLocale(
+                getDefaultLocaleSupplier().get(),
+                isInheritable());
         return new I18nSpringContext(getSessionUUID());
     }
 

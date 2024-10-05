@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
  * @see I18nSpringWebConfiguration
  */
 @Tag("ut")
-class I18nSpringWebConfigurationTest {
+class I18nSpringWebConfigurationTest extends I18nSpringConfigurationTest {
 
     /**
      * Test {@link I18nSpringWebConfiguration#orneBeansI18nContextClearer()}.

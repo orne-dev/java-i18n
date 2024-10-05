@@ -39,14 +39,20 @@ of `dev.orne.i18n.context.I18nContextProviderFactory` through Java SPI.
 
 ## Programmatic configuration
 
-To change the context provider programmatically a class implementing interface
-`I18nContextProvider.Configurer` can call `setI18nContextProvider()`
-with a fully configured instance:
+To change the I18N configuration or context provider programmatically a class
+implementing the interface `I18nContextProvider.Configurer` can call
+`setI18nConfiguration()` to override the configuration or
+`setI18nContextProvider()` to set a fully configured context provider instance:
 
 ```java
 class I18nConfigurer implements I18nContextProvider.Configurer {
 
     void configureI18n() {
+        // Set configuration (do not use 'dev.orne.i18n.config.properties' file)
+        setI18nConfiguration(config);
+
+        // and/or
+
         // Configure context provider
         I18nContextProvider provider = ...;
         // Register for this thread and child threads
@@ -72,9 +78,31 @@ class SpringConfig {
 }
 ```
 
+On applications with Spring contexts hierarchies property `classLoader` can
+be set to provide a class of the class loader being configured. This allows
+I18N configuration EAR wide,  
+
+```java
+@Configuration
+@EnableI18N(classLoader = EarSpringConfig.class)
+class EarSpringConfig {
+    // Configures shared I18N provider for all WARs and EJBs
+}
+
+@Configuration
+@EnableI18N
+class War1SpringConfig {
+    // Configures custom I18N configuration for this WAR
+}
+
+@Configuration
+class War2SpringConfig {
+    // Uses shared I18N provider
+}
+```
+
 Additional configuration can be applied implementing the `I18nSpringConfigurer`
 interface.
-
 For example, to extract context configuation from application provided
 properties:
 

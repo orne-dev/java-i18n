@@ -1,8 +1,5 @@
 package dev.orne.i18n.spring;
 
-import org.apiguardian.api.API;
-import org.apiguardian.api.API.Status;
-
 /*-
  * #%L
  * Orne I18N
@@ -25,9 +22,11 @@ import org.apiguardian.api.API.Status;
  * #L%
  */
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * I18N context provider configuration for Spring Web.
@@ -36,14 +35,13 @@ import org.springframework.context.annotation.Import;
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2023-05
- * @see I18nSpringBaseConfiguration
+ * @see I18nSpringConfiguration
  * @see I18nSpringWebContextClearer
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
 @Configuration
-@Import(I18nSpringBaseConfiguration.class)
-public class I18nSpringWebConfiguration {
+public class I18nSpringWebConfiguration extends I18nSpringConfiguration {
 
     /** The I18N context clearer  */
     public static final String CLEARER_BEAN_NAME =

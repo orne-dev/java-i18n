@@ -120,14 +120,14 @@ import dev.orne.i18n.context.I18nConfiguration;
  * 
  * @author <a href="https://github.com/ihernaez">(w) Iker Hernaez</a>
  * @version 1.0, 2021-01
- * @see I18nSpringConfiguration
+ * @see I18nSpringConfigurationSelector
  * @since 0.1
  */
 @API(status=Status.STABLE, since="0.1")
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
-@Import(I18nSpringConfiguration.class)
+@Import(I18nSpringConfigurationSelector.class)
 public @interface EnableI18N {
 
     /**

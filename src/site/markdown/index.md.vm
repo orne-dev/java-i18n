@@ -4,7 +4,7 @@ $dash Introduction
 Provides utilities for internationalization and localization of Java
 applications.
 
-$dash$dash Usage
+$dash$dash Maven coordinates
 
 ```xml
 <project ...>
@@ -18,7 +18,7 @@ $dash$dash Usage
 </project>
 ```
 
-$dash$dash Features
+$dash$dash Usage
 
 $dash$dash$dash I18N context
 
@@ -114,7 +114,7 @@ I18nString resource = I18nString.fromResources("My default text")
         .withCode("my.resource.code");
 ```
 
-$dash$dash$dash [Plugable configuration system](./configuration.html)
+$dash$dash$dash Configuration
 
 By default the library provides a separate I18N context to each thread,
 inherited by child threads, with `messages` bundle based I18N resources
@@ -122,19 +122,21 @@ if present. Initial locale will be obtained from `Locale.getDefault()`
 and all locales returned by `Locale.getAvailableLocales()` will be listed as
 available.
 
-Applications can change this behavior providing a configuration file in
-the class path.
+Applications can change this initial configuration providing a configuration
+file in the class path.
 
-In application with complex class loader hierarchies (like EAR applications)
-can provide separate configurations for each class path. 
+In applications with complex class loader hierarchies (like Jakarta EE
+applications)
+can provide separate configurations for each class path.
 
-See [configuration page](./configuration.html) for further instructions.
+See [configuration page](./configuration.html#file-based-configuration) for further details.
 
-$dash$dash$dash$dash [Spring integration](./spring.html)
+$dash$dash$dash$dash Spring integration
 
 The library supports integration with Spring, coordinating the current locale
 with Spring's `LocaleContextHolder` and exposing Spring's main `MessageSource`
 as default I18N resources simply adding `@EnableI18N` annotation to Spring
 context configuration class.
 
-See [Spring configuration page](./spring.html) for further instructions.
+See [Spring configuration page](./configuration.html#spring-configuration) for
+further details.
