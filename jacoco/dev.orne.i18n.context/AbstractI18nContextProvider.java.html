@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractI18nContextProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">AbstractI18nContextProvider.java</span></div><h1>AbstractI18nContextProvider.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2022 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.function.Supplier;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nResources;
+
+/**
+ * Abstract implementation of {@code I18nContextProvider}.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2022-12
+ * @see I18nContextProvider
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public abstract class AbstractI18nContextProvider
+implements I18nContextProvider {
+
+    /** The UUID of this provider instance. */
+<span class="fc" id="L58">    private @NotNull UUID sessionUUID = UUID.randomUUID();</span>
+    /** The default locale supplier. */
+    private final @NotNull Supplier&lt;@NotNull Locale&gt; defaultLocaleSupplier;
+    /** The available locales. */
+    private final @NotNull @NotNull Locale[] availableLocales;
+    /** The default I18N resources. */
+    private final @NotNull I18nResources defaultI18nResources;
+    /** The alternative I18N resources by key. */
+    private final @NotNull Map&lt;@NotNull String, @NotNull I18nResources&gt; i18nResources;
+
+    /**
+     * Creates a new instance based on specified builder.
+     * 
+     * @param builder The I18N context provider builder.
+     */
+    protected AbstractI18nContextProvider(
+            final @NotNull BuilderImpl&lt;?, ?&gt; builder) {
+<span class="fc" id="L75">        super();</span>
+<span class="fc" id="L76">        this.defaultLocaleSupplier = builder.defaultLocaleSupplier;</span>
+<span class="fc" id="L77">        this.availableLocales = builder.availableLocales;</span>
+<span class="fc" id="L78">        this.defaultI18nResources = builder.defaultI18nResources;</span>
+<span class="fc" id="L79">        this.i18nResources = Collections.unmodifiableMap(</span>
+                new HashMap&lt;&gt;(builder.i18nResources));
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Returns the UUID of this provider instance and session.
+     * Used to check contexts validity. Constant from instance creation to
+     * call to {@code invalidate()}
+     * 
+     * @return The UUID of this provider instance
+     */
+    public @NotNull UUID getSessionUUID() {
+<span class="fc" id="L91">        return this.sessionUUID;</span>
+    }
+
+    /**
+     * Returns the default locale supplier.
+     * 
+     * @return The default locale supplier.
+     */
+    protected @NotNull Supplier&lt;@NotNull Locale&gt; getDefaultLocaleSupplier() {
+<span class="fc" id="L100">        return this.defaultLocaleSupplier;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Locale[] getAvailableLocales() {
+<span class="fc" id="L108">        return Arrays.copyOf(availableLocales, availableLocales.length);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull I18nResources getDefaultI18nResources() {
+<span class="fc" id="L116">        return this.defaultI18nResources;</span>
+    }
+
+    /**
+     * Returns the alternative I18N resources by key.
+     * 
+     * @return The alternative I18N resources by key
+     */
+    public @NotNull Map&lt;@NotNull String, @NotNull I18nResources&gt; getI18nResources() {
+<span class="fc" id="L125">        return Collections.unmodifiableMap(this.i18nResources);</span>
+    }
+
+    /**
+     * Returns the I18N resources identified by the specified key.
+     * If key is {@code null} or no resources is associated for such key
+     * returns the default I18N resources.
+     * 
+     * @param key The key of the alternative I18N resources
+     * @return The I18N resources to use for the key
+     */
+    public @NotNull I18nResources getI18nResources(
+            final String key) {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (key == null) {</span>
+<span class="fc" id="L139">            return this.defaultI18nResources;</span>
+        } else {
+<span class="fc" id="L141">            return this.i18nResources.getOrDefault(key, this.defaultI18nResources);</span>
+        }
+    }
+
+    /**
+     * Creates a new I18N context with default values.
+     * 
+     * @return The new I18N context
+     */
+    public @NotNull I18nContext createContext() {
+<span class="fc" id="L151">        final I18nContext context = new DefaultI18nContext(this.sessionUUID);</span>
+<span class="fc" id="L152">        context.setLocale(getDefaultLocaleSupplier().get());</span>
+<span class="fc" id="L153">        return context;</span>
+    }
+
+    /**
+     * Creates a new I18N context with values inherited from the specified
+     * parent I18N context.
+     * 
+     * @param parent The parent I18N context
+     * @return The new I18N context
+     */
+    public @NotNull I18nContext createContext(
+            final @NotNull I18nContext parent) {
+<span class="fc" id="L165">        Validate.notNull(parent);</span>
+<span class="fc" id="L166">        final I18nContext context = createContext();</span>
+<span class="fc" id="L167">        context.setLocale(parent.getLocale());</span>
+<span class="fc" id="L168">        return context;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     * &lt;p&gt;
+     * This implementation resets available languages, and I18N resources to
+     * defaults and generates a new session UUID to invalidate any existing
+     * contexts.
+     */
+    @Override
+    public synchronized void invalidate() {
+<span class="fc" id="L180">        this.sessionUUID = UUID.randomUUID();</span>
+<span class="fc" id="L181">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L188">        return new HashCodeBuilder()</span>
+<span class="fc" id="L189">                .append(this.defaultLocaleSupplier.get())</span>
+<span class="fc" id="L190">                .append(this.availableLocales)</span>
+<span class="fc" id="L191">                .append(this.defaultI18nResources)</span>
+<span class="fc" id="L192">                .append(this.i18nResources)</span>
+<span class="fc" id="L193">                .toHashCode();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (obj == null) { return false; }</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (obj == this) { return true; }</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (!getClass().equals(obj.getClass())) { return false; }</span>
+<span class="fc" id="L204">        final AbstractI18nContextProvider other = (AbstractI18nContextProvider) obj;</span>
+<span class="fc" id="L205">        return new EqualsBuilder()</span>
+<span class="fc" id="L206">                .append(this.defaultLocaleSupplier.get(), other.defaultLocaleSupplier.get())</span>
+<span class="fc" id="L207">                .append(this.availableLocales, other.availableLocales)</span>
+<span class="fc" id="L208">                .append(this.defaultI18nResources, other.defaultI18nResources)</span>
+<span class="fc" id="L209">                .append(this.i18nResources, other.i18nResources)</span>
+<span class="fc" id="L210">                .isEquals();</span>
+    }
+
+    /**
+     * Abstract builder of I18N context provider instances.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2024-09
+     * @param &lt;T&gt; The type of I18N context provider build by the builder.
+     * @param &lt;B&gt; The type of builder returned for method chaining.
+     * @since 0.1
+     */
+    protected abstract static class BuilderImpl&lt;
+            T extends AbstractI18nContextProvider,
+            B extends BuilderImpl&lt;T, B&gt;&gt; {
+
+        /** The default language supplier. */
+<span class="fc" id="L227">        protected @NotNull Supplier&lt;@NotNull Locale&gt; defaultLocaleSupplier =</span>
+                Locale::getDefault;
+        /** The supported languages. */
+<span class="fc" id="L230">        protected @NotNull Locale[] availableLocales =</span>
+<span class="fc" id="L231">                Locale.getAvailableLocales();</span>
+        /** The default I18N resources. */
+<span class="fc" id="L233">        protected @NotNull I18nResources defaultI18nResources =</span>
+<span class="fc" id="L234">                DummyI18nResources.getInstance();</span>
+        /** The alternative I18N resources by key. */
+<span class="fc" id="L236">        protected final @NotNull Map&lt;@NotNull String, @NotNull I18nResources&gt; i18nResources =</span>
+                new HashMap&lt;&gt;();
+
+        /**
+         * Creates a new instance.
+         */
+        protected BuilderImpl() {
+<span class="fc" id="L243">            super();</span>
+<span class="fc" id="L244">        }</span>
+
+        /**
+         * Configures the builder with specified I18N configuration.
+         * 
+         * @param config The I18N configuration.
+         * @return This builder, for method chaining.
+         * @see I18nContextProvider.Builder#configure(Properties)
+         */
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public @NotNull B configure(
+                @NotNull Properties config) {
+<span class="fc" id="L256">            configureDefaultLocaleSupplier(config);</span>
+<span class="fc" id="L257">            configureAvailableLocalesSupplier(config);</span>
+<span class="fc" id="L258">            configureDefaultI18nResources(config);</span>
+<span class="fc" id="L259">            configureAlternativeI18nResources(config);</span>
+<span class="fc" id="L260">            return (B) this;</span>
+        }
+
+        /**
+         * Configures the default language based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureDefaultLocaleSupplier(
+                final @NotNull Properties config) {
+<span class="fc bfc" id="L270" title="All 2 branches covered.">            if (config.containsKey(I18nConfiguration.DEFAULT_LANGUAGE)) {</span>
+<span class="fc" id="L271">                final Locale locale = new Locale(config.getProperty(I18nConfiguration.DEFAULT_LANGUAGE));</span>
+<span class="fc" id="L272">                setDefaultLocaleSupplier(() -&gt; locale);</span>
+            }
+<span class="fc" id="L274">        }</span>
+
+        /**
+         * Configures the supported languages based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureAvailableLocalesSupplier(
+                final @NotNull Properties config) {
+<span class="fc bfc" id="L283" title="All 2 branches covered.">            if (config.containsKey(I18nConfiguration.AVAILABLE_LANGUAGES)) {</span>
+<span class="fc" id="L284">                final String[] langs = StringUtils.split(</span>
+<span class="fc" id="L285">                        config.getProperty(I18nConfiguration.AVAILABLE_LANGUAGES),</span>
+                        &quot;,&quot;);
+<span class="fc" id="L287">                final Locale[] locales = new Locale[langs.length];</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">                for (int i = 0; i &lt; langs.length; i++) {</span>
+<span class="fc" id="L289">                    locales[i] = new Locale(langs[i]);</span>
+                }
+<span class="fc" id="L291">                setAvailableLocales(locales);</span>
+            }
+<span class="fc" id="L293">        }</span>
+
+        /**
+         * Configures the default I18N resources based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureDefaultI18nResources(
+                final @NotNull Properties config) {
+<span class="fc bfc" id="L302" title="All 2 branches covered.">            if (config.containsKey(I18nConfiguration.DEFAULT_RESOURCES)) {</span>
+<span class="fc" id="L303">                setDefaultI18nResources(I18nBundleResources.forBasename(</span>
+<span class="fc" id="L304">                        config.getProperty(I18nConfiguration.DEFAULT_RESOURCES)));</span>
+            }
+<span class="fc" id="L306">        }</span>
+
+        /**
+         * Configures the alternative I18N resources based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureAlternativeI18nResources(
+                final @NotNull Properties config) {
+<span class="fc bfc" id="L315" title="All 2 branches covered.">            for (final String prop : config.stringPropertyNames()) {</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">                if (prop.startsWith(I18nConfiguration.NAMED_RESOURCES_PREFIX)) {</span>
+<span class="fc" id="L317">                    final String resourceName = prop.substring(I18nConfiguration.NAMED_RESOURCES_PREFIX.length());</span>
+<span class="fc" id="L318">                    addI18nResources(</span>
+                            resourceName,
+<span class="fc" id="L320">                            I18nBundleResources.forBasename(config.getProperty(prop)));</span>
+                }
+<span class="fc" id="L322">            }</span>
+<span class="fc" id="L323">        }</span>
+
+        /**
+         * Sets the default locale supplier.
+         * 
+         * @param supplier The default locale supplier.
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#setDefaultLocaleSupplier(Supplier)
+         */
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public @NotNull B setDefaultLocaleSupplier(
+                final @NotNull Supplier&lt;@NotNull Locale&gt; supplier) {
+<span class="fc" id="L335">            this.defaultLocaleSupplier = supplier;</span>
+<span class="fc" id="L336">            return (B) this;</span>
+        }
+
+        /**
+         * Sets the available locales.
+         * 
+         * @param locales The available locales.
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#setAvailableLocales(Locale[])
+         */
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public @NotNull B setAvailableLocales(
+                final @NotNull Locale[] locales) {
+<span class="fc" id="L349">            this.availableLocales = Validate.notNull(locales);</span>
+<span class="fc" id="L350">            return (B) this;</span>
+        }
+
+        /**
+         * Sets the default I18N resources.
+         * 
+         * @param resources The default I18N resources
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#setDefaultI18nResources(I18nResources)
+         */
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public @NotNull B setDefaultI18nResources(
+                final @NotNull I18nResources resources) {
+<span class="fc" id="L363">            this.defaultI18nResources = Validate.notNull(resources);</span>
+<span class="fc" id="L364">            return (B) this;</span>
+        }
+
+        /**
+         * Adds alternative I18N resources to be used when the specified key is
+         * used.
+         * 
+         * @param key The key of the alternative I18N resources
+         * @param resource The alternative I18N resources
+         * @return This instance, for method chaining.
+         * @see I18nContextProvider.Builder#addI18nResources(String, I18nResources)
+         */
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public @NotNull B addI18nResources(
+                final @NotNull String key,
+                final @NotNull I18nResources resource) {
+<span class="fc" id="L380">            this.i18nResources.put(</span>
+<span class="fc" id="L381">                    Validate.notNull(key),</span>
+<span class="fc" id="L382">                    Validate.notNull(resource));</span>
+<span class="fc" id="L383">            return (B) this;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

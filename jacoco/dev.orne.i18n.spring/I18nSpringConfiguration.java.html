@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nSpringConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spring</a> &gt; <span class="el_source">I18nSpringConfiguration.java</span></div><h1>I18nSpringConfiguration.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spring;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2023 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportAware;
+import org.springframework.core.type.AnnotationMetadata;
+
+import dev.orne.i18n.context.DummyI18nResources;
+import dev.orne.i18n.context.I18nContextProvider;
+
+/**
+ * I18N context provider configuration for Spring. Configures a
+ * {@code I18nContextProvider} (an instance of
+ * {@code I18nSpringContextProvider} by default).
+ * &lt;p&gt;
+ * By default configures the provider for all {@code ClassLoader}s.
+ * Supports selecting a target class that will configure
+ * the provider for the {@code ClassLoader} of the given class and all its
+ * children {@code ClassLoader}, allowing different configurations for each
+ * application even when the library is deployed as a shared library or
+ * different configurations for each sub-module when the library is deployed
+ * at EAR level in JavaEE environments.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2023-05
+ * @see I18nContextProvider
+ * @see I18nSpringContextProvider
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+@Configuration
+public class I18nSpringConfiguration
+implements ApplicationContextAware,
+        MessageSourceAware,
+        ImportAware,
+        InitializingBean,
+        I18nContextProvider.Configurer {
+
+    /** The default I18N context provider configuration customizer. */
+<span class="fc" id="L74">    protected static final I18nSpringConfigurer DEFAULT_CONFIGURER = new I18nSpringConfigurer() {};</span>
+
+    /** The Spring application context. */
+    private ApplicationContext applicationContext;
+    /** The application default {@code MessageSource}. */
+    private MessageSource messageSource;
+    /** The {@code ClassLoader} this configuration will be applied to. */
+    private ClassLoader target;
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nSpringConfiguration() {
+<span class="fc" id="L87">        super();</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Returns the Spring application context.
+     * 
+     * @return The Spring application context.
+     */
+    protected ApplicationContext getApplicationContext() {
+<span class="fc" id="L96">        return this.applicationContext;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setApplicationContext(
+            final ApplicationContext applicationContext)
+    throws BeansException {
+<span class="fc" id="L106">        this.applicationContext = applicationContext;</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Returns the application default {@code MessageSource}.
+     * 
+     * @return The application default {@code MessageSource}.
+     */
+    protected MessageSource getMessageSource() {
+<span class="fc" id="L115">        return this.messageSource;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMessageSource(
+            final MessageSource messageSource) {
+<span class="fc" id="L124">        this.messageSource = messageSource;</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Returns the {@code ClassLoader} this configuration will be applied to.
+     * &lt;p&gt;
+     * If {@code null} the configuration will be applied to current thread's
+     * context class loader.
+     * 
+     * @return The target class loader.
+     */
+    protected ClassLoader getTarget() {
+<span class="fc" id="L136">        return target;</span>
+    }
+
+    /**
+     * Sets the {@code ClassLoader} this configuration will be applied to.
+     * &lt;p&gt;
+     * If {@code null} the configuration will be applied to current thread's
+     * context class loader.
+     * 
+     * @param target The target class loader.
+     */
+    public void setTarget(
+            final ClassLoader target) {
+<span class="fc" id="L149">        this.target = target;</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Inherits configuration from {@code EnableI18N} annotation.
+     * 
+     * @param importMetadata The import metadata
+     * @see EnableI18N
+     */
+    @Override
+    public void setImportMetadata(
+            final @NotNull AnnotationMetadata importMetadata) {
+<span class="fc" id="L161">        Validate.notNull(importMetadata);</span>
+<span class="fc" id="L162">        final Map&lt;String, Object&gt; annotAttrs = importMetadata.getAnnotationAttributes(</span>
+<span class="fc" id="L163">                EnableI18N.class.getName());</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (annotAttrs != null) {</span>
+<span class="fc" id="L165">            final Class&lt;?&gt; targetCls = (Class&lt;?&gt;) annotAttrs.get(&quot;classLoader&quot;);</span>
+<span class="pc bpc" id="L166" title="1 of 4 branches missed.">            if (targetCls != null &amp;&amp; !Void.class.equals(targetCls)) {</span>
+<span class="fc" id="L167">                this.target = targetCls.getClassLoader();</span>
+            }
+        }
+<span class="fc" id="L170">    }</span>
+
+    /**
+     * Determines the I18N context provider configuration customizer to apply.
+     * 
+     * @return The I18N context provider configuration customizer.
+     * @throws IllegalStateException If multiple instances of {@code I18nSpringConfigurer}
+     * are present in current Spring context.
+     */
+    protected @NotNull I18nSpringConfigurer determineConfigurer() {
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (this.applicationContext == null) {</span>
+<span class="fc" id="L181">            return DEFAULT_CONFIGURER;</span>
+        }
+<span class="fc" id="L183">        final Map&lt;String, I18nSpringConfigurer&gt; configurers = this.applicationContext.getBeansOfType(I18nSpringConfigurer.class);</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (configurers.isEmpty()) {</span>
+<span class="fc" id="L185">            return DEFAULT_CONFIGURER;</span>
+        }
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (configurers.size() &gt; 1) {</span>
+<span class="fc" id="L188">            throw new IllegalStateException(</span>
+<span class="fc" id="L189">                    &quot;Only one I18nSpringConfigurer may exist, but multiple found: &quot; + configurers.keySet());</span>
+        }
+<span class="fc" id="L191">        return configurers.values().iterator().next();</span>
+    }
+
+    /**
+     * Creates a new {@code I18nSpringContextProvider} based on configured
+     * properties.
+     * &lt;p&gt;
+     * This implementation creates an instance of
+     * {@code I18nSpringContextProvider}.
+     * 
+     * @return The new configured {@code I18nSpringContextProvider}
+     */
+    protected @NotNull I18nSpringContextProvider createContextProvider() {
+<span class="fc" id="L204">        final I18nSpringConfigurer configurer = determineConfigurer();</span>
+<span class="fc" id="L205">        final I18nSpringContextProvider.Builder builder = configurer.getI18nContextProviderBuilder();</span>
+<span class="fc" id="L206">        configurer.configureI18nContextProvider(builder);</span>
+<span class="pc bpc" id="L207" title="1 of 4 branches missed.">        if (builder.build().getDefaultI18nResources() instanceof DummyI18nResources</span>
+                &amp;&amp; this.messageSource != null) {
+<span class="fc" id="L209">            builder.setDefaultI18nResources(new I18nSpringResources(this.messageSource));</span>
+        }
+<span class="fc" id="L211">        return builder.build();</span>
+    }
+
+    /**
+     * Sets the configured {@code I18nContextProvider} for the configured
+     * {@code ClassLoader}.
+     */
+    @Override
+    public void afterPropertiesSet() {
+<span class="fc" id="L220">        final I18nContextProvider provider = createContextProvider();</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (this.target != null) {</span>
+<span class="fc" id="L222">            setI18nContextProvider(this.target, provider);</span>
+        } else {
+<span class="fc" id="L224">            setI18nContextProvider(provider);</span>
+        }
+<span class="fc" id="L226">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

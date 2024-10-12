@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nBundleResources.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">I18nBundleResources.java</span></div><h1>I18nBundleResources.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.orne.i18n.I18N;
+import dev.orne.i18n.I18nResources;
+
+/**
+ * Implementation of {@code I18nResources} based on {@code ResourceBundle}.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @see I18nResources
+ * @see ResourceBundle
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public class I18nBundleResources
+implements I18nResources {
+
+    /** The logger of the class. */
+<span class="fc" id="L55">    private static final Logger LOG = LoggerFactory.getLogger(I18nBundleResources.class);</span>
+
+    /** The I18N resources bundle base name. */
+    private final @NotNull String baseName;
+
+    /**
+     * Creates a new instance for the specified bundle.
+     * 
+     * @param baseName The I18N resources bundle base name
+     */
+    public I18nBundleResources(
+            final @NotNull String baseName) {
+<span class="fc" id="L67">        super();</span>
+<span class="fc" id="L68">        this.baseName = Validate.notNull(baseName);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Returns a non null I18N resources for the specified bundle base name.
+     * If the bundle cannot be found a dommy I18N resources is returned.
+     * 
+     * @param baseName The I18N resources bundle base name
+     * @return The I18N resources instance.
+     */
+    public static @NotNull I18nResources forBasename(
+            final @NotNull String baseName) {
+        try {
+<span class="fc" id="L81">            ResourceBundle.getBundle(baseName, Locale.getDefault());</span>
+<span class="fc" id="L82">            return new I18nBundleResources(baseName);</span>
+<span class="fc" id="L83">        } catch (final MissingResourceException e) {</span>
+<span class="fc" id="L84">            LOG.warn(&quot;No bundle for I18N resources found. Using dummy resources.&quot;);</span>
+<span class="fc" id="L85">            return DummyI18nResources.getInstance();</span>
+        }
+    }
+
+    /**
+     * Returns the I18N resources bundle for the current locale.
+     * 
+     * @return The I18N resources bundle
+     */
+    protected @NotNull ResourceBundle getBundle() {
+<span class="fc" id="L95">        return getBundle(I18N.getLocale());</span>
+    }
+
+    /**
+     * Returns the I18N resources bundle for the specified locale.
+     * 
+     * @param locale The desired locale
+     * @return The I18N resources bundle
+     */
+    protected @NotNull ResourceBundle getBundle(
+            final @NotNull Locale locale) {
+<span class="fc" id="L106">        return ResourceBundle.getBundle(this.baseName, locale);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getMessage(
+            final @NotNull String defaultMessage,
+            final @NotNull String[] codes,
+            final Locale locale,
+            final Object... params) {
+<span class="fc" id="L118">        Validate.notNull(defaultMessage);</span>
+<span class="fc" id="L119">        Validate.notNull(codes);</span>
+<span class="fc" id="L120">        Validate.noNullElements(codes);</span>
+<span class="fc" id="L121">        final ResourceBundle bundle = getBundle(locale);</span>
+<span class="fc" id="L122">        String format = null;</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (final String code : codes) {</span>
+            try {
+<span class="fc" id="L125">                format = bundle.getString(code);</span>
+<span class="fc" id="L126">                break;</span>
+<span class="fc" id="L127">            } catch (final MissingResourceException ignore) {</span>
+                // Ignored
+            }
+        }
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (format == null) {</span>
+<span class="fc" id="L132">            format = defaultMessage;</span>
+        }
+        try {
+<span class="fc" id="L135">            return MessageFormat.format(format, params);</span>
+<span class="fc" id="L136">        } catch (final IllegalArgumentException ignore) {</span>
+<span class="fc" id="L137">            return format;</span>
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMessage(
+            final @NotNull String defaultMessage,
+            final @NotNull String code,
+            final Locale locale,
+            final Object... params) {
+<span class="fc" id="L150">        Validate.notNull(defaultMessage);</span>
+<span class="fc" id="L151">        Validate.notNull(code);</span>
+<span class="fc" id="L152">        final ResourceBundle bundle = getBundle(locale);</span>
+        String format;
+        try {
+<span class="fc" id="L155">            format = bundle.getString(code);</span>
+<span class="fc" id="L156">        } catch (final MissingResourceException mre) {</span>
+<span class="fc" id="L157">            format = defaultMessage;</span>
+<span class="fc" id="L158">        }</span>
+        try {
+<span class="fc" id="L160">            return MessageFormat.format(format, params);</span>
+<span class="fc" id="L161">        } catch (final IllegalArgumentException ignore) {</span>
+<span class="fc" id="L162">            return format;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

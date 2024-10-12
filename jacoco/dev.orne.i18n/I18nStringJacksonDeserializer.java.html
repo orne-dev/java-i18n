@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nStringJacksonDeserializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n</a> &gt; <span class="el_source">I18nStringJacksonDeserializer.java</span></div><h1>I18nStringJacksonDeserializer.java</h1><pre class="source lang-java linenums">package dev.orne.i18n;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+
+/**
+ * Jackson JSON deserializer for {@code I18nString} instances.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-02
+ * @see I18nString
+ * @since 0.1
+ */
+@API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+public class I18nStringJacksonDeserializer
+extends JsonDeserializer&lt;I18nString&gt;
+implements ContextualDeserializer {
+
+    /** The by target type cache. */
+<span class="fc" id="L58">    private final Map&lt;Class&lt;?&gt;, I18nStringJacksonDeserializer&gt; cache =</span>
+            new HashMap&lt;&gt;();
+    /** The converter from {@code I18nString} to the target type. */
+    private final I18nStringConverter converter;
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nStringJacksonDeserializer() {
+<span class="fc" id="L67">        super();</span>
+<span class="fc" id="L68">        this.converter = null;</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Creates a new instance.
+     * 
+     * @param converter The converter from {@code I18nString} to the target type
+     */
+    protected I18nStringJacksonDeserializer(
+            final I18nStringConverter converter) {
+<span class="fc" id="L78">        super();</span>
+<span class="fc" id="L79">        this.converter = converter;</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonDeserializer&lt;?&gt; createContextual(
+            final @NotNull DeserializationContext ctxt,
+            final BeanProperty property)
+    throws JsonMappingException {
+        final Class&lt;?&gt; targetType;
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (property == null) {</span>
+<span class="fc" id="L92">            targetType = ctxt.getContextualType().getRawClass();</span>
+        } else {
+<span class="fc" id="L94">            targetType = property.getType().getRawClass();</span>
+        }
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (!I18nString.class.equals(targetType) ) {</span>
+<span class="fc" id="L97">            return cache.computeIfAbsent(targetType, type -&gt; {</span>
+<span class="fc" id="L98">                final I18nStringConverter typeConverter = getConverter(targetType);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                if (typeConverter == null) {</span>
+<span class="fc" id="L100">                    return this;</span>
+                } else {
+<span class="fc" id="L102">                    return new I18nStringJacksonDeserializer(typeConverter);</span>
+                }
+            });
+        }
+<span class="fc" id="L106">        return this;</span>
+    }
+
+    /**
+     * Returns a converter that converts {@code I18nString} instances to the
+     * specified target type.
+     * 
+     * @param targetType The target type.
+     * @return The {@code I18nString} type converter.
+     */
+    protected I18nStringConverter getConverter(
+            final @NotNull Class&lt;?&gt; targetType) {
+        final I18nStringConverter result;
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (I18nFixedString.class.equals(targetType)) {</span>
+<span class="fc" id="L120">            result = I18nFixedString::from;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        } else if (I18nStringMap.class.equals(targetType)) {</span>
+<span class="fc" id="L122">            result = I18nStringMap::new;</span>
+        } else {
+<span class="fc" id="L124">            result = null;</span>
+        }
+<span class="fc" id="L126">        return result;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public I18nString deserialize(
+            final @NotNull JsonParser parser,
+            final @NotNull DeserializationContext context)
+    throws IOException {
+<span class="fc" id="L137">        I18nString result = null;</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (parser.hasCurrentToken()) {</span>
+<span class="fc" id="L139">            JsonToken token = parser.getCurrentToken();</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            if (token == JsonToken.START_OBJECT) {</span>
+<span class="fc" id="L141">                result = new I18nStringMap(parser.readValueAs(MapFromObject.class));</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">            } else if (token == JsonToken.VALUE_STRING) {</span>
+<span class="fc" id="L143">                result = I18nFixedString.from(parser.getText());</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">            } else if (token != JsonToken.VALUE_NULL) {</span>
+<span class="fc" id="L145">                throw new JsonParseException(parser, &quot;Unexpected token.&quot;, parser.getTokenLocation());</span>
+            }
+        }
+<span class="fc bfc" id="L148" title="All 4 branches covered.">        if (result != null &amp;&amp; this.converter != null) {</span>
+<span class="fc" id="L149">            result = this.converter.convert(result);</span>
+        }
+<span class="fc" id="L151">        return result;</span>
+    }
+
+    /**
+     * Extension of {@code I18nStringMap} for deserialization from
+     * JSON object.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2021-02
+     * @see I18nStringMap
+     * @since 0.1
+     */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    @JsonDeserialize(using = JsonDeserializer.None.class)
+    private static  class MapFromObject
+    extends I18nStringMap {
+
+        /** The serial version UID. */
+        private static final long serialVersionUID = 1L;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

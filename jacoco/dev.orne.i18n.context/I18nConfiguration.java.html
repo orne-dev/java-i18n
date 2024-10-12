@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">I18nConfiguration.java</span></div><h1>I18nConfiguration.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2023 - 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.orne.i18n.I18nConfigurationException;
+
+/**
+ * Utility class with I18N configuration constants and retrieval methods.
+ * &lt;p&gt;
+ * Configuration is loaded from application provided {@value #FILE}
+ * properties file. Only one configuration file is allowed by class loader.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2023-11
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public final class I18nConfiguration {
+
+    /** The class logger. */
+<span class="fc" id="L61">    private static final Logger LOG = LoggerFactory.getLogger(I18nConfiguration.class);</span>
+
+    /** The I18N configuration resource. */
+    public static final String FILE = &quot;dev.orne.i18n.config.properties&quot;;
+
+    /**
+     * The configuration properties prefix.
+     */
+    public static final String PREFIX = &quot;dev.orne.i18n.&quot;;
+    /**
+     * The configuration property for {@code I18nContextProvider}
+     * implementation to use.
+     * Takes {@code DEFAULT} by default.
+     */
+    public static final String CONTEXT_PROVIDER = PREFIX + &quot;context.provider&quot;;
+    /**
+     * The configuration property for {@code I18nContex} inheritance by
+     * child threads in per-thread based context providers.
+     * Takes {@code true} by default.
+     */
+    public static final String CONTEXT_INHERITED = PREFIX + &quot;context.inherited&quot;;
+    /**
+     * The configuration property for default language.
+     * Takes {@code Locale.getDefault()} by default.
+     */
+    public static final String DEFAULT_LANGUAGE = PREFIX + &quot;language.default&quot;;
+    /**
+     * The configuration property for comma separated available languages.
+     * Takes {@code Locale.getAvailableLocales()} by default.
+     */
+    public static final String AVAILABLE_LANGUAGES = PREFIX + &quot;language.available&quot;;
+    /**
+     * The configuration property for default {@code I18nResources}
+     * bundle base name.
+     * Takes {@code messages} by default.
+     */
+    public static final String DEFAULT_RESOURCES = PREFIX + &quot;resources&quot;;
+    /**
+     * The configuration properties prefix for named {@code I18nResources}
+     * bundle base name.
+     * &lt;p&gt;
+     * To be concatenated with bundle name. For example:
+     * {@value NAMED_RESOURCES_PREFIX}{@code .alt-messages}
+     * configures resource with name {@code alt-messages}.
+     */
+    public static final String NAMED_RESOURCES_PREFIX = PREFIX + &quot;resources.named.&quot;;
+
+    /** The default configuration resource, relative to this class. */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    static final String DEFAULT_CFG = &quot;default-config.properties&quot;;
+    /** The by ClassLoader I18N configuration cache. */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+<span class="fc" id="L113">    static final WeakHashMap&lt;ClassLoader, Pair&lt;Properties, Set&lt;String&gt;&gt;&gt; CACHE =</span>
+            new WeakHashMap&lt;&gt;();
+
+    /**
+     * Private constructor.
+     */
+    private I18nConfiguration() {
+        // Utility class
+    }
+
+    /**
+     * Returns the I18N configuration for the current class loader.
+     * 
+     * @return The I18N configuration properties
+     * @see #get(ClassLoader)
+     * @throws I18nConfigurationException If an error occurs loading the
+     * configuration.
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    public static @NotNull Properties get() {
+<span class="fc" id="L133">        return get(Thread.currentThread().getContextClassLoader());</span>
+    }
+
+    /**
+     * Returns the I18N configuration for the specified class loader.
+     * If the class loader has a {@value #FILE} resource loads the
+     * configuration from the file.
+     * Otherwise inherits the configuration from the parent class loader and,
+     * if none has a custom configuration, applies the default configuration.
+     * &lt;p&gt;
+     * Note that having more that one {@value #FILE} in a class loader
+     * throws a {@code I18nConfigurationException}.
+     * 
+     * @param cl The class loader to retrieve the configuration for.
+     * @return The configuration properties.
+     * @see #FILE
+     * @throws I18nConfigurationException If an error occurs loading the
+     * configuration.
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    public static @NotNull Properties get(
+            final @NotNull ClassLoader cl) {
+<span class="fc" id="L155">        Validate.notNull(cl);</span>
+<span class="fc" id="L156">        final Properties copy = new Properties();</span>
+<span class="fc" id="L157">        copy.putAll(getCache(cl).getLeft());</span>
+<span class="fc" id="L158">        return copy;</span>
+    }
+
+    /**
+     * Sets the specified configuration for the specified class loader
+     * and all its children.
+     * 
+     * @param cl The class loader.
+     * @param config The configuration to apply.
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    static synchronized void set(
+            final @NotNull ClassLoader cl,
+            final @NotNull Properties config) {
+<span class="fc" id="L172">        Validate.notNull(cl);</span>
+<span class="fc" id="L173">        Validate.notNull(config);</span>
+<span class="fc" id="L174">        final Properties copy = new Properties();</span>
+<span class="fc" id="L175">        copy.putAll(config);</span>
+<span class="fc" id="L176">        final Set&lt;String&gt; clRes = getCache(cl).getRight();</span>
+<span class="fc" id="L177">        CACHE.put(cl, Pair.of(copy, clRes));</span>
+<span class="fc" id="L178">        CACHE.forEach((key, cache) -&gt; {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            boolean child = key.getParent() != null &amp;&amp;</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">                    key.getParent().equals(cl);</span>
+<span class="fc bfc" id="L181" title="All 4 branches covered.">            if (child &amp;&amp; cache.getRight().equals(clRes)) {</span>
+<span class="fc" id="L182">                set(key, config);</span>
+            }
+<span class="fc" id="L184">        });</span>
+<span class="fc" id="L185">    }</span>
+
+    /**
+     * Resets the I18N configuration cache.
+     */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    static synchronized void reset() {
+<span class="fc" id="L192">        CACHE.clear();</span>
+<span class="fc" id="L193">    }</span>
+
+    /**
+     * Returns or computes the cached tuple of I18N configuration and applied
+     * file URLs for the specified class loader.
+     * 
+     * @param cl The class loader.
+     * @return The tuple of I18N configuration and applied file URLs.
+     * @throws I18nConfigurationException If an error occurs loading the
+     * configuration.
+     */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    static synchronized @NotNull Pair&lt;Properties, Set&lt;String&gt;&gt; getCache(
+            final @NotNull ClassLoader cl) {
+<span class="fc" id="L207">        return CACHE.computeIfAbsent(cl, I18nConfiguration::loadConfiguration);</span>
+    }
+
+    /**
+     * Computes the cached tuple of I18N configuration and applied file URLs
+     * for the specified class loader.
+     * &lt;p&gt;
+     * If the class loader has a configuration file not inherited from the
+     * parent class loader loads the configuration from the file and returns
+     * a set with parent class loader's file URLs plus the class loader file
+     * URL to detect new configuration files in child class loaders.
+     * &lt;p&gt;
+     * If the class loader has not a configuration file inherits the
+     * configuration and the set of detected file URLs from the parent class
+     * loader.
+     * &lt;p&gt;
+     * If the class loader has multiple configuration files throws a
+     * {@code I18nConfigurationException}.
+     * &lt;p&gt;
+     * Finally if the class loader has no parent (bootstrap class loader)
+     * loads the default configuration and returns an empty set of detected
+     * configuration files.
+     * 
+     * @param cl The class loader.
+     * @return The tuple of I18N configuration and applied file URLs.
+     * @throws I18nConfigurationException If an error occurs loading the
+     * configuration.
+     */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    static @NotNull Pair&lt;Properties, Set&lt;String&gt;&gt; loadConfiguration(
+            final @NotNull ClassLoader cl) {
+<span class="fc" id="L238">        final Properties config = new Properties();</span>
+<span class="fc" id="L239">        final Set&lt;String&gt; resources = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (cl.getParent() == null) {</span>
+<span class="fc" id="L241">            LOG.debug(&quot;Loading default I18N configuration for ClassLoader {}&quot;, cl);</span>
+<span class="fc" id="L242">            try (final InputStream is = I18nConfiguration.class.getResourceAsStream(DEFAULT_CFG)) {</span>
+<span class="fc" id="L243">                config.load(is);</span>
+<span class="nc" id="L244">            } catch (final IOException e) {</span>
+<span class="nc" id="L245">                throw new I18nConfigurationException(</span>
+                        &quot;Error loading I18N default configuration&quot;,
+                        e);
+<span class="fc" id="L248">            }</span>
+        } else {
+<span class="fc" id="L250">            final Pair&lt;Properties, Set&lt;String&gt;&gt; parent = getCache(cl.getParent());</span>
+<span class="fc" id="L251">            resources.addAll(parent.getRight());</span>
+<span class="fc" id="L252">            final URL file = getClassLoaderConfigFile(cl, parent.getRight());</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            if (file == null) {</span>
+<span class="fc" id="L254">                LOG.debug(&quot;Inheriting parent I18N configuration for ClassLoader {}&quot;, cl);</span>
+<span class="fc" id="L255">                config.putAll(parent.getLeft());</span>
+            } else {
+<span class="fc" id="L257">                LOG.debug(&quot;Loading I18N configuration for ClassLoader {}&quot;, cl);</span>
+<span class="fc" id="L258">                try (final InputStream is = file.openStream()) {</span>
+<span class="fc" id="L259">                    config.load(is);</span>
+<span class="nc" id="L260">                } catch (final IOException e) {</span>
+<span class="nc" id="L261">                    throw new I18nConfigurationException(</span>
+                            &quot;Error loading custom I18N configuration&quot;,
+                            e);
+<span class="fc" id="L264">                }</span>
+<span class="fc" id="L265">                resources.add(file.toString());</span>
+            }
+        }
+<span class="fc" id="L268">        return Pair.of(config, resources);</span>
+    }
+
+    /**
+     * Finds a new I18N configuration file to apply to the specified class
+     * loader.
+     * If the class loader has multiple configuration files throws a
+     * {@code I18nConfigurationException}.
+     * 
+     * @param cl The class loader.
+     * @param prev The set of configuration files detected in parent class
+     * loaders.
+     * @return The configuration file URL, if any.
+     * @throws I18nConfigurationException If an error occurs loading the
+     * configuration or multiple files are detected.
+     */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    static URL getClassLoaderConfigFile(
+            final @NotNull ClassLoader cl,
+            final @NotNull Set&lt;String&gt; prev) {
+<span class="fc" id="L288">        final List&lt;URL&gt; result = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="fc bfc" id="L290" title="All 2 branches covered.">            for (final URL resource : Collections.list(cl.getResources(I18nConfiguration.FILE))) {</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">                if (!prev.contains(resource.toString())) {</span>
+<span class="fc" id="L292">                    result.add(resource);</span>
+                }
+<span class="fc" id="L294">            }</span>
+<span class="nc" id="L295">        } catch (final IOException e) {</span>
+<span class="nc" id="L296">            throw new I18nConfigurationException(&quot;Error loading I18N configuration&quot;, e);</span>
+<span class="fc" id="L297">        }</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (result.isEmpty()) {</span>
+<span class="fc" id="L299">            return null;</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        } else if (result.size() == 1) {</span>
+<span class="fc" id="L301">            return result.get(0);</span>
+        } else {
+<span class="nc" id="L303">            throw new I18nConfigurationException(</span>
+                    &quot;Error loading I18N configuration: ClassLoader&quot; + cl +
+                    &quot; contain multiple I18N configuration resources: &quot; + result);
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

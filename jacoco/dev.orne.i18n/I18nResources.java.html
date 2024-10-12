@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nResources.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n</a> &gt; <span class="el_source">I18nResources.java</span></div><h1>I18nResources.java</h1><pre class="source lang-java linenums">package dev.orne.i18n;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.text.MessageFormat;
+import java.util.Locale;
+
+import javax.validation.constraints.NotNull;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.context.I18nContext;
+
+/**
+ * Interface for I18N messages source. Provides an implementation agnostic way
+ * to retrieve I18N messages based in the current {@code I18nContext} locale.
+ * &lt;p&gt;
+ * The default messages are expect to be {@code MessageFormat} compliant.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @see I18nContext
+ * @see MessageFormat
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public interface I18nResources {
+
+    /**
+     * Retrieves the I18N message for the specified message code and the 18N
+     * context locale.
+     * If the message code is not defined in this I18N resources the specified
+     * default message is used.
+     * The message is formatted with the provided parameters.
+     * 
+     * @param defaultMessage The default message format
+     * @param code The message code
+     * @param params The message parameters
+     * @return The formatted message in the I18N context locale
+     */
+    default @NotNull String getMessage(
+            @NotNull String defaultMessage,
+            @NotNull String code,
+            Object... params) {
+<span class="fc" id="L66">        return getMessage(defaultMessage, code, I18N.getLocale(), params);</span>
+    }
+
+    /**
+     * Retrieves the I18N message for the specified message code and locale.
+     * If the message code is not defined in this I18N resources the specified
+     * default message is used.
+     * The message is formatted with the provided parameters.
+     * 
+     * @param defaultMessage The default message format
+     * @param code The message code
+     * @param locale The locale to retrieve the message for
+     * @param params The message parameters
+     * @return The formatted message in the specified locale
+     */
+    @NotNull String getMessage(
+            @NotNull String defaultMessage,
+            @NotNull String code,
+            @NotNull Locale locale,
+            Object... params);
+
+    /**
+     * Retrieves the I18N message for the specified locale of the first
+     * message code efined in this I18N resources of specified message codes.
+     * If no message code is defined in this I18N resources the specified
+     * default message is used.
+     * The message is formatted with the provided parameters.
+     * 
+     * @param defaultMessage The default message format
+     * @param codes The message codes, in order of preference
+     * @param params The message parameters
+     * @return The formatted message in the I18N context locale
+     */
+    default @NotNull String getMessage(
+            @NotNull String defaultMessage,
+            @NotNull String[] codes,
+            Object... params) {
+<span class="fc" id="L103">        return getMessage(defaultMessage, codes, I18N.getLocale(), params);</span>
+    }
+
+    /**
+     * Retrieves the I18N message for the specified locale of the first
+     * message code efined in this I18N resources of specified message codes.
+     * If no message code is defined in this I18N resources the specified
+     * default message is used.
+     * The message is formatted with the provided parameters.
+     * 
+     * 
+     * @param defaultMessage The default message format
+     * @param codes The message codes, in order of preference
+     * @param locale The locale to retrieve the message for
+     * @param params The message parameters
+     * @return The formatted message in the specified locale
+     */
+    @NotNull String getMessage(
+            @NotNull String defaultMessage,
+            @NotNull String[] codes,
+            @NotNull Locale locale,
+            Object... params);
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

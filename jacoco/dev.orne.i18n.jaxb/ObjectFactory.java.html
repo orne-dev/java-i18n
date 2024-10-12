@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ObjectFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.jaxb</a> &gt; <span class="el_source">ObjectFactory.java</span></div><h1>ObjectFactory.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.jaxb;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import javax.xml.bind.annotation.XmlRegistry;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+/**
+ * This object contains factory methods for each Java content interface and
+ * Java element interface in the dev.orne.i18n package.
+ * &lt;p&gt;
+ * An ObjectFactory allows you to programatically construct new instances of
+ * the Java representation for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces and classes representing
+ * the binding of schema type definitions, element declarations and model
+ * groups.
+ * Factory methods for each of these are provided in this class.
+ */
+@XmlRegistry
+@API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+public class ObjectFactory {
+
+    /**
+     * Create a new ObjectFactory that can be used to create new instances of
+     * schema derived classes for package: dev.orne.i18n.
+     */
+    public ObjectFactory() {
+<span class="fc" id="L50">        super();</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Create an instance of {@link XmlI18nString}.
+     * 
+     * @return The instance of {@link XmlI18nString}.
+     */
+    public XmlI18nString createXmlI18NString() {
+<span class="fc" id="L59">        return new XmlI18nString();</span>
+    }
+
+    /**
+     * Create an instance of {@link XmlI18nStringTranslation}.
+     * 
+     * @return The instance of {@link XmlI18nStringTranslation}.
+     */
+    public XmlI18nStringTranslation createTranslation() {
+<span class="fc" id="L68">        return new XmlI18nStringTranslation();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nSpringConfigurer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spring</a> &gt; <span class="el_source">I18nSpringConfigurer.java</span></div><h1>I18nSpringConfigurer.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spring;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 - 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import javax.validation.constraints.NotNull;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.context.I18nContextProvider;
+
+/**
+ * Interface to be implemented by {@literal @}{@link org.springframework.context.annotation.Configuration}
+ * classes annotated with {@literal @}{@link EnableI18N} that wish to customize the
+ * {@link I18nContextProvider} instance used by the application
+ * &lt;p&gt;
+ * See {@literal @}{@link EnableI18N} for usage examples.
+ *
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @see I18nContextProvider
+ * @see EnableI18N
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public interface I18nSpringConfigurer {
+
+    /**
+     * Returns the  I18N context provider builder to use to configure
+     * I18N context provider.
+     * 
+     * @return The I18N context provider builder.
+     */
+    default @NotNull I18nSpringContextProvider.Builder getI18nContextProviderBuilder() {
+<span class="fc" id="L55">        return I18nSpringContextProvider.builder();</span>
+    }
+
+    /**
+     * Configure the I18N context provider configuration.
+     * 
+     * @param builder The I18N context provider builder.
+     */
+    default void configureI18nContextProvider(
+            final @NotNull I18nSpringContextProvider.Builder builder) {
+<span class="fc" id="L65">        builder.configure();</span>
+<span class="fc" id="L66">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

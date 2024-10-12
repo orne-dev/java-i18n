@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">I18nContext.java</span></div><h1>I18nContext.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.Locale;
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nResources;
+
+/**
+ * Interface for I18N context. Contains the data required to return the I18N
+ * texts in user's language.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public interface I18nContext {
+
+    /**
+     * Return the {@code I18nContext} associated with the current
+     * {@code Thread}.
+     * 
+     * @return The I18N context.
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    public static @NotNull I18nContext getInstance() {
+<span class="fc" id="L54">        return I18nContextProvider.getInstance().getContext();</span>
+    }
+
+    /**
+     * Returns the UUID of the provider owner of this context.
+     * 
+     * @return The UUID of the provider owner of this context
+     */
+    @NotNull UUID getProviderUUID();
+
+    /**
+     * Returns the user's language.
+     * 
+     * @return The user's language
+     */
+    @NotNull Locale getLocale();
+
+    /**
+     * Sets the user's language. If the argument is {@code null} the JVM
+     * default language is set.
+     * 
+     * @param language The user's language to set
+     */
+    void setLocale(Locale language);
+
+    /**
+     * Returns the languages supported by the application.
+     * 
+     * @return The languages supported by the application
+     */
+    default @NotNull Locale[] getAvailableLocales() {
+<span class="fc" id="L85">        return I18nContextProvider.getInstance().getAvailableLocales();</span>
+    }
+
+    /**
+     * Returns the default I18N resources of the application.
+     * 
+     * @return The default I18N resources
+     */
+    default @NotNull I18nResources getI18nResources() {
+<span class="fc" id="L94">        return I18nContextProvider.getInstance().getDefaultI18nResources();</span>
+    }
+
+    /**
+     * Returns the I18N resources identified by the specified key.
+     * If key is {@code null} or no resources is associated for such key
+     * returns the default I18N resources.
+     * 
+     * @param key The key of the alternative I18N resources
+     * @return The I18N resources to use for the key
+     */
+    default @NotNull I18nResources getI18nResources(
+            final String key) {
+<span class="fc" id="L107">        return I18nContextProvider.getInstance().getI18nResources(key);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

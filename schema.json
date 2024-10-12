@@ -1,0 +1,42 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://orne-dev.github.io/java-i18n/schema.json",
+    "description": "JSON schema definitions for dev.orne:i18n library",
+    "$defs": {
+        "string": {
+            "$anchor": "string",
+            "description": "I18N string",
+            "oneOf": [
+                {
+                    "description": "The current language text",
+                    "type": "string"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "defaultText": {
+                            "description": "Default text",
+                            "type": "string"
+                        },
+                        "i18n": {
+                            "description": "The available translations",
+                            "type": "object",
+                            "minProperties": 0,
+                            "propertyNames": {
+                                "pattern": "^[a-z]{2}$"
+                            },
+                            "patternProperties": {
+                                "^[a-z]{2}$": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": [ "defaultText", "i18n" ],
+                    "additionalProperties": false
+                }
+            ]
+        }
+    }
+}

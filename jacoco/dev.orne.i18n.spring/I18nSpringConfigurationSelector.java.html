@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nSpringConfigurationSelector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.spring</a> &gt; <span class="el_source">I18nSpringConfigurationSelector.java</span></div><h1>I18nSpringConfigurationSelector.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.spring;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportSelector;
+import org.springframework.core.type.AnnotationMetadata;
+
+/**
+ * Selector of Spring configuration based on presence of {@code spring-web}
+ * on the classpath.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2023-05
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+@Configuration
+public class I18nSpringConfigurationSelector
+implements ImportSelector {
+
+    /** Class to use detect {@code spring-web}. */
+    public static final String SPRING_WEB_DETECTOR = &quot;org.springframework.web.context.support.RequestHandledEvent&quot;;
+    /** Class of {@code spring-web} based configuration. */
+    private static final String WEB_CONFIGURATION = &quot;dev.orne.i18n.spring.I18nSpringWebConfiguration&quot;;
+    /** Class of default configuration. */
+    private static final String BASE_CONFIGURATION = &quot;dev.orne.i18n.spring.I18nSpringConfiguration&quot;;
+
+    /**
+     * Creates a new instance.
+     */
+    public I18nSpringConfigurationSelector() {
+<span class="fc" id="L55">        super();</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * {@inheritDoc}
+     * &lt;p&gt;
+     * Loads {@code I18nSpringWebContextCleaner} if {@code spring-web} is on
+     * the classpth. {@code I18nSpringBaseConfigurer} otherwise.
+     * .
+     */
+    @Override
+    public String[] selectImports(
+            final AnnotationMetadata importingClassMetadata) {
+        try {
+<span class="fc" id="L69">            Thread.currentThread().getContextClassLoader().loadClass(SPRING_WEB_DETECTOR);</span>
+<span class="fc" id="L70">            return new String[] { WEB_CONFIGURATION };</span>
+<span class="fc" id="L71">        } catch (ClassNotFoundException e) {</span>
+<span class="fc" id="L72">            return new String[] { BASE_CONFIGURATION };</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

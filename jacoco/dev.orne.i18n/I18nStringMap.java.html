@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nStringMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n</a> &gt; <span class="el_source">I18nStringMap.java</span></div><h1>I18nStringMap.java</h1><pre class="source lang-java linenums">package dev.orne.i18n;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.jaxb.I18nStringMapAdapter;
+
+/**
+ * Implementation of {@code I18nString} populated with translations.
+ * &lt;p&gt;
+ * Useful for translations edition and visualization.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @see I18nString
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+@XmlJavaTypeAdapter(I18nStringMapAdapter.class)
+public class I18nStringMap
+implements I18nString {
+
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1L;
+
+    /** The default text. */
+    private @NotNull String defaultText;
+    /** The text translations. */
+<span class="fc" id="L61">    private final @NotNull Map&lt;@NotNull String, @NotNull String&gt; i18n = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Creates a new instance with empty default text and no translations.
+     */
+    public I18nStringMap() {
+<span class="fc" id="L67">        this(&quot;&quot;);</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Creates a new instance  with specified default text and no translations.
+     * 
+     * @param defaultText The default text
+     */
+    public I18nStringMap(
+            final @NotNull String defaultText) {
+<span class="fc" id="L77">        super();</span>
+<span class="fc" id="L78">        this.defaultText = Validate.notNull(defaultText);</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Copy constructor.
+     * &lt;p&gt;
+     * If {@code copy} is of {@code I18nStringMap} type a full copy is
+     * performed.
+     * If {@code copy} is of {@code I18nResourcesString} type the formatted
+     * default text is set as default text and the result of {@code get()} as
+     * translation for current language.
+     * Otherwise the result of {@code get()} is used as default text.
+     * 
+     * @param copy The instance to copy
+     */
+    public I18nStringMap(
+            final @NotNull I18nString copy) {
+<span class="fc" id="L95">        super();</span>
+<span class="fc" id="L96">        Validate.notNull(copy);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (copy instanceof I18nStringMap) {</span>
+<span class="fc" id="L98">            final I18nStringMap mapcopy = (I18nStringMap) copy;</span>
+<span class="fc" id="L99">            this.defaultText = mapcopy.getDefaultText();</span>
+<span class="fc" id="L100">            this.i18n.putAll(mapcopy.i18n);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        } else if (copy instanceof I18nResourcesString) {</span>
+<span class="fc" id="L102">            final I18nResourcesString rescopy = (I18nResourcesString) copy;</span>
+<span class="fc" id="L103">            this.defaultText = rescopy.getFormattedDefaultText();</span>
+<span class="fc" id="L104">            this.i18n.put(I18N.getLocale().getLanguage(), copy.get());</span>
+<span class="fc" id="L105">        } else {</span>
+<span class="fc" id="L106">            this.defaultText = copy.get();</span>
+        }
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Returns the default text.
+     * 
+     * @return The default text
+     */
+    public @NotNull String getDefaultText() {
+<span class="fc" id="L116">        return this.defaultText;</span>
+    }
+
+    /**
+     * Sets the default text.
+     * 
+     * @param defaultText The default text
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap setDefaultText(
+            final @NotNull String defaultText) {
+<span class="fc" id="L127">        this.defaultText = Validate.notNull(defaultText);</span>
+<span class="fc" id="L128">        return this;</span>
+    }
+
+    /**
+     * Returns the text translations.
+     * 
+     * @return The text translations
+     */
+    public @NotNull Map&lt;@NotNull String, @NotNull String&gt; getI18n() {
+<span class="fc" id="L137">        return this.i18n;</span>
+    }
+
+    /**
+     * Sets the text translations. This methods modifies the internal
+     * {@code Map}. Further modifications on argument will have no effect in
+     * internal translations.
+     * 
+     * @param translations The text translations
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap setI18n(
+            final @NotNull Map&lt;@NotNull String, @NotNull String&gt; translations) {
+<span class="fc" id="L150">        Validate.notNull(translations);</span>
+<span class="fc" id="L151">        Validate.noNullElements(translations.keySet());</span>
+<span class="fc" id="L152">        Validate.noNullElements(translations.values());</span>
+<span class="fc" id="L153">        this.i18n.clear();</span>
+<span class="fc" id="L154">        this.i18n.putAll(translations);</span>
+<span class="fc" id="L155">        return this;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String get() {
+<span class="fc" id="L163">        return get(I18N.getLocale());</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String get(final @NotNull String language) {
+<span class="fc" id="L171">        String tmp = Validate.notNull(language);</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        while (!this.i18n.containsKey(tmp) &amp;&amp;</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">                tmp.contains(&quot;-&quot;)) {</span>
+<span class="fc" id="L174">            tmp = tmp.substring(0, tmp.lastIndexOf('-'));</span>
+        }
+        final String result;
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (this.i18n.containsKey(tmp)) {</span>
+<span class="fc" id="L178">            result = this.i18n.get(tmp);</span>
+        } else {
+<span class="fc" id="L180">            result = this.defaultText;</span>
+        }
+<span class="fc" id="L182">        return result;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String get(final @NotNull Locale locale) {
+<span class="fc" id="L190">        return get(Validate.notNull(locale).getLanguage());</span>
+    }
+
+    /**
+     * Sets the translation for the specified locale.
+     * 
+     * @param language The language of the translation
+     * @param text The translated text
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap set(
+            final @NotNull String language,
+            final @NotNull String text) {
+<span class="fc" id="L203">        this.i18n.put(</span>
+<span class="fc" id="L204">                Validate.notNull(language),</span>
+<span class="fc" id="L205">                Validate.notNull(text));</span>
+<span class="fc" id="L206">        return this;</span>
+    }
+
+    /**
+     * Sets the translation for the specified locale.
+     * 
+     * @param locale The language of the translation
+     * @param text The translated text
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap set(
+            final @NotNull Locale locale,
+            final @NotNull String text) {
+<span class="fc" id="L219">        set(Validate.notNull(locale).getLanguage(), text);</span>
+<span class="fc" id="L220">        return this;</span>
+    }
+
+    /**
+     * Removes the translation for the specified language.
+     * 
+     * @param language The language of the translation
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap remove(
+            final @NotNull String language) {
+<span class="fc" id="L231">        this.i18n.remove(Validate.notNull(language));</span>
+<span class="fc" id="L232">        return this;</span>
+    }
+
+    /**
+     * Removes the translation for the specified language.
+     * 
+     * @param locale The language of the translation
+     * @return This instance for method chaining
+     */
+    public @NotNull I18nStringMap remove(
+            final @NotNull Locale locale) {
+<span class="fc" id="L243">        this.i18n.remove(Validate.notNull(locale).getLanguage());</span>
+<span class="fc" id="L244">        return this;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L252">        return new HashCodeBuilder()</span>
+<span class="fc" id="L253">                .append(this.defaultText)</span>
+<span class="fc" id="L254">                .append(this.i18n)</span>
+<span class="fc" id="L255">                .toHashCode();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (obj == null) { return false; }</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        if (this == obj) { return true; }</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (!this.getClass().equals(obj.getClass())) { return false; }</span>
+<span class="fc" id="L266">        final I18nStringMap other = (I18nStringMap) obj;</span>
+<span class="fc" id="L267">        return new EqualsBuilder()</span>
+<span class="fc" id="L268">                .append(this.defaultText, other.defaultText)</span>
+<span class="fc" id="L269">                .append(this.i18n, other.i18n)</span>
+<span class="fc" id="L270">                .isEquals();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEquivalent(final I18nString obj) {
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (obj == null) { return false; }</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (obj == this) { return true; }</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (getClass().equals(obj.getClass())) { return equals(obj); }</span>
+<span class="fc" id="L281">        return get().equals(obj.get());</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull I18nStringMap asMap() {
+<span class="fc" id="L289">        return this;</span>
+    }
+
+    /**
+     * Returns the default text.
+     * 
+     * @return The default text.
+     */
+    @Override
+    public @NotNull String toString() {
+<span class="fc" id="L299">        return this.getDefaultText();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

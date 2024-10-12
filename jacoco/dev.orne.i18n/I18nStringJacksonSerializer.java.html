@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nStringJacksonSerializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n</a> &gt; <span class="el_source">I18nStringJacksonSerializer.java</span></div><h1>I18nStringJacksonSerializer.java</h1><pre class="source lang-java linenums">package dev.orne.i18n;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.io.IOException;
+
+import javax.validation.constraints.NotNull;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.ContextualSerializer;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+/**
+ * Jackson JSON serializer for {@code I18nString} instances.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-02
+ * @see I18nString
+ * @since 0.1
+ */
+@API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+public class I18nStringJacksonSerializer
+extends StdSerializer&lt;I18nString&gt;
+implements ContextualSerializer {
+
+    /** The serial version UID.  */
+    private static final long serialVersionUID = 1L;
+    /** The shared instance for {@code } as object serialization. */
+<span class="fc" id="L58">    private static final I18nStringJacksonSerializer OBJECT_INSTANCE =</span>
+            new I18nStringJacksonSerializer(true);
+
+    /** If {@code I18nStringMap} instances should be serialized as objects. */
+    private final boolean mapsAsObject;
+
+    /**
+     * Creates a new instance that serializes all instances as current language
+     * translation text.
+     */
+    public I18nStringJacksonSerializer() {
+<span class="fc" id="L69">        super(I18nString.class);</span>
+<span class="fc" id="L70">        this.mapsAsObject = false;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Creates a new instance.
+     * 
+     * @param mapsAsObject If {@code I18nStringMap} instances should be
+     * serialized as objects
+     */
+    protected I18nStringJacksonSerializer(
+            final boolean mapsAsObject) {
+<span class="fc" id="L81">        super(I18nString.class);</span>
+<span class="fc" id="L82">        this.mapsAsObject = mapsAsObject;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonSerializer&lt;?&gt; createContextual(
+            final @NotNull SerializerProvider provider,
+            final @NotNull BeanProperty property)
+    throws JsonMappingException {
+<span class="fc" id="L93">        final JsonFormat.Value format = findFormatOverrides(provider, property, handledType());</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (format != null) {</span>
+<span class="fc" id="L95">            final JsonFormat.Shape shape = format.getShape();</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if (JsonFormat.Shape.OBJECT == shape) {</span>
+<span class="fc" id="L97">                return OBJECT_INSTANCE;</span>
+            }
+        }
+<span class="fc" id="L100">        return this;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void serialize(
+            final @NotNull I18nString value,
+            final @NotNull JsonGenerator jgen,
+            final @NotNull SerializerProvider provider)
+    throws IOException {
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (this.mapsAsObject) {</span>
+<span class="fc" id="L113">            provider.defaultSerializeValue(new MapAsObject(value.asMap()), jgen);</span>
+        } else {
+<span class="fc" id="L115">            jgen.writeString(value.get());</span>
+        }
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Extension of {@code I18nStringMap} for serialization as
+     * JSON object.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2021-02
+     * @see I18nStringMap
+     * @since 0.1
+     */
+    @API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+    @JsonSerialize(using = JsonSerializer.None.class)
+    private static class MapAsObject
+    extends I18nStringMap {
+
+        /** The serial version UID. */
+        private static final long serialVersionUID = 1L;
+
+        public MapAsObject(
+                final @NotNull I18nString copy) {
+<span class="fc" id="L138">            super(copy);</span>
+<span class="fc" id="L139">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

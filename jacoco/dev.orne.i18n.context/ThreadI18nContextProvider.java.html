@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThreadI18nContextProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">ThreadI18nContextProvider.java</span></div><h1>ThreadI18nContextProvider.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 - 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.Locale;
+import java.util.Properties;
+import java.util.function.Supplier;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nResources;
+
+/**
+ * Implementation of {@code I18nContextProvider} that provides a
+ * different {@code I18nContext} for each thread.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 2.0, 2022-12
+ * @see I18nContextProvider
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public class ThreadI18nContextProvider
+extends AbstractI18nContextProvider {
+
+    /** The I18N context provider type. */
+    public static final String TYPE = &quot;THREAD&quot;;
+
+    /** The {@code I18nContext}s per {@code Thread} container. */
+    private final @NotNull ThreadLocal&lt;I18nContext&gt; contexts;
+
+    /**
+     * Creates a new instance based on specified builder.
+     * 
+     * @param builder The I18N context provider builder.
+     */
+    protected ThreadI18nContextProvider(
+            @NotNull BuilderImpl&lt;?, ?&gt; builder) {
+<span class="fc" id="L65">        super(builder);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (builder.inheritableContexts) {</span>
+<span class="fc" id="L67">            this.contexts = new InheritableThreadLocal&lt;&gt;();</span>
+        } else {
+<span class="fc" id="L69">            this.contexts = new ThreadLocal&lt;&gt;();</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Creates a new {@code ThreadI18nContextProvider} instances builder.
+     * 
+     * @return The {@code ThreadI18nContextProvider} instances builder.
+     */
+    public static @NotNull Builder builder() {
+<span class="fc" id="L79">        return new BuilderImpl&lt;&gt;();</span>
+    }
+
+    /**
+     * Returns {@code true} if the {@code I18nContext} instances will be
+     * inherited by child threads.
+     * 
+     * @return If the {@code I18nContext} instances will be inherited by child
+     * threads.
+     */
+    public boolean isInheritable() {
+<span class="fc" id="L90">        return this.contexts instanceof InheritableThreadLocal;</span>
+    }
+
+    /**
+     * Returns the internal {@code I18nContext}s per {@code Thread} container.
+     * 
+     * @return The {@code I18nContext}s per {@code Thread} container
+     */
+    protected @NotNull ThreadLocal&lt;I18nContext&gt; getContexts() {
+<span class="fc" id="L99">        return this.contexts;</span>
+    }
+
+    /**
+     * Return the {@code I18nContext} associated with the current
+     * {@code Thread}.
+     * &lt;p&gt;
+     * If no {@code I18nContext} exists for the current {@code Thread} or the
+     * existing one is not alive anymore a new one is created.
+     * 
+     * @return The current {@code I18nContext}. Never {@code null}.
+     */
+    public @NotNull I18nContext getContext() {
+<span class="fc" id="L112">        I18nContext context = this.contexts.get();</span>
+<span class="fc bfc" id="L113" title="All 4 branches covered.">        if (context == null || !isContextValid(context)) {</span>
+<span class="fc" id="L114">            context = createContext();</span>
+<span class="fc" id="L115">            this.contexts.set(context);</span>
+        }
+<span class="fc" id="L117">        return context;</span>
+    }
+
+    /**
+     * The default contexts don't expire.
+     */
+    @Override
+    public boolean isContextValid(
+            final @NotNull I18nContext context) {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        return Validate.notNull(context) == this.contexts.get() &amp;&amp;</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                getSessionUUID().equals(context.getProviderUUID());</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearContext() {
+<span class="fc" id="L135">        this.contexts.remove();</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L143">        return new HashCodeBuilder()</span>
+<span class="fc" id="L144">                .appendSuper(super.hashCode())</span>
+<span class="fc" id="L145">                .append(isInheritable())</span>
+<span class="fc" id="L146">                .toHashCode();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (obj == null) { return false; }</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (obj == this) { return true; }</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (!getClass().equals(obj.getClass())) { return false; }</span>
+<span class="fc" id="L157">        final ThreadI18nContextProvider other = (ThreadI18nContextProvider) obj;</span>
+<span class="fc" id="L158">        return new EqualsBuilder()</span>
+<span class="fc" id="L159">                .appendSuper(super.equals(obj))</span>
+<span class="fc" id="L160">                .append(this.isInheritable(), other.isInheritable())</span>
+<span class="fc" id="L161">                .isEquals();</span>
+    }
+
+    /**
+     * Interface for {@code ThreadI18nContextProvider} instance builders.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2024-09
+     * @since 0.1
+     */
+    public interface Builder
+    extends I18nContextProvider.Builder {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default @NotNull Builder configure() {
+<span class="nc" id="L179">            return configure(I18nConfiguration.get());</span>
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder configure(
+                @NotNull Properties config);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder setDefaultLocaleSupplier(
+                @NotNull Supplier&lt;@NotNull Locale&gt; supplier);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder setAvailableLocales(
+                @NotNull Locale[] locales);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder setDefaultI18nResources(
+                @NotNull I18nResources resources);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull Builder addI18nResources(
+                @NotNull String key,
+                @NotNull I18nResources resource);
+
+        /**
+         * Sets if the {@code I18nContext} instances will be inherited by child
+         * threads.
+         * 
+         * @param inheritable If the {@code I18nContext} instances will be
+         * inherited by child threads.
+         * @return This builder, for method chaining.
+         */
+        @NotNull Builder setInheritableContexts(
+                @NotNull boolean inheritable);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull ThreadI18nContextProvider build();
+    }
+
+    /**
+     * Abstract builder of {@code ThreadI18nContextProvider} instances.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2024-09
+     * @param &lt;T&gt; The type of I18N context provider build by the builder.
+     * @param &lt;B&gt; The type of builder returned for method chaining.
+     * @since 0.1
+     */
+    protected static class BuilderImpl&lt;
+            T extends ThreadI18nContextProvider,
+            B extends BuilderImpl&lt;T, B&gt;&gt;
+    extends AbstractI18nContextProvider.BuilderImpl&lt;T, B&gt;
+    implements Builder {
+
+        /**
+         * If the {@code I18nContext} instances should be inherited by child
+         * {@code Thread}s.
+         */
+<span class="fc" id="L255">        protected boolean inheritableContexts = true;</span>
+
+        /**
+         * Creates a new instance.
+         */
+        protected BuilderImpl() {
+<span class="fc" id="L261">            super();</span>
+<span class="fc" id="L262">        }</span>
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public B configure(
+                final @NotNull Properties config) {
+<span class="fc" id="L271">            super.configure(config);</span>
+<span class="fc" id="L272">            configureInheritable(config);</span>
+<span class="fc" id="L273">            return (B) this;</span>
+        }
+
+        /**
+         * Configures the default language based on specified configuration.
+         * 
+         * @param config The I18N configuration.
+         */
+        protected void configureInheritable(
+                final @NotNull Properties config) {
+<span class="fc bfc" id="L283" title="All 2 branches covered.">            if (config.containsKey(I18nConfiguration.CONTEXT_INHERITED)) {</span>
+<span class="fc" id="L284">                setInheritableContexts(Boolean.valueOf(</span>
+<span class="fc" id="L285">                        config.getProperty(I18nConfiguration.CONTEXT_INHERITED)));</span>
+            }
+<span class="fc" id="L287">        }</span>
+
+        /**
+         * Sets if the {@code I18nContext} instances will be inherited by child
+         * threads.
+         * 
+         * @param inheritable If the {@code I18nContext} instances will be
+         * inherited by child threads.
+         * @return This builder, for method chaining.
+         */
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public @NotNull B setInheritableContexts(
+                @NotNull boolean inheritable) {
+<span class="fc" id="L300">            this.inheritableContexts = inheritable;</span>
+<span class="fc" id="L301">            return (B) this;</span>
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull ThreadI18nContextProvider build() {
+<span class="fc" id="L309">            return new ThreadI18nContextProvider(this);</span>
+        }
+    }
+
+    /**
+     * Factory for {@code ThreadI18nContextProvider} instances.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2024-08
+     * @since 0.1
+     */
+    public static class Factory
+    implements I18nContextProviderFactory {
+
+        /**
+         * Creates a new instance.
+         */
+        public Factory() {
+<span class="fc" id="L327">            super();</span>
+<span class="fc" id="L328">        }</span>
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull String getType() {
+<span class="fc" id="L335">            return TYPE;</span>
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull ThreadI18nContextProvider create(
+                final @NotNull Properties config) {
+<span class="fc" id="L344">            return ThreadI18nContextProvider.builder()</span>
+<span class="fc" id="L345">                    .configure(config)</span>
+<span class="fc" id="L346">                    .build();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

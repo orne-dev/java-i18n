@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JaxbUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.jaxb</a> &gt; <span class="el_source">JaxbUtils.java</span></div><h1>JaxbUtils.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.jaxb;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nFixedString;
+import dev.orne.i18n.I18nString;
+import dev.orne.i18n.I18nStringMap;
+
+/**
+ * Utility class for Jakarta XML Binding (JAXB)
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-10
+ * @since 0.1
+ */
+@API(status=Status.INTERNAL, since=&quot;0.1&quot;)
+public final class JaxbUtils {
+
+    /**
+     * Private constructor.
+     */
+    private JaxbUtils() {
+        // Utility class
+    }
+
+    /**
+     * Converts the specified {@code I18nString} to {@code XmlI18NString}
+     * containing only the current language translation.
+     * 
+     * @param value The {@code I18nString} to convert
+     * @return The {@code XmlI18NString} to marshall
+     */
+    public static XmlI18nString toXml(
+            final I18nString value) {
+        final XmlI18nString result;
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L67">            result = null;</span>
+        } else {
+<span class="fc" id="L69">            result = new XmlI18nString();</span>
+<span class="fc" id="L70">            result.getContent().add(value.get());</span>
+        }
+<span class="fc" id="L72">        return result;</span>
+    }
+
+    /**
+     * Converts the specified {@code I18nString} to {@code XmlI18NString}
+     * containing all the available translations.
+     * Calls {@code I18nString.asMap()} to retrieve the full translations
+     * version.
+     * 
+     * @param value The {@code I18nString} to convert
+     * @return The {@code XmlI18NString} to marshall
+     */
+    public static XmlI18nString toFullXml(
+            final I18nString value) {
+        final XmlI18nString result;
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L88">            result = null;</span>
+        } else {
+<span class="fc" id="L90">            final I18nStringMap map = value.asMap();</span>
+<span class="fc" id="L91">            result = new XmlI18nString();</span>
+<span class="fc" id="L92">            result.getContent().add(map.getDefaultText());</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for (final Map.Entry&lt;String,String&gt; entry : map.getI18n().entrySet()) {</span>
+<span class="fc" id="L94">                final XmlI18nStringTranslation translation = new XmlI18nStringTranslation();</span>
+<span class="fc" id="L95">                translation.setLang(entry.getKey());</span>
+<span class="fc" id="L96">                translation.setValue(entry.getValue());</span>
+<span class="fc" id="L97">                result.getContent().add(translation);</span>
+<span class="fc" id="L98">            }</span>
+        }
+<span class="fc" id="L100">        return result;</span>
+    }
+
+    /**
+     * Converts the specified {@code XmlI18NString} to {@code I18nString}.
+     * If {@code XmlI18NString} contains {@code XmlI18NStringTranslation}
+     * instances a {@code I18nStringMap} is returned.
+     * Otherwise a {@code I18nFixedString} is returned.
+     * 
+     * @param value The {@code XmlI18NString} to convert
+     * @return The equivalent {@code I18nString}
+     */
+    public static @NotNull I18nString fromXml(
+            final @NotNull XmlI18nString value) {
+<span class="fc" id="L114">        final StringBuilder buffer = new StringBuilder();</span>
+<span class="fc" id="L115">        final List&lt;XmlI18nStringTranslation&gt; translations = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (final Serializable part : value.getContent()) {</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (part instanceof XmlI18nStringTranslation) {</span>
+<span class="fc" id="L118">                translations.add((XmlI18nStringTranslation) part);</span>
+            } else {
+<span class="fc" id="L120">                buffer.append(part.toString());</span>
+            }
+<span class="fc" id="L122">        }</span>
+<span class="fc" id="L123">        final String text = buffer.toString().trim();</span>
+        final I18nString result;
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (translations.isEmpty()) {</span>
+<span class="fc" id="L126">            result = I18nFixedString.from(text);</span>
+        } else {
+<span class="fc" id="L128">            final I18nStringMap tmp = new I18nStringMap(text);</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            for (final XmlI18nStringTranslation trans : translations) {</span>
+<span class="fc" id="L130">                tmp.set(</span>
+<span class="fc" id="L131">                        trans.getLang(),</span>
+<span class="fc" id="L132">                        trans.getValue());</span>
+<span class="fc" id="L133">            }</span>
+<span class="fc" id="L134">            result = tmp;</span>
+        }
+<span class="fc" id="L136">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18nContextProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">I18nContextProvider.java</span></div><h1>I18nContextProvider.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 - 2024 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ServiceLoader;
+import java.util.WeakHashMap;
+import java.util.function.Supplier;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nConfigurationException;
+import dev.orne.i18n.I18nResources;
+
+/**
+ * Provider of {@code I18nContext} instances. Provides methods to create new
+ * I18n contexts, to check if a given context is still alive and to access
+ * default I18N resources of the application.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @see I18nContext
+ * @see I18nResources
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public interface I18nContextProvider {
+
+    /**
+     * Returns the I18N context provider.
+     * 
+     * @return The I18N context provider.
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    public static @NotNull I18nContextProvider getInstance() {
+<span class="fc" id="L61">        return Registry.get();</span>
+    }
+
+    /**
+     * Returns the supported languages.
+     * 
+     * @return The supported languages
+     */
+    @NotNull Locale[] getAvailableLocales();
+
+    /**
+     * Returns the default I18N resources.
+     * 
+     * @return The default I18N resources
+     */
+    @NotNull I18nResources getDefaultI18nResources();
+
+    /**
+     * Returns the I18N resources identified by the specified key.
+     * If key is {@code null} or no resources is associated for such key
+     * returns the default I18N resources.
+     * 
+     * @param key The key of the alternative I18N resources
+     * @return The I18N resources to use for the key
+     */
+    @NotNull I18nResources getI18nResources(String key);
+
+    /**
+     * Return the {@code I18nContext} associated with the current
+     * {@code Thread}.
+     * &lt;p&gt;
+     * If no {@code I18nContext} exists for the current {@code Thread} or the
+     * existing one is not alive anymore a new one is created.
+     * 
+     * @return The current {@code I18nContext}. Never {@code null}.
+     */
+    @NotNull I18nContext getContext();
+
+    /**
+     * Returns {@code true} if the specified context is valid or should be
+     * discarded.
+     * 
+     * @param context The I18N context
+     * @return {@code true} if the specified context is valid
+     */
+    boolean isContextValid(@NotNull I18nContext context);
+
+    /**
+     * Clears the I18N context for the current thread.
+     */
+    void clearContext();
+
+    /**
+     * Invalidates this context provider, thus invalidating
+     * any previously created I18N contexts.
+     * &lt;p&gt;
+     * Effects of calling any other method after this one is left to
+     * implementations choice, and thus is discouraged.
+     */
+    void invalidate();
+
+    /**
+     * Builder of I18N context provider instances.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2024-09
+     * @since 0.1
+     */
+    @API(status=Status.STABLE, since=&quot;0.1&quot;)
+    public interface Builder {
+
+        /**
+         * Configures the builder with I18N configuration for the current class loader.
+         * 
+         * @return This builder, for method chaining.
+         * @see I18nConfiguration#get()
+         */
+        default @NotNull Builder configure() {
+<span class="nc" id="L139">            return configure(I18nConfiguration.get());</span>
+        }
+
+        /**
+         * Configures the builder with specified I18N configuration.
+         * 
+         * @param config The I18N configuration.
+         * @return This instance, for method chaining.
+         */
+        @NotNull Builder configure(
+                @NotNull Properties config);
+
+        /**
+         * Sets the default locale supplier.
+         * 
+         * @param supplier The default locale supplier.
+         * @return This instance, for method chaining.
+         */
+        @NotNull Builder setDefaultLocaleSupplier(
+                @NotNull Supplier&lt;@NotNull Locale&gt; supplier);
+
+        /**
+         * Sets the available locales.
+         * 
+         * @param locales The available locales.
+         * @return This instance, for method chaining.
+         */
+        @NotNull Builder setAvailableLocales(
+                @NotNull Locale[] locales);
+
+        /**
+         * Sets the default I18N resources.
+         * 
+         * @param resources The default I18N resources
+         * @return This instance, for method chaining.
+         */
+        @NotNull Builder setDefaultI18nResources(
+                @NotNull I18nResources resources);
+
+        /**
+         * Adds alternative I18N resources to be used when the specified key is
+         * used.
+         * 
+         * @param key The key of the alternative I18N resources
+         * @param resource The alternative I18N resources
+         * @return This instance, for method chaining.
+         */
+        @NotNull Builder addI18nResources(
+                @NotNull String key,
+                @NotNull I18nResources resource);
+
+        /**
+         * Builds an immutable I18N context provider instance with the current
+         * configuration of this builder. Further modifications to the builder
+         * will have no effect in the returned instance.
+         * 
+         * @return The I18N context provider instance.
+         */
+        @NotNull I18nContextProvider build();
+    }
+
+    /**
+     * The I18N context provider registry.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2021-01
+     * @since 0.1
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    final class Registry {
+
+        /** The per class loader I18N context provider cache. */
+<span class="fc" id="L211">        private static final WeakHashMap&lt;ClassLoader, I18nContextProvider&gt; CACHE = new WeakHashMap&lt;&gt;();</span>
+
+        /**
+         * Private constructor.
+         */
+        private Registry() {
+            // Utility class
+        }
+
+        /**
+         * Returns the I18N context provider for current thread context class loader.
+         * 
+         * @return The I18N context provider.
+         */
+        public static @NotNull I18nContextProvider get() {
+<span class="fc" id="L226">            return get(Thread.currentThread().getContextClassLoader());</span>
+        }
+
+        /**
+         * Returns the I18N context provider for the specified class loader.
+         * 
+         * @param cl The class loader.
+         * @return The I18N context provider.
+         */
+        public static synchronized @NotNull I18nContextProvider get(
+                final @NotNull ClassLoader cl) {
+<span class="fc" id="L237">            return CACHE.computeIfAbsent(cl, Registry::configure);</span>
+        }
+
+        /**
+         * Resets the I18N context provider cache.
+         */
+        static void reset() {
+<span class="fc" id="L244">            CACHE.clear();</span>
+<span class="fc" id="L245">        }</span>
+
+        /**
+         * Sets the I18N context provider for the current thread's context class loader.
+         * 
+         * @param provider The I18N context provider.
+         */
+        static void set(
+                final @NotNull I18nContextProvider provider) {
+<span class="fc" id="L254">            set(Thread.currentThread().getContextClassLoader(), provider);</span>
+<span class="fc" id="L255">        }</span>
+
+        /**
+         * Sets the I18N context provider for the specified class loader.
+         * 
+         * @param cl The class loader.
+         * @param provider The I18N context provider.
+         */
+        static synchronized void set(
+                final @NotNull ClassLoader cl,
+                final @NotNull I18nContextProvider provider) {
+<span class="fc" id="L266">            Validate.notNull(cl);</span>
+<span class="fc" id="L267">            Validate.notNull(provider);</span>
+<span class="fc" id="L268">            CACHE.put(cl, provider);</span>
+<span class="fc" id="L269">        }</span>
+
+        /**
+         * Configures the I18N context provider based on the
+         * I18N configuration for the specified class loader.
+         * &lt;p&gt;
+         * If the class loader inherits configuration from parent then
+         * parent class loader's context provider is assigned.
+         * Otherwise a new context provider is created based on the
+         * I18N configuration.
+         * 
+         * @param cl The class loader.
+         * @return The configured I18N context provider.
+         */
+        static @NotNull I18nContextProvider configure(
+                final @NotNull ClassLoader cl) {
+<span class="fc" id="L285">            final Properties config = I18nConfiguration.get(cl);</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">            if (cl.getParent() != null) {</span>
+<span class="fc" id="L287">                final Properties parentConfig = I18nConfiguration.get(cl.getParent());</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">                if (config.equals(parentConfig)) {</span>
+<span class="fc" id="L289">                    return get(cl.getParent());</span>
+                }
+            }
+<span class="fc" id="L292">            return configure(config);</span>
+        }
+
+        /**
+         * Creates and configures a I18N context provider based on the
+         * specified application I18N configuration.
+         * 
+         * @param config The I18N configuration.
+         * @return The configured I18N context provider.
+         */
+        static @NotNull I18nContextProvider configure(
+                final @NotNull Properties config) {
+<span class="fc" id="L304">            String type = config.getProperty(I18nConfiguration.CONTEXT_PROVIDER);</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">            if (type == null) {</span>
+<span class="fc" id="L306">                type = ThreadI18nContextProvider.TYPE;</span>
+            }
+<span class="fc" id="L308">            final ServiceLoader&lt;I18nContextProviderFactory&gt; loader =</span>
+<span class="fc" id="L309">                    ServiceLoader.load(I18nContextProviderFactory.class);</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">            for (final I18nContextProviderFactory configurer : loader) {</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">                if (type.equals(configurer.getType())) {</span>
+<span class="fc" id="L312">                    return configurer.create(config);</span>
+                }
+<span class="fc" id="L314">            }</span>
+<span class="fc" id="L315">            throw new I18nConfigurationException(&quot;No I18N context provider found for configured type: &quot; + type);</span>
+        }
+    }
+
+    /**
+     * Interface for configuration classes that need to set I18N context
+     * provider instances to use.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2024-08
+     * @since 0.1
+     */
+    @API(status=Status.EXPERIMENTAL, since=&quot;0.1&quot;)
+    interface Configurer {
+
+        /**
+         * Sets the I18N configuration for the current thread's context class loader.
+         * 
+         * @param config The I18N configuration.
+         */
+        default void setI18nConfiguration(
+                final @NotNull Properties config) {
+<span class="fc" id="L337">            setI18nConfiguration(Thread.currentThread().getContextClassLoader(), config);</span>
+<span class="fc" id="L338">        }</span>
+
+        /**
+         * Sets the I18N configuration for the specified class loader.
+         * 
+         * @param cl The class loader to configure.
+         * @param config The I18N configuration.
+         */
+        default void setI18nConfiguration(
+                final @NotNull ClassLoader cl,
+                final @NotNull Properties config) {
+<span class="fc" id="L349">            I18nConfiguration.set(cl, config);</span>
+<span class="fc" id="L350">        }</span>
+
+        /**
+         * Sets the I18N context provider for the current thread's context class loader.
+         * 
+         * @param provider The I18N context provider.
+         */
+        default void setI18nContextProvider(
+                final @NotNull I18nContextProvider provider) {
+<span class="fc" id="L359">            setI18nContextProvider(Thread.currentThread().getContextClassLoader(), provider);</span>
+<span class="fc" id="L360">        }</span>
+
+        /**
+         * Sets the I18N context provider for the specified class loader.
+         * 
+         * @param cl The class loader.
+         * @param provider The I18N context provider.
+         */
+        default void setI18nContextProvider(
+                final @NotNull ClassLoader cl,
+                final @NotNull I18nContextProvider provider) {
+<span class="fc" id="L371">            Registry.set(cl, provider);</span>
+<span class="fc" id="L372">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

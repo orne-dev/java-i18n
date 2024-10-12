@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"dev.orne.i18n"},{"l":"dev.orne.i18n.context"},{"l":"dev.orne.i18n.jaxb"},{"l":"dev.orne.i18n.spring"},{"l":"dev.orne.i18n.validation"}];updateSearchResults();

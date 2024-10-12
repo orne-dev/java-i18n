@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DummyI18nResources.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Orne I18N</a> &gt; <a href="index.source.html" class="el_package">dev.orne.i18n.context</a> &gt; <span class="el_source">DummyI18nResources.java</span></div><h1>DummyI18nResources.java</h1><pre class="source lang-java linenums">package dev.orne.i18n.context;
+
+/*-
+ * #%L
+ * Orne I18N
+ * %%
+ * Copyright (C) 2021 Orne Developments
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * &lt;http://www.gnu.org/licenses/lgpl-3.0.html&gt;.
+ * #L%
+ */
+
+import java.text.MessageFormat;
+import java.util.Locale;
+
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.Validate;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import dev.orne.i18n.I18nResources;
+
+/**
+ * Dummy implementation of {@code I18nResources} that always returns the
+ * {@code defaultMessage}, formated with passed arguments.
+ * 
+ * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+ * @version 1.0, 2021-01
+ * @see I18nResources
+ * @since 0.1
+ */
+@API(status=Status.STABLE, since=&quot;0.1&quot;)
+public class DummyI18nResources
+implements I18nResources {
+
+    /**
+     * Private constructor. Use shared instance.
+     * 
+     * @see DummyI18nResources#getInstance()
+     */
+    private DummyI18nResources() {
+        super();
+    }
+
+    /**
+     * Returns the shared instance.
+     * 
+     * @return The shared instance.
+     */
+    public static @NotNull DummyI18nResources getInstance() {
+<span class="fc" id="L64">        return InstanceHolder.INSTANCE;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getMessage(
+            final @NotNull String defaultMessage,
+            final String code,
+            final Object... params) {
+<span class="fc" id="L75">        Validate.notNull(defaultMessage, &quot;The default message cannot be null&quot;);</span>
+        try {
+<span class="fc" id="L77">            return MessageFormat.format(defaultMessage, params);</span>
+<span class="fc" id="L78">        } catch (final IllegalArgumentException ignore) {</span>
+<span class="fc" id="L79">            return defaultMessage;</span>
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getMessage(
+            final @NotNull String defaultMessage,
+            final String code,
+            final Locale locale,
+            final Object... params) {
+<span class="fc" id="L92">        return getMessage(defaultMessage, (String) null, params);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getMessage(
+            final @NotNull String defaultMessage,
+            final String[] codes,
+            final Object... params) {
+<span class="fc" id="L103">        return getMessage(defaultMessage, (String) null, params);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getMessage(
+            final @NotNull String defaultMessage,
+            final String[] codes,
+            final Locale locale,
+            final Object... params) {
+<span class="fc" id="L115">        return getMessage(defaultMessage, (String) null, params);</span>
+    }
+
+    /**
+     * Shared instance lazy initialization class.
+     * 
+     * @author &lt;a href=&quot;https://github.com/ihernaez&quot;&gt;(w) Iker Hernaez&lt;/a&gt;
+     * @version 1.0, 2021-01
+     * @since 0.1
+     */
+    private static final class InstanceHolder {
+
+        /** The invariant shared instance. */
+<span class="fc" id="L128">        private static final DummyI18nResources INSTANCE = new DummyI18nResources();</span>
+
+        /**
+         * Private constructor.
+         */
+        private InstanceHolder() {
+            // Utility class
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
