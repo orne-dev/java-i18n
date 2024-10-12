@@ -44,7 +44,7 @@
     <javax.validation.version>2.0.1.Final</javax.validation.version>
     <javax.jaxb.version>2.3.1</javax.jaxb.version>
     <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
-    <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
+    <spring.framework.version>5.3.0</spring.framework.version>
     <dev.orne.generators.version>0.2.0</dev.orne.generators.version>
 
     <hibernate.validation.version>7.0.1.Final</hibernate.validation.version>
