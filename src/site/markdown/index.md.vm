@@ -1,0 +1,142 @@
+#set( $dash = "#" )
+$dash Introduction
+
+Provides utilities for internationalization and localization of Java
+applications.
+
+$dash$dash Maven coordinates
+
+```xml
+<project ...>
+...
+  <dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>${project.artifactId}</artifactId>
+    <version>${project.version}</version>
+  </dependency>
+...
+</project>
+```
+
+$dash$dash Usage
+
+$dash$dash$dash I18N context
+
+Each thread is associated to a I18N context (that can be shared between
+child threads or not). 
+
+The library's main entry point
+[I18N](./apidocs/dev/orne/i18n/I18N.html) provides shortcut access
+to current thread's context state, including the following:
+
+- Current locale
+
+  Locale associated to current I18N context can be accessed and changed
+  through main [I18N](./apidocs/dev/orne/i18n/I18N.html) API,
+  keeping it separate of system default locale:
+
+```java
+Locale currentLocale = I18n.getLocale();
+I18N.setLocale(newLocale);
+```
+
+- Supported locales
+
+  Applications, by default, support all locales available in the JVM,
+  but those locales can be configured.
+  Main [I18N](./apidocs/dev/orne/i18n/I18N.html) API provides access to locales
+  supported by the application:
+
+```java
+Locale[] locales = I18n.getAvailableLocales();
+```
+
+- I18N resources
+
+  [I18N resources](./resources.html) available to current I18N context can be
+  accessed through main [I18N](./apidocs/dev/orne/i18n/I18N.html) API from
+  anywhere in the application code:
+
+```java
+I18nResources resources = I18n.getResources();
+String messageInCurrentLocale = resources.getMessage("My message", "my.message");
+String messageInAltLocale = resources.getMessage("My message", "my.message", altLocale);
+I18nResources altResources = I18n.getResources("altResources");
+String altMessageInCurrentLocale = resources.getMessage("My message", "my.message");
+String altMessageInAltLocale = resources.getMessage("My message", "my.message", altLocale);
+```
+
+$dash$dash$dash I18N strings
+
+To provide potentially localized texts other classes may rely on
+the [I18N strings](./strings.html) feature without accessing the main API.
+
+```java
+interface MyType {
+    String getCode();
+    I18nString getName();
+}
+
+MyType bean = ...;
+String nameInCurrentLang = bean.getName().get();
+String nameInSpecifiedLang = bean.getName().get(lang);
+```
+
+Several implementation are provided out of the box:
+
+- Fixed I18N strings
+
+  Fixed I18N strings implement the I18nString interface providing the
+  same fixed text for all languages. Used when only one value is available.
+
+```java
+I18nString fixed = I18nString.fixed("Fixed text");
+```
+
+- Mapped I18N strings
+
+  Mapped I18N strings provide an "in memory" representation of localized texts.
+  Usable for manage multiple translations within code.
+
+```java
+I18nString mapped = I18nString.mapped("Default text")
+        .set(locale1, "Translation 1")
+        .set(locale2, "Translation 2");
+```
+
+- Application resources based I18N strings
+
+  Application resources based I18N strings delegate the resolution of localized
+  texts in application's I18N resources.
+
+```java
+I18nString resource = I18nString.fromResources("My default text")
+        .withCode("my.resource.code");
+```
+
+$dash$dash$dash Configuration
+
+By default the library provides a separate I18N context to each thread,
+inherited by child threads, with `messages` bundle based I18N resources
+if present. Initial locale will be obtained from `Locale.getDefault()`
+and all locales returned by `Locale.getAvailableLocales()` will be listed as
+available.
+
+Applications can change this initial configuration providing a configuration
+file in the class path.
+
+In applications with complex class loader hierarchies (like Jakarta EE
+applications)
+can provide separate configurations for each class path.
+
+See [configuration page](./configuration.html#file-based-configuration) for further details.
+
+$dash$dash$dash$dash Spring integration
+
+The library supports integration with Spring, coordinating the current locale
+with Spring's `LocaleContextHolder` and exposing Spring's main `MessageSource`
+as default I18N resources simply adding `@EnableI18N` annotation to Spring
+context configuration class.
+
+See [Spring configuration page](./configuration.html#spring-configuration) for
+further details.

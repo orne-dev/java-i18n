@@ -1,0 +1,139 @@
+<!--
+  #%L
+  Orne I18N
+  %%
+  Copyright (C) 2021 Orne Developments
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>dev.orne</groupId>
+    <artifactId>java-root-pom</artifactId>
+    <version>0.7.0</version>
+    <relativePath />
+  </parent>
+
+  <groupId>dev.orne</groupId>
+  <artifactId>i18n-it-java8</artifactId>
+  <version>@project.version@</version>
+  <packaging>jar</packaging>
+
+  <inceptionYear>2021</inceptionYear>
+  <url>https://orne-dev.github.io/java-i18n/</url>
+
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License (LGPL) version 3.0</name>
+      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <properties>
+    <java.version>8</java.version>
+    <java.module.name>dev.orne.i18n.it.java8</java.module.name>
+    <license.licenseName>lgpl_v3</license.licenseName>
+
+    <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
+    <hibernate.validation.version>6.1.5.Final</hibernate.validation.version>
+    <glassfish.jakarta.el.version>3.0.3</glassfish.jakarta.el.version>
+    <spring.framework.version>5.0.0.RELEASE</spring.framework.version>
+
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <ut.skip>true</ut.skip>
+    <maven.install.skip>true</maven.install.skip>
+    <maven.deploy.skip>true</maven.deploy.skip>
+    <sonar.skip>true</sonar.skip>
+    <revapi.skip>true</revapi.skip>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>dev.orne</groupId>
+      <artifactId>i18n</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>dev.orne</groupId>
+      <artifactId>i18n-it-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hibernate.validation.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>jakarta.el</artifactId>
+      <version>${glassfish.jakarta.el.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${fasterxml.jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.framework.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.framework.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <configuration>
+            <groups>it,javax-jaxb,javax-validation</groups>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

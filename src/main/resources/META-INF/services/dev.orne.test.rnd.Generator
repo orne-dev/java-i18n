@@ -1,0 +1,4 @@
+dev.orne.i18n.I18nFixedStringGenerator
+dev.orne.i18n.I18nStringMapGenerator
+dev.orne.i18n.I18nResourcesStringGenerator
+dev.orne.i18n.I18nStringGenerator
