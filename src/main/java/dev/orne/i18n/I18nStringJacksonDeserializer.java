@@ -85,7 +85,7 @@ implements ContextualDeserializer {
     @Override
     public JsonDeserializer<?> createContextual(
             final @NotNull DeserializationContext ctxt,
-            final @NotNull BeanProperty property)
+            final BeanProperty property)
     throws JsonMappingException {
         final Class<?> targetType;
         if (property == null) {
@@ -145,7 +145,7 @@ implements ContextualDeserializer {
                 throw new JsonParseException(parser, "Unexpected token.", parser.getTokenLocation());
             }
         }
-        if (this.converter != null) {
+        if (result != null && this.converter != null) {
             result = this.converter.convert(result);
         }
         return result;

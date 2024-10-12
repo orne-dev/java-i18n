@@ -384,8 +384,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testContainer_Null()
-    throws JsonProcessingException {
+    void testContainer_Null() {
         final String json = nodeToJson(nodeFactory.nullNode());
         final I18nStringContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringContainer.class);
@@ -398,8 +397,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testContainer_NullBean()
-    throws JsonProcessingException {
+    void testContainer_NullBean() {
         final String json = nodeToJson(createContainerNode(nodeFactory.nullNode()));
         final I18nStringContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringContainer.class);
@@ -448,8 +446,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testAsObjectContainer_Null()
-    throws JsonProcessingException {
+    void testAsObjectContainer_Null() {
         final String json = nodeToJson(nodeFactory.nullNode());
         final I18nStringAsObjectContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringAsObjectContainer.class);
@@ -462,8 +459,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testAsObjectContainer_NullBean()
-    throws JsonProcessingException {
+    void testAsObjectContainer_NullBean() {
         final String json = nodeToJson(createContainerNode(nodeFactory.nullNode()));
         final I18nStringAsObjectContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringAsObjectContainer.class);
@@ -512,8 +508,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testMapContainer_Null()
-    throws JsonProcessingException {
+    void testMapContainer_Null() {
         final String json = nodeToJson(nodeFactory.nullNode());
         final I18nStringMapContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringMapContainer.class);
@@ -526,8 +521,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testMapContainer_NullBean()
-    throws JsonProcessingException {
+    void testMapContainer_NullBean() {
         final String json = nodeToJson(createContainerNode(nodeFactory.nullNode()));
         final I18nStringMapContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringMapContainer.class);
@@ -576,8 +570,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testMapAsObjectContainer_Null()
-    throws JsonProcessingException {
+    void testMapAsObjectContainer_Null() {
         final String json = nodeToJson(nodeFactory.nullNode());
         final I18nStringMapAsObjectContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringMapAsObjectContainer.class);
@@ -590,8 +583,7 @@ class I18nStringJacksonDeserializationTest {
      * in containers.
      */
     @Test
-    void testMapAsObjectContainer_NullBean()
-    throws JsonProcessingException {
+    void testMapAsObjectContainer_NullBean() {
         final String json = nodeToJson(createContainerNode(nodeFactory.nullNode()));
         final I18nStringMapAsObjectContainer result = assertDoesNotThrow(() -> {
             return mapper.readValue(json, I18nStringMapAsObjectContainer.class);

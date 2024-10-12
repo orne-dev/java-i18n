@@ -577,8 +577,7 @@ class I18nStringJacksonSerializationTest {
             final @NotNull JsonNode node) {
         assertNotNull(node);
         assertTrue(node.isObject());
-        final JsonNode beanNode = node.get(I18nStringContainer.BEAN_PROPERTY);
-        return beanNode;
+        return node.get(I18nStringContainer.BEAN_PROPERTY);
     }
 
     protected void assertStringNode(
@@ -596,8 +595,7 @@ class I18nStringJacksonSerializationTest {
         assertTrue(node.isObject());
         final JsonNode defaultTextNode = node.get(DEFAULT_TEXT_PROP);
         assertStringNode(expectedDefaultText, defaultTextNode);
-        final JsonNode i18nNode = node.get(I18N_PROP);
-        return i18nNode;
+        return node.get(I18N_PROP);
     }
 
     protected void assertTranslationNodeEmpty(
