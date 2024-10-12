@@ -39,7 +39,7 @@ import dev.orne.i18n.I18N;
 import dev.orne.i18n.context.ContextTestUtils;
 import dev.orne.i18n.context.I18nContextProvider;
 import dev.orne.i18n.context.ThreadI18nContextProvider;
-import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
+import dev.orne.i18n.spring.I18nSpringConfiguration;
 import dev.orne.i18n.spring.I18nSpringContextProvider;
 
 /**
@@ -216,7 +216,7 @@ public class SpringClassLoaderI18nConfigurerTest {
 
         @Override
         public void run() {
-            final I18nSpringBaseConfiguration configurer = new TestConfiguration(this.provider);
+            final I18nSpringConfiguration configurer = new TestConfiguration(this.provider);
             if (this.targetClass != null) {
                 configurer.setTarget(cl);
             }
@@ -227,7 +227,7 @@ public class SpringClassLoaderI18nConfigurerTest {
         }
     }
 
-    static class TestConfiguration extends I18nSpringBaseConfiguration {
+    static class TestConfiguration extends I18nSpringConfiguration {
 
         private final @NotNull I18nContextProvider provider;
 

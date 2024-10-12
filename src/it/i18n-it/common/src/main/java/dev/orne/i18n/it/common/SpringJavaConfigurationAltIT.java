@@ -38,7 +38,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
+import dev.orne.i18n.spring.I18nSpringConfiguration;
 import dev.orne.i18n.spring.I18nSpringConfigurer;
 import dev.orne.i18n.spring.I18nSpringContextProvider;
 import dev.orne.i18n.spring.I18nSpringResources;
@@ -73,9 +73,9 @@ extends AbstractSpringConfigurationAltIT {
             return source;
         }
         @Bean
-        public I18nSpringBaseConfiguration I18nSpringBaseConfiguration(
+        public I18nSpringConfiguration I18nSpringBaseConfiguration(
                 final @Autowired MessageSource messageSource) {
-            final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
+            final I18nSpringConfiguration configurer = new I18nSpringConfiguration();
             return configurer;
         }
         @Override

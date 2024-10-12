@@ -1,7 +1,5 @@
 package dev.orne.i18n.it.common;
 
-import java.nio.charset.StandardCharsets;
-
 /*-
  * #%L
  * Orne I18N
@@ -24,6 +22,8 @@ import java.nio.charset.StandardCharsets;
  * #L%
  */
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.orne.i18n.spring.I18nSpringBaseConfiguration;
+import dev.orne.i18n.spring.I18nSpringConfiguration;
 
 /**
  * Integration tests for Spring Java configuration of Orne I18N.
@@ -58,9 +58,9 @@ extends AbstractSpringConfigurationIT {
             return source;
         }
         @Bean
-        public I18nSpringBaseConfiguration I18nSpringBaseConfiguration(
+        public I18nSpringConfiguration I18nSpringBaseConfiguration(
                 final @Autowired MessageSource messageSource) {
-            final I18nSpringBaseConfiguration configurer = new I18nSpringBaseConfiguration();
+            final I18nSpringConfiguration configurer = new I18nSpringConfiguration();
             return configurer;
         }
     }
